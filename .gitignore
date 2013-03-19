@@ -2,4 +2,6 @@
 *~
 parser.out
 parsetab.py
+
 .DS_STORE
+.sublime-workspace
