@@ -1,3 +1,0 @@
-# remember the underscore before print for now, look in simple_lex.py for
-# explination --> if someone can fix this that would be great!
-_print("hello world")
