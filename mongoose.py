@@ -1,5 +1,4 @@
 import sys
-
 from parser import parser
 from backend import walk_ast
 

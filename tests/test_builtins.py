@@ -1,5 +1,5 @@
 from nose.tools import *
-import mongoose
+from .. import mongoose
 
 # For the stdout hack
 from cStringIO import StringIO

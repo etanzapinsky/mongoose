@@ -1,5 +1,5 @@
 from nose.tools import *
-from lexer import lexer
+from ..lexer import lexer
 
 # We should fill these out to increase code coverage. @todo (bo)
 # See https://nose.readthedocs.org/en/latest/
