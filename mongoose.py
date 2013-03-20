@@ -10,12 +10,12 @@ def main():
     walk_ast(parser.parse(src.read()))
 
 def interpret(source=None, source_path=None):
-	if source:
-		src = source
-	elif source_path:
-		# Less space-efficient, but only one return path
-		src = open(source, 'r').read()
-	return walk_ast(parser.parse(src))
+    if source:
+        src = source
+    elif source_path:
+        # Less space-efficient, but only one return path
+        src = open(source, 'r').read()
+    return walk_ast(parser.parse(src))
 
 if __name__ == '__main__':
     main()
