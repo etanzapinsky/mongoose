@@ -1,6 +1,5 @@
 import ply.yacc as yacc
-
-from lexer import lexer
+from ..lexer import lexer
 # hack to get the tokens since they are a global variable in the lexer object
 tokens = lexer.tokens
 

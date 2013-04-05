@@ -1,5 +1,5 @@
 import ply.lex as lex
-from stdlib import builtins
+from ..backend.stdlib import builtins
 
 class Lexer:
     tokens = (

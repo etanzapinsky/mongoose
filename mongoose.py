@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+
 import sys
 from parser import parser
 from backend import walk_ast
 
 def main():
     if len(sys.argv) != 2:
-        print 'Invalid number of arguments: <./mongoose.py> <mongoose src code>'
+        print 'Invalid number of arguments: <mongoose> <mongoose src code>'
         exit(1)
     src = open(sys.argv[1])
     walk_ast(parser.parse(src.read()))
