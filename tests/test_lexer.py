@@ -6,9 +6,9 @@ from ..lexer import lexer
 # Also see: https://nose.readthedocs.org/en/latest/testing_tools.html
 
 def test_lex_string_literals():
-	eq_([['STRING', 'string']], lexer.test('string'))
+    eq_([['STRING', 'string']], lexer.test('string'))
 
-	eq_([['QUOTE', r'"'],
-		 ['STRING', 'string'],
-		 ['QUOTE', r'"']],
-		lexer.test(r'"string"'))
+    eq_([['QUOTE', r'"'],
+         ['STRING', 'string'],
+         ['QUOTE', r'"']],
+        lexer.test(r'"string"'))

@@ -10,7 +10,6 @@ class Node:
         self.syn_value = syn_value
         self.children = children
     
-
     # Useful for testing 
     def __eq__(self, other):
         if self.children == None:
@@ -30,4 +29,3 @@ class Node:
                                                                       inh_val=self.inh_value,
                                                                       syn_val=self.syn_value,
                                                                       kids=self.children)
-

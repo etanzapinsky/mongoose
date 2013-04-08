@@ -2,3 +2,5 @@
 from __future__ import print_function
 
 builtins = {'_print': lambda x: print(x)}
+
+first_order_ops = {'PLUS': sum}
