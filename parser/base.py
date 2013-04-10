@@ -7,6 +7,9 @@ tokens = lexer.tokens
 def p_function(p):
     'expr : NAME LPAREN expr RPAREN'
     func = lexer.symbol_table.get(p[1])
+    # this is not what we want to do (at least I don't think so) --> the
+    # syn_value should be what the function evaluates to, not the function call
+    # itself. Acually I'm not sure, it depends how we implement it #upfordebate
     p[0] = Node(vtype='FUNCTION', syn_value=func, children=[p[3]])
 
 def p_expr_string(p):
