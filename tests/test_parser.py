@@ -1,6 +1,6 @@
 from copy import deepcopy
 from nose.tools import *
-from ..parser import Node, parser
+from parser import Node, parser
 
 # We should fill these out to increase code coverage. @todo (bo)
 # See https://nose.readthedocs.org/en/latest/

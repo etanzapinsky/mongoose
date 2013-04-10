@@ -1,9 +1,9 @@
 import unittest
 
 from nose.tools import *
-from ..parser import Node
-from ..backend import walk_ast
-from ..backend.stdlib import first_order_ops
+from parser import Node
+from backend import walk_ast
+from backend.stdlib import first_order_ops
 
 class BackendTests(unittest.TestCase):
     @classmethod
