@@ -259,17 +259,21 @@ parser = yacc.yacc()
 
 
 #test
-def traverse(root): #postorder
+def traverse(root):
+    traversePost(root, 0)
+
+def traversePost(root, indent): #postorder
     if type(root) is 'str':
         print root, "is a str. oops"
 
     if(root is not None ):
         for n in root.children:
-            traverse(n)
+            traversePost(n, indent+1)
+        #print ' '*indent
         if len(root.children) == 0: #leaf
-            print root.vtype,':',root.syn_value
+            print '     '*indent + root.vtype,':',root.syn_value
         else: #non-leaf
-            print root.vtype
+            print '    '*indent + root.vtype
 
 if __name__ == "__main__": 
     while True:
