@@ -24,7 +24,7 @@ start = 'stat'
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
     '''
-    p[0] = Node(vtype='ASSIGNMENT', children=[p[1], p[3]])
+    p[0] = Node(vtype='ASSIGNMENT', children=[Node(vtype='NAME', syn_value=p[1]), p[3]])
 
 def p_stat_decl_assign(p):
     '''stat : decl '=' expr                                                                                                                             
@@ -57,17 +57,16 @@ def p_arith_expr(p):
     '''arith_expr : arith_expr '+' term
                   | arith_expr '-' term
                   | term
-                  | '-' arith_expr %prec UMINUS
     '''
     if len(p) == 4:
         if p[2] == '+':
             p[0] = Node(vtype='ADDITION', children=[p[1], p[3]])
         else: 
             p[0] = Node(vtype='SUBTRACTION', children=[p[1], p[3]])
-    elif len(p) == 2:
+    else: # len(p) == 2:
         p[0] = p[1]
-    else: #len(p) == 3
-        p[0] = Node(vtype='UMINUS', children=[p[2]])
+    #else: #len(p) == 3
+    #    p[0] = Node(vtype='UMINUS', children=[p[2]])
 
 def p_term(p):
     '''term : term '*' factor
@@ -96,8 +95,12 @@ def p_factor(p):
 
 def p_power(p):
     ''' pow : '(' arith_expr ')'
+            | '-' arith_expr %prec UMINUS
     '''
-    p[0] = p[2] 
+    if len(p) == 4:
+        p[0] = p[2] 
+    else: #len(p) == 3                                                                                                   
+        p[0] = Node(vtype='UMINUS', children=[p[2]])
 
 def p_integer(p):
     ''' pow : VINTEGER '''
@@ -107,43 +110,113 @@ def p_float(p):
     ''' pow : VFLOAT '''
     p[0] = Node(vtype='FLOAT_VALUE', syn_value=p[1])#p[1], see p_integer
 
-# NOT my be incorrect (should have highest precedence) -same with uminus?
+# (fixed) NOT my be incorrect (should have highest precedence) -same with uminus?
 def p_exprb(p):
-    ''' b_expr : b_expr AND b_expr
-               | b_expr OR b_expr
-               | NOT b_expr
-               | '(' b_expr ')'
-               | expr EQ expr
-               | expr NEQ expr
-               | VBOOLEAN
-               | arith_expr '<' arith_expr
-               | arith_expr '>' arith_expr 
-               | arith_expr GEQ arith_expr 
-               | arith_expr LEQ arith_expr  
+    ''' b_expr : b_term 
+               | b_expr OR b_term 
+    '''         
+    if len(p) == 4:
+        p[0] = Node(vtype='OR', children=[p[1], p[3]])
+    else:
+        p[0] = p[1]
+
+def p_termb(p):
+    ''' b_term : b_factor                                                                                       
+               | b_term AND b_factor                                                                                    
     '''
     if len(p) == 4:
-        if p[2] == 'AND':
-            p[0] = Node(vtype='AND', children=[p[1], p[3]])
-        elif p[2] == 'OR':
-            p[0] = Node(vtype='OR', children=[p[1], p[3]])
-        elif p[2] == '<':
-            p[0] = Node(vtype='LT', children=[p[1], p[3]])
-        elif p[2] == '>':
-            p[0] = Node(vtype='GT', children=[p[1], p[3]])
-        elif p[2] == 'GEQ':
-            p[0] = Node(vtype='GEQ', children=[p[1], p[3]])
-        elif p[2] == 'LEQ':
-            p[0] = Node(vtype='LEQ', children=[p[1], p[3]])
-        elif p[2] == 'EQ':
-            p[0] = Node(vtype='EQUAL', children=[p[1], p[3]])
-        elif p[2] == 'NEQ':
-            p[0] = Node(vtype='NOT_EQUAL', children=[p[1], p[3]])
-        else: #p[1] == '('
-            p[0] = p[2]
-    elif len(p) == 3:
+        p[0] = Node(vtype='AND', children=[p[1], p[3]])
+    else:
+        p[0] = p[1]
+
+def p_factorb(p):
+    ''' b_factor : NOT b_primary
+                 | b_primary
+    '''
+    if len(p) == 3:
         p[0] = Node(vtype='NOT', children=[p[2]])
-    else: #len(p) == 2
-        p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer
+    else:
+        p[0] = p[1]        
+          
+def p_primaryb(p):
+    ''' b_primary : b_condition 
+                  | '(' b_expr ')'
+    '''
+    if len(p) == 4:                                                                                                                                                      
+        p[0] = p[2] 
+    else:
+        p[0] = p[1] 
+
+def p_primaryb_bool(p):
+    ''' b_primary : VBOOLEAN '''
+    p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer   
+
+def p_conditionb(p):
+    ''' b_condition : arith_expr '<' arith_expr
+               | arith_expr '>' arith_expr
+               | arith_expr GEQ arith_expr
+               | arith_expr LEQ arith_expr
+               | expr EQ expr
+               | expr NEQ expr
+    '''
+    if p[2] == '<':
+            p[0] = Node(vtype='LT', children=[p[1], p[3]])
+    elif p[2] == '>':
+            p[0] = Node(vtype='GT', children=[p[1], p[3]])
+    elif p[2] == 'GEQ':
+            p[0] = Node(vtype='GEQ', children=[p[1], p[3]])
+    elif p[2] == 'LEQ':
+            p[0] = Node(vtype='LEQ', children=[p[1], p[3]])
+    elif p[2] == 'EQ':
+            p[0] = Node(vtype='EQUAL', children=[p[1], p[3]])
+    elif p[2] == 'NEQ':
+            p[0] = Node(vtype='NOT_EQUAL', children=[p[1], p[3]])
+
+#########
+#     ''' b_expr : b_expr AND b_expr
+#               | b_expr OR b_expr
+#               | b_expr2
+#               | expr EQ expr
+#               | expr NEQ expr
+#               | VBOOLEAN
+#               | arith_expr '<' arith_expr
+#               | arith_expr '>' arith_expr 
+#               | arith_expr GEQ arith_expr 
+#               | arith_expr LEQ arith_expr  
+#    '''
+#   if len(p) == 4:
+#        if p[2] == 'AND':
+#            p[0] = Node(vtype='AND', children=[p[1], p[3]])
+#        elif p[2] == 'OR':
+#            p[0] = Node(vtype='OR', children=[p[1], p[3]])
+#        elif p[2] == '<':
+#            p[0] = Node(vtype='LT', children=[p[1], p[3]])
+#        elif p[2] == '>':
+#            p[0] = Node(vtype='GT', children=[p[1], p[3]])
+#        elif p[2] == 'GEQ':
+#            p[0] = Node(vtype='GEQ', children=[p[1], p[3]])
+#        elif p[2] == 'LEQ':
+#            p[0] = Node(vtype='LEQ', children=[p[1], p[3]])
+#        elif p[2] == 'EQ':
+#            p[0] = Node(vtype='EQUAL', children=[p[1], p[3]])
+#        elif p[2] == 'NEQ':
+#            p[0] = Node(vtype='NOT_EQUAL', children=[p[1], p[3]])
+#        #else: #p[1] == '('
+#        #    p[0] = p[2]
+#    #elif len(p) == 3:
+#    #    p[0] = Node(vtype='NOT', children=[p[2]])
+#    else: #len(p) == 2
+#        p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer
+
+#def p_exprboolean2(p):
+#    ''' b_expr2 : NOT b_expr
+#                | '(' b_expr ')'
+#    '''
+#    if len(p) == 3:
+#        p[0] = Node(vtype='NOT', children=[p[2]]) 
+#    else: # if len(p)==4
+#        p[0] = p[2]       
+
 
 def p_exprs(p):
     '''s_expr : s_expr '+' s_expr
@@ -188,14 +261,15 @@ parser = yacc.yacc()
 #test
 def traverse(root): #postorder
     if type(root) is 'str':
-        print root
-    if(root is not None):
+        print root, "is a str. oops"
+
+    if(root is not None ):
         for n in root.children:
             traverse(n)
-            if len(root.children) == 0: #leaf
-                print root.syn_value
-            else: #non-leaf
-                print root.vtype
+        if len(root.children) == 0: #leaf
+            print root.vtype,':',root.syn_value
+        else: #non-leaf
+            print root.vtype
 
 if __name__ == "__main__": 
     while True:
