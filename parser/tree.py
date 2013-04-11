@@ -2,7 +2,8 @@ class Node:
     def __init__(self, vtype, inh_value=None, syn_value=None, children=[]):
         """
         @param vtype: str
-        @param value: <anything>
+        @param inh_value: <anything>
+        @param syn_value: <anything>
         @param children: list(Node)
         """
         self.vtype = vtype
