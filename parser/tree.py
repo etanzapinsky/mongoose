@@ -13,14 +13,17 @@ class Node:
     
     # Useful for testing 
     def __eq__(self, other):
+
+        if self.vtype != other.vtype:
+            # We're currently just raising a python error #FIXME @todo
+            raise TypeError, "'{}' is not comparable with '{}'".format(self.vtype, other.vtype)
+
         if self.children == None:
-            return bool(self.vtype == other.vtype and
-                        self.inh_value == other.inh_value and
+            return bool(self.inh_value == other.inh_value and
                         self.syn_value == other.syn_value)
         else:
-            self_comp = bool(self.vtype == other.vtype and
-                        self.inh_value == other.inh_value and
-                        self.syn_value == other.syn_value)
+            self_comp = bool(self.inh_value == other.inh_value and
+                             self.syn_value == other.syn_value)
             return self_comp and all([self_c == other_c for self_c, other_c in
                                   zip(sorted(self.children), sorted(other.children))])
 

@@ -11,6 +11,8 @@ first_order_ops = {'ADD': lambda x, y: x + y,
                    'MODULUS': lambda x, y: x % y,
                    'LESS_THAN': lambda x, y: x < y,
                    'GREATER_THAN': lambda x, y: x > y,
+                   'EQUAL': lambda x, y: x == y,
+                   'NOT_EQUAL': lambda x, y: x != y,
                    'LESS_THAN_EQUAL': lambda x, y: x <= y,
                    'GREATER_THAN_EQUAL': lambda x, y: x >= y,
                    }
