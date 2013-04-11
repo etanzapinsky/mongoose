@@ -13,9 +13,9 @@ then
     else
         PYTHONPATH='.' python $*
     fi
-elif [ $1 = 'nosetests' ]
+elif [ $1 = 'tests' ]
 then
-    PYTHONPATH='.' nosetests
+    PYTHONPATH='.' nosetests $*
 else
     PYTHONPATH='.' python $*
 fi
