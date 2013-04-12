@@ -1,4 +1,5 @@
 import unittest
+import vtypes as v
 
 from nose.tools import *
 from parser import Node
@@ -151,7 +152,6 @@ class BackendTests(unittest.TestCase):
     def test_assignment(self):
         x_node = Node(vtype="IDENTIFIER", symbol='x')
         val_node = self.int_node_two
-        assignment_node = Node(vtype="ASSIGNMENT", children=[x_node, val_node])
         assignment_node = Node(vtype="IDENTIFIER", children=[x_node, val_node])
         walk_ast(assignment_node)
         symbol_record = SCOPES[-1][x_node.symbol]
