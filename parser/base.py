@@ -24,7 +24,7 @@ start = 'stat'
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
     '''
-    p[0] = Node(vtype='ASSIGNMENT', children=[Node(vtype='NAME', syn_value=p[1]), p[3]])
+    p[0] = Node(vtype='ASSIGNMENT', children=[Node(vtype='NAME', syn_value=p[1]), p[3]]) #todo IDENTIFIER
 
 def p_stat_decl_assign(p):
     '''stat : decl '=' expr                                                                                                                             
@@ -34,7 +34,7 @@ def p_stat_decl_assign(p):
 def p_stat_decl(p):
     '''stat : decl
     '''
-    p[0] = p[1] #Node(vtype='DECLARATION2', children=[p[1]]) #might just be  p[0]=p[1]
+    p[0] = p[1] 
 
 def p_expr_a(p):
     '''expr : arith_expr'''
@@ -60,7 +60,7 @@ def p_arith_expr(p):
     '''
     if len(p) == 4:
         if p[2] == '+':
-            p[0] = Node(vtype='ADDITION', children=[p[1], p[3]])
+            p[0] = Node(vtype='ADDITION', children=[p[1], p[3]]) #todo ADD/SUBTRACT/MULTIPLY/DIVIDE
         else: 
             p[0] = Node(vtype='SUBTRACTION', children=[p[1], p[3]])
     else: # len(p) == 2:
@@ -104,7 +104,7 @@ def p_power(p):
 
 def p_integer(p):
     ''' pow : VINTEGER '''
-    p[0] = Node(vtype='INTEGER_VALUE', syn_value=p[1])#p[1], Depends on responsibility to decide value 
+    p[0] = Node(vtype='INTEGER_VALUE', syn_value=p[1])#p[1], Depends on responsibility to decide value (backend) 
 
 def p_float(p):
     ''' pow : VFLOAT '''
@@ -149,7 +149,7 @@ def p_primaryb(p):
 
 def p_primaryb_bool(p):
     ''' b_primary : VBOOLEAN '''
-    p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer   
+    p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer    #todo BOOLEAN_VALUE
 
 def p_conditionb(p):
     ''' b_condition : arith_expr '<' arith_expr
@@ -160,13 +160,13 @@ def p_conditionb(p):
                | expr NEQ expr
     '''
     if p[2] == '<':
-            p[0] = Node(vtype='LT', children=[p[1], p[3]])
+            p[0] = Node(vtype='LT', children=[p[1], p[3]]) #todo LESS_THAN
     elif p[2] == '>':
-            p[0] = Node(vtype='GT', children=[p[1], p[3]])
+            p[0] = Node(vtype='GT', children=[p[1], p[3]]) #todo GREATER_THAN
     elif p[2] == 'GEQ':
-            p[0] = Node(vtype='GEQ', children=[p[1], p[3]])
+            p[0] = Node(vtype='GEQ', children=[p[1], p[3]]) #todo GREATER_THAN_EQUAL
     elif p[2] == 'LEQ':
-            p[0] = Node(vtype='LEQ', children=[p[1], p[3]])
+            p[0] = Node(vtype='LEQ', children=[p[1], p[3]]) #todo LESS_THAN_EQUAL
     elif p[2] == 'EQ':
             p[0] = Node(vtype='EQUAL', children=[p[1], p[3]])
     elif p[2] == 'NEQ':
@@ -223,21 +223,22 @@ def p_exprs(p):
               | VSTRING
     '''
     if len(p) == 4:
-        p[0] = Node(vtype='CONCAT', children=[p[1], p[3]])
+        p[0] = Node(vtype='CONCAT', children=[p[1], p[3]]) #todo CONCATENATE
     else: #len(p) == 2
-        p[0] = Node(vtype='STRING_VALUE', syn_value=p[1])
+        p[0] = Node(vtype='STRING_VALUE', syn_value=p[1].strip("\'\""))
 
 def p_decl(p):
     '''decl : type NAME
     '''
-    p[0] = Node(vtype='DECLARATION', children=[p[1], Node(vtype='NAME', syn_value=p[2])]) ##testing NAME
+    p[0] = Node(vtype='DECLARATION', children=[p[1], Node(vtype='NAME', syn_value=p[2])]) #todo IDENTIFIER
 
+# todo split into 4 functions
 def p_type(p):
     '''type : INTEGER 
             | FLOAT 
             | STRING 
             | BOOLEAN'''
-    p[0] = Node(vtype='BASIC_TYPE', syn_value=p[1]) ####using syn_value
+    p[0] = Node(vtype='BASIC_TYPE', syn_value=p[1]) ####using syn_value #<BASIC_TYPE>_KEYWORD
 
 #def p_function(p):
     #'expr : NAME LPAREN expr RPAREN'
