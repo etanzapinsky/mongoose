@@ -1,11 +1,13 @@
 class Node:
-    def __init__(self, vtype, inh_value=None, syn_value=None, children=[]):
+    def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[]):
         """
         @param vtype: str
+        @param symbol: str
         @param inh_value: <anything>
         @param syn_value: <anything>
         @param children: list(Node)
         """
+        self.symbol = symbol
         self.vtype = vtype
         self.inh_value = inh_value
         self.syn_value = syn_value
@@ -29,7 +31,8 @@ class Node:
 
     # Useful for debugging
     def __str__(self):
-        return '[Node: {vtype}, {inh_val}, {syn_val}, {kids}]'.format(vtype=self.vtype,
-                                                                      inh_val=self.inh_value,
-                                                                      syn_val=self.syn_value,
-                                                                      kids=self.children)
+        return '[Node: {sym} {vtype}, {inh_val}, {syn_val}, {kids}]'.format(sym=self.symbol,
+                                                                            vtype=self.vtype,
+                                                                            inh_val=self.inh_value,
+                                                                            syn_val=self.syn_value,
+                                                                            kids=self.children)

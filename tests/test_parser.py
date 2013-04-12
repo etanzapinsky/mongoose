@@ -7,7 +7,7 @@ from parser import Node, parser
 # Also see: https://nose.readthedocs.org/en/latest/testing_tools.html
 
 def test_print_node():
-    eq_(parser.parse(r'"hello"').__str__(),'[Node: STRING, None, hello, []]')
+    eq_(parser.parse(r'"hello"').__str__(),'[Node: None STRING, None, hello, []]')
 
 def test_parse_string_literal():
     src = r'"hello"'
