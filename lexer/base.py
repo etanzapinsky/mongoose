@@ -93,8 +93,3 @@ class Lexer:
 
 lexer = Lexer()
 lexer.build()
-
-if __name__ == "__main__":
-    while True:
-        data = raw_input(">>   ")
-        lexer.test(data)
