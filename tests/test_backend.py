@@ -152,6 +152,7 @@ class BackendTests(unittest.TestCase):
         x_node = Node(vtype="IDENTIFIER", symbol='x')
         val_node = self.int_node_two
         assignment_node = Node(vtype="ASSIGNMENT", children=[x_node, val_node])
+        assignment_node = Node(vtype="IDENTIFIER", children=[x_node, val_node])
         walk_ast(assignment_node)
         symbol_record = SCOPES[-1][x_node.symbol]
         eq_(symbol_record[0], val_node.vtype)

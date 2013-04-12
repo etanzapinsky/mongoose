@@ -20,6 +20,8 @@ class Node:
             # We're currently just raising a python error #FIXME @todo
             raise TypeError, "'{}' is not comparable with '{}'".format(self.vtype, other.vtype)
 
+            # @todo #FIXME expanding IDENTIFIER (so we can say x == 32)
+
         if self.children == None:
             return bool(self.inh_value == other.inh_value and
                         self.syn_value == other.syn_value)
