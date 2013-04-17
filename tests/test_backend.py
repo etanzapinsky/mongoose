@@ -28,6 +28,16 @@ class BackendTests(unittest.TestCase):
                              children=[self.int_node_one, self.int_node_two])
         walk_ast(int_node_add)
         eq_(int_node_add.syn_value, 3)
+        int_node_neg_two = Node(vtype=v.ADD,
+                                children=[self.int_node_neg_one, self.int_node_neg_one])
+        int_node_neg_four = Node(vtype=v.ADD,
+                                 children=[int_node_neg_two, int_node_neg_two])
+        int_node_four = Node(vtype=v.ADD,
+                             children=[self.int_node_two, self.int_node_two])
+        int_node_result = Node(vtype=v.ADD,
+                               children=[int_node_four, int_node_neg_four])
+        walk_ast(int_node_result)
+        eq_(int_node_result.syn_value, 0)
 
     def test_int_subtract(self):
         int_node_subtract = Node(vtype=v.SUBTRACT,
