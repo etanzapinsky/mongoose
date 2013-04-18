@@ -19,10 +19,43 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start = 'stat'
+start = 'program'
+
+def p_program(p):
+    '''program : NEWLINE stat_list
+               | stat_list
+    '''
+    if len(p) == 3:
+        p[0] = p[2]
+    else: #len(p) == 2
+        p[0] = p[1]
+
+def p_stat_list(p):
+    '''stat_list : stat_list stat
+                 | stat_n
+    '''
+    if len(p) == 3:
+        p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
+    else: #len(p) == 2
+        p[0] = p[1]
+
+def p_stat_listn(p):
+    '''stat_list : stat_list stat_n
+    '''
+    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
+
+#(fixed?) TODO: dont require last newline
+def p_statn(p):
+    '''stat_n : stat NEWLINE
+    '''
+    p[0] = p[1] 
+
+#def p_stat_eps(p):
+#    '''stat : epsilon
+#    '''
+#    p[0] = Node(vtype=v.EPSILON_STAT) 
 
 #(prob correct) unsure if literals should be in single quotes
-#add int x = y,   x = y
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
     '''
@@ -219,7 +252,7 @@ def p_decl(p):
 def p_list_type(p):
     ''' list_type : type brack
     '''
-    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[2].inh_value)#TODO add to vtypes
+    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[2].inh_value) #TODO: change these (and below) to syn_value
 
 def p_bracket(p):
     ''' brack : '[' VINTEGER ']' brack
@@ -227,7 +260,7 @@ def p_bracket(p):
               | epsilon
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4]], inh_value=p[1]+p[2]+p[3]+p[4].inh_value)#TODO add to vtypes
+        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4]], inh_value=p[1]+p[2]+p[3]+p[4].inh_value)
     elif len(p) == 4:
         p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
     else:  
@@ -259,7 +292,7 @@ def p_type_boolean(p):
     #p[0] = Node(vtype='FUNCTION', syn_value=func, children=[p[3]])
 
 def p_epsilon(p):
-    'epsilon :'
+    '''epsilon : '''
     pass
 
 # Error rule for syntax errors
@@ -270,3 +303,5 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
+if __name__ == '__main__':
+    pass    

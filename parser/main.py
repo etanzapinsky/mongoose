@@ -1,4 +1,5 @@
 from parser import parser
+import sys
 
 def traverse(root):
     traversePost(root, 0)
@@ -17,13 +18,14 @@ def traversePost(root, indent): #postorder
         #    print '    '*indent + root.vtype
 
 if __name__ == "__main__": 
-    while True:
-        try:
-            s = raw_input('y>>   ')
-        except EOFError:
-            break
-        if not s: continue
-        result = parser.parse(s)
-        print "result is of type", type(result)
-        traverse(result)
-        print "done"
+    #while True:
+    #try:
+        #s = raw_input('y>>   ')
+    s = open(sys.argv[1], 'r')
+    #except EOFError:
+        #break
+    #if not s: continue
+    result = parser.parse(s.read())
+    print "result is of type", type(result)
+    traverse(result)
+    print "done"

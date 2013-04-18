@@ -21,6 +21,7 @@ class Lexer:
 
     #add 'none' later
     tokens = [
+        'NEWLINE',
         'NAME',
         'VSTRING',
         'VINTEGER',
@@ -70,6 +71,8 @@ class Lexer:
     def t_newline(self, t):
         r'\n+'
         t.lexer.lineno += len(t.value)
+        t.type = 'NEWLINE'
+        return t
 
     #def t_COMMENT(self, t):
         #r'\#.*'
