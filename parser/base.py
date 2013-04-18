@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from lexer import lexer
 from tree import Node
+import vtypes as v
 # hack to get the tokens since they are a global variable in the lexer object
 tokens = lexer.tokens
 
@@ -14,6 +15,7 @@ precedence = (
     ('nonassoc', '<', '>', 'LEQ', 'GEQ'),
     ('left', '+', '-'),
     ('left', '*', '/', '%'),
+    ('right', '^'),
     ('right', 'NOT', 'UMINUS'),           
 )
 
@@ -24,29 +26,28 @@ start = 'stat'
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
     '''
-    p[0] = Node(vtype='ASSIGNMENT', children=[Node(vtype='NAME', syn_value=p[1]), p[3]]) #todo IDENTIFIER
+    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1]), p[3]]) 
 
 def p_stat_decl_assign(p):
-    '''stat : decl '=' expr                                                                                                                             
-    '''
-    p[0] = Node(vtype='DECLARATION_ASSIGNMENT', children=[p[1], p[3]])
+    '''stat : decl '=' expr                                                                                                  '''
+    p[0] = Node(vtype=v.DECLARATION_ASSIGNMENT, children=[p[1], p[3]] )#, symbol=p[1].children[1].symbol)
 
 def p_stat_decl(p):
     '''stat : decl
     '''
     p[0] = p[1] 
 
-def p_expr_a(p):
-    '''expr : arith_expr'''
-    p[0] = p[1]
+#def p_expr_a(p):
+#    '''expr : arith_expr'''
+#    p[0] = p[1]
 
 def p_expr_b(p):
     '''expr : b_expr'''
     p[0] = p[1]
 
-def p_expr_s(p):
-    '''expr : s_expr'''
-    p[0] = p[1]
+#def p_expr_s(p):
+#    '''expr : s_expr'''
+#    p[0] = p[1]
 
 #def p_expr_none(p):
     #'''expr : NONE'''
@@ -60,9 +61,9 @@ def p_arith_expr(p):
     '''
     if len(p) == 4:
         if p[2] == '+':
-            p[0] = Node(vtype='ADDITION', children=[p[1], p[3]]) #todo ADD/SUBTRACT/MULTIPLY/DIVIDE
+            p[0] = Node(vtype=v.ADD, children=[p[1], p[3]])
         else: 
-            p[0] = Node(vtype='SUBTRACTION', children=[p[1], p[3]])
+            p[0] = Node(vtype=v.SUBTRACT, children=[p[1], p[3]])
     else: # len(p) == 2:
         p[0] = p[1]
     #else: #len(p) == 3
@@ -76,11 +77,11 @@ def p_term(p):
     '''
     if len(p) == 4:
         if p[2] == '*':
-            p[0] = Node(vtype='MULTIPLICATION', children=[p[1], p[3]])
+            p[0] = Node(vtype=v.MULTIPLY, children=[p[1], p[3]])
         elif p[2] == '/':
-            p[0] = Node(vtype='DIVISION', children=[p[1], p[3]])
+            p[0] = Node(vtype=v.DIVIDE, children=[p[1], p[3]])
         else: #p[2] == '%'
-            p[0] = Node(vtype='MODULUS', children=[p[1], p[3]])
+            p[0] = Node(vtype=v.MODULUS, children=[p[1], p[3]])
     else: #len(p) == 2
         p[0] = p[1]
 
@@ -89,43 +90,58 @@ def p_factor(p):
               | pow             
     '''
     if len(p) == 4:
-       p[0] = Node(vtype='POWER', children=[p[1], p[3]])
+       p[0] = Node(vtype=v.POWER, children=[p[1], p[3]])
     else:#len(p) == 2
        p[0] = p[1]
 
 def p_power(p):
-    ''' pow : '(' arith_expr ')'
-            | '-' arith_expr %prec UMINUS
-    '''
-    if len(p) == 4:
-        p[0] = p[2] 
-    else: #len(p) == 3                                                                                                   
-        p[0] = Node(vtype='UMINUS', children=[p[2]])
+    ''' pow : '-' arith_expr %prec UMINUS
+    '''# | '(' arith_expr ')' 
+    #if len(p) == 4:
+    #    p[0] = p[2] 
+    #else: #len(p) == 3                                                                                                 
+    p[0] = Node(vtype=v.UMINUS, children=[p[2]])
 
 def p_integer(p):
     ''' pow : VINTEGER '''
-    p[0] = Node(vtype='INTEGER_VALUE', syn_value=p[1])#p[1], Depends on responsibility to decide value (backend) 
+    p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1])#p[1], Depends on responsibility to decide value (backend) 
 
 def p_float(p):
     ''' pow : VFLOAT '''
-    p[0] = Node(vtype='FLOAT_VALUE', syn_value=p[1])#p[1], see p_integer
+    p[0] = Node(vtype=v.FLOAT_VALUE, syn_value=p[1])#p[1], see p_integer
 
-# (fixed) NOT my be incorrect (should have highest precedence) -same with uminus?
+def p_bool(p):
+    ''' pow : VBOOLEAN '''
+    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_value=p[1])#p[1], see p_integer    
+
+def p_string(p):
+    ''' pow : VSTRING '''
+    p[0] = Node(vtype=v.STRING_VALUE, syn_value=p[1])#p[1], see p_integer    
+
+def p_id(p):
+    ''' pow : NAME '''
+    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1])
+
+def p_expr_paren(p):
+    ''' pow : '(' expr ')'
+    '''
+    p[0] = p[2]
+
 def p_exprb(p):
-    ''' b_expr : b_term 
-               | b_expr OR b_term 
+    ''' b_expr : b_expr OR b_term 
+               | b_term 
     '''         
     if len(p) == 4:
-        p[0] = Node(vtype='OR', children=[p[1], p[3]])
+        p[0] = Node(vtype=v.OR, children=[p[1], p[3]])
     else:
         p[0] = p[1]
 
 def p_termb(p):
-    ''' b_term : b_factor                                                                                       
-               | b_term AND b_factor                                                                                    
+    ''' b_term : b_term AND b_factor
+               | b_factor
     '''
     if len(p) == 4:
-        p[0] = Node(vtype='AND', children=[p[1], p[3]])
+        p[0] = Node(vtype=v.AND, children=[p[1], p[3]])
     else:
         p[0] = p[1]
 
@@ -134,121 +150,102 @@ def p_factorb(p):
                  | b_primary
     '''
     if len(p) == 3:
-        p[0] = Node(vtype='NOT', children=[p[2]])
+        p[0] = Node(vtype=v.NOT, children=[p[2]])
     else:
         p[0] = p[1]        
           
 def p_primaryb(p):
-    ''' b_primary : b_condition 
-                  | '(' b_expr ')'
-    '''
-    if len(p) == 4:                                                                                                                                                      
-        p[0] = p[2] 
-    else:
-        p[0] = p[1] 
+    ''' b_primary : b_condition   
+    ''' #| '(' b_expr ')' 
+    #if len(p) == 4:
+    #    p[0] = p[2] 
+    #else:
+    p[0] = p[1] 
 
-def p_primaryb_bool(p):
-    ''' b_primary : VBOOLEAN '''
-    p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer    #todo BOOLEAN_VALUE
+def p_primaryb_aexpr(p):
+    ''' b_primary : arith_expr
+    '''
+    p[0] = p[1] 
+
+#def p_bool_id(p):
+#    ''' b_primary : NAME 
+#    '''
+#    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1])
+
+#def p_primaryb_bool(p):
+#    ''' b_primary : VBOOLEAN '''
+#    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_value=p[1])#p[1], see p_integer   
 
 def p_conditionb(p):
     ''' b_condition : arith_expr '<' arith_expr
                | arith_expr '>' arith_expr
                | arith_expr GEQ arith_expr
                | arith_expr LEQ arith_expr
-               | expr EQ expr
-               | expr NEQ expr
+               | arith_expr EQ arith_expr
+               | arith_expr NEQ arith_expr
     '''
     if p[2] == '<':
-            p[0] = Node(vtype='LT', children=[p[1], p[3]]) #todo LESS_THAN
+            p[0] = Node(vtype=v.LESS_THAN, children=[p[1], p[3]]) 
     elif p[2] == '>':
-            p[0] = Node(vtype='GT', children=[p[1], p[3]]) #todo GREATER_THAN
+            p[0] = Node(vtype=v.GREATER_THAN, children=[p[1], p[3]])
     elif p[2] == 'GEQ':
-            p[0] = Node(vtype='GEQ', children=[p[1], p[3]]) #todo GREATER_THAN_EQUAL
+            p[0] = Node(vtype=v.GREATER_THAN_EQUAL, children=[p[1], p[3]])
     elif p[2] == 'LEQ':
-            p[0] = Node(vtype='LEQ', children=[p[1], p[3]]) #todo LESS_THAN_EQUAL
+            p[0] = Node(vtype=v.LESS_THAN_EQUAL, children=[p[1], p[3]])
     elif p[2] == 'EQ':
-            p[0] = Node(vtype='EQUAL', children=[p[1], p[3]])
+            p[0] = Node(vtype=v.EQUAL, children=[p[1], p[3]])
     elif p[2] == 'NEQ':
-            p[0] = Node(vtype='NOT_EQUAL', children=[p[1], p[3]])
+            p[0] = Node(vtype=v.NOT_EQUAL, children=[p[1], p[3]])
 
-#########
-#     ''' b_expr : b_expr AND b_expr
-#               | b_expr OR b_expr
-#               | b_expr2
-#               | expr EQ expr
-#               | expr NEQ expr
-#               | VBOOLEAN
-#               | arith_expr '<' arith_expr
-#               | arith_expr '>' arith_expr 
-#               | arith_expr GEQ arith_expr 
-#               | arith_expr LEQ arith_expr  
+#def p_exprs(p):
+#    '''s_expr : s_expr '+' s_expr
+#              | VSTRING
 #    '''
-#   if len(p) == 4:
-#        if p[2] == 'AND':
-#            p[0] = Node(vtype='AND', children=[p[1], p[3]])
-#        elif p[2] == 'OR':
-#            p[0] = Node(vtype='OR', children=[p[1], p[3]])
-#        elif p[2] == '<':
-#            p[0] = Node(vtype='LT', children=[p[1], p[3]])
-#        elif p[2] == '>':
-#            p[0] = Node(vtype='GT', children=[p[1], p[3]])
-#        elif p[2] == 'GEQ':
-#            p[0] = Node(vtype='GEQ', children=[p[1], p[3]])
-#        elif p[2] == 'LEQ':
-#            p[0] = Node(vtype='LEQ', children=[p[1], p[3]])
-#        elif p[2] == 'EQ':
-#            p[0] = Node(vtype='EQUAL', children=[p[1], p[3]])
-#        elif p[2] == 'NEQ':
-#            p[0] = Node(vtype='NOT_EQUAL', children=[p[1], p[3]])
-#        #else: #p[1] == '('
-#        #    p[0] = p[2]
-#    #elif len(p) == 3:
-#    #    p[0] = Node(vtype='NOT', children=[p[2]])
+#    if len(p) == 4:
+#        p[0] = Node(vtype=v.CONCATENATE, children=[p[1], p[3]])
 #    else: #len(p) == 2
-#        p[0] = Node(vtype='BOOL_VALUE', syn_value=p[1])#p[1], see p_integer
+#        p[0] = Node(vtype=v.STRING_VALUE, syn_value=p[1].strip("\'\""))
 
-#def p_exprboolean2(p):
-#    ''' b_expr2 : NOT b_expr
-#                | '(' b_expr ')'
+#def p_string_id(p):
+#    ''' s_expr : NAME
 #    '''
-#    if len(p) == 3:
-#        p[0] = Node(vtype='NOT', children=[p[2]]) 
-#    else: # if len(p)==4
-#        p[0] = p[2]       
-
-
-def p_exprs(p):
-    '''s_expr : s_expr '+' s_expr
-              | VSTRING
-    '''
-    if len(p) == 4:
-        p[0] = Node(vtype='CONCAT', children=[p[1], p[3]]) #todo CONCATENATE
-    else: #len(p) == 2
-        p[0] = Node(vtype='STRING_VALUE', syn_value=p[1].strip("\'\""))
+#    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1])
 
 def p_decl(p):
-    '''decl : type NAME
+    '''decl : list_type NAME
     '''
-    p[0] = Node(vtype='DECLARATION', children=[p[1], Node(vtype='NAME', syn_value=p[2])]) #todo IDENTIFIER
+    p[0] = Node(vtype=v.DECLARATION, children=[p[1], Node(vtype=v.IDENTIFIER, symbol=p[2])]) #name is syn_value or symbol?
 
-# todo split into 4 functions
-def p_type(p):
+#def p_list_type(p):
+#    ''' list_type : type brack
+#                  | type
+#    '''
+#    if 
+
+def p_type_int(p):
     '''type : INTEGER 
-            | FLOAT 
-            | STRING 
-            | BOOLEAN'''
-    p[0] = Node(vtype='BASIC_TYPE', syn_value=p[1]) ####using syn_value #<BASIC_TYPE>_KEYWORD
+    '''        
+    p[0] = Node(vtype=v.INT_KEYWORD, syn_value=p[1]) ####using syn_value #<BASIC_TYPE>_KEYWORD
+
+def p_type_float(p):
+    '''type : FLOAT                                                                                                    
+    '''  
+    p[0] = Node(vtype=v.FLOAT_KEYWORD, syn_value=p[1])
+
+def p_type_string(p):
+    '''type : STRING 
+    '''
+    p[0] = Node(vtype=v.STRING_KEYWORD, syn_value=p[1])
+
+def p_type_boolean(p):
+    '''type : BOOLEAN
+    '''
+    p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_value=p[1])
 
 #def p_function(p):
     #'expr : NAME LPAREN expr RPAREN'
     #func = lexer.symbol_table.get(p[1])
     #p[0] = Node(vtype='FUNCTION', syn_value=func, children=[p[3]])
-
-#def p_string(p):
-    #'string : QUOTE STRING QUOTE'
-    #p[0] = Node(vtype='STRING', syn_value=p[2])
-
 
 # Error rule for syntax errors
 def p_error(p):

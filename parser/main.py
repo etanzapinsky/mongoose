@@ -12,7 +12,7 @@ def traversePost(root, indent): #postorder
             traversePost(n, indent+1)
         #print ' '*indent
         if len(root.children) == 0: #leaf
-            print '     '*indent + root.vtype,':',root.syn_value
+            print '     '*indent + root.vtype,':',root.syn_value,':',root.symbol
         else: #non-leaf
             print '    '*indent + root.vtype
 
