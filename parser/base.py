@@ -19,10 +19,10 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start = 'program'
+start = 'stat_list_wrapper'
 
-def p_program(p):
-    '''program : NEWLINE stat_list
+def p_stat_list_wrapper(p):
+    '''stat_list_wrapper : NEWLINE stat_list
                | stat_list
     '''
     if len(p) == 3:
@@ -30,19 +30,23 @@ def p_program(p):
     else: #len(p) == 2
         p[0] = p[1]
 
+#TODO: if statement_list has only 1 line, requires newline at end !!!!
 def p_stat_list(p):
     '''stat_list : stat_list stat
+    '''
+    #if len(p) == 3:
+    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
+    #else: #len(p) == 2
+    #    p[0] = p[1]
+
+def p_stat_listn(p):
+    '''stat_list : stat_list stat_n
                  | stat_n
     '''
     if len(p) == 3:
         p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
-    else: #len(p) == 2
+    else: #len(p) == 2      
         p[0] = p[1]
-
-def p_stat_listn(p):
-    '''stat_list : stat_list stat_n
-    '''
-    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
 
 #(fixed?) TODO: dont require last newline
 def p_statn(p):
@@ -56,6 +60,11 @@ def p_statn(p):
 #    p[0] = Node(vtype=v.EPSILON_STAT) 
 
 #(prob correct) unsure if literals should be in single quotes
+def p_while(p):
+    ''' stat : WHILE '(' expr ')' '{' stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.WHILE, children=[p[3], p[6]])
+
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
     '''
