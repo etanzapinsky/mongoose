@@ -216,11 +216,22 @@ def p_decl(p):
     '''
     p[0] = Node(vtype=v.DECLARATION, children=[p[1], Node(vtype=v.IDENTIFIER, symbol=p[2])]) #name is syn_value or symbol?
 
-#def p_list_type(p):
-#    ''' list_type : type brack
-#                  | type
-#    '''
-#    if 
+def p_list_type(p):
+    ''' list_type : type brack
+    '''
+    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[2].inh_value)#TODO add to vtypes
+
+def p_bracket(p):
+    ''' brack : '[' VINTEGER ']' brack
+              | '[' ']' brack
+              | epsilon
+    '''
+    if len(p) == 5:
+        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4]], inh_value=p[1]+p[2]+p[3]+p[4].inh_value)#TODO add to vtypes
+    elif len(p) == 4:
+        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
+    else:  
+        p[0] = Node(vtype=v.BRACKET_DECL, inh_value='')
 
 def p_type_int(p):
     '''type : INTEGER 
@@ -246,6 +257,10 @@ def p_type_boolean(p):
     #'expr : NAME LPAREN expr RPAREN'
     #func = lexer.symbol_table.get(p[1])
     #p[0] = Node(vtype='FUNCTION', syn_value=func, children=[p[3]])
+
+def p_epsilon(p):
+    'epsilon :'
+    pass
 
 # Error rule for syntax errors
 def p_error(p):
