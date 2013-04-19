@@ -5,17 +5,13 @@ def traverse(root):
     traversePost(root, 0)
 
 def traversePost(root, indent): #postorder
-    if type(root) is 'str':
+    if type(root) is str:
         print root, "is a str. oops"
 
     if(root is not None ):
         for n in root.children:
-            traversePost(n, indent+1)
-        #print ' '*indent
-        #if len(root.children) == 0: #leaf
+                traversePost(n, indent+1)
         print '     '*indent + root.vtype,':',root.syn_value,':',root.symbol,':',root.inh_value
-        #else: #non-leaf
-        #    print '    '*indent + root.vtype
 
 if __name__ == "__main__": 
     #while True:

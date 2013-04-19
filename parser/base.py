@@ -43,13 +43,6 @@ def p_stat_list_wrapper(p):
 #    p[0] = p[1]
 
 #TODO: if statement_list has only 1 line, requires newline at end !!!!
-#def p_stat_list(p):
-#    '''stat_list : stat_list stat
-#    '''
-#    #if len(p) == 3:
-#    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
-#    #else: #len(p) == 2
-#    #    p[0] = p[1]
 
 def p_stat_opt(p):
     ''' stat_opt : stat                                                                                              
@@ -64,12 +57,9 @@ def p_stat_opt_epsilon(p):
 def p_stat_listn(p):
     '''stat_list : stat_n stat_opt
     '''
-#    if len(p) == 3:
     p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
- #   else: #len(p) == 2      
- #      p[0] = p[1]
 
-#(fixed?) TODO: dont require last newline                                                                               
+# TODO: dont require last newline                                                                               
 def p_statn(p):
     '''stat_n : stat NEWLINE stat_n                                                                                      
               | epsilon                                                                                             
@@ -79,13 +69,6 @@ def p_statn(p):
     else:
         p[0] = None
 
-#def p_stat_eps(p):
-#    '''stat : epsilon
-#    '''
-#    p[0] = Node(vtype=v.EPSILON_STAT) 
-
-#(prob correct) unsure if literals should be in single quotes
-
 #TODO: (fix:) cant have newline before {
 def p_while(p):
     ''' stat : WHILE '(' expr ')' '{' stat_list_wrapper '}'
@@ -94,21 +77,26 @@ def p_while(p):
 
 #TODO: need newline before elif/else, maybe fix this
 def p_if(p):
-    ''' stat : IF '(' expr ')' '{' stat_list_wrapper '}' elif_stat NEWLINE ELSE '{' stat_list_wrapper '}'
-             | IF '(' expr ')' '{' stat_list_wrapper '}' elif_stat
-    ''' 
-    if len(p) == 14:
-        p[0] = Node(vtype=v.IF_ELSE, children=[p[3],p[6],p[8],p[12]])
-    else: #len(p)==9
-        p[0] = Node(vtype=v.IF, children=[p[3],p[6],p[8]])
-
-def p_elif_stat(p):
-    ''' elif_stat : NEWLINE ELIF '(' expr ')' '{' stat_list_wrapper '}' elif_stat
-                  | NEWLINE epsilon
+    ''' stat : IF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs opt_else  
     '''
-    if len(p) == 10:
-        p[0] = Node(vtype=v.ELIF, children=[p[4],p[7],p[9]])
-    else: #len(p)==3
+    p[0] = Node(vtype=v.IF, children=[p[3],p[6],p[8],p[9]])
+
+def p_opt_elifs(p):
+    ''' opt_elifs : epsilon
+                  | opt_elifs ELIF '(' expr ')' '{' stat_list_wrapper '}' 
+    ''' 
+    if len(p) == 9:
+        p[0] = Node(vtype=v.ELIF, children=[p[1],p[4],p[7]])
+    else: #len(p)==2
+        p[0] = None
+
+def p_opt_else(p):
+    ''' opt_else : epsilon
+                 | ELSE '{' stat_list_wrapper '}'
+    '''
+    if len(p) == 5:
+        p[0] = Node(vtype=v.ELSE, children=[p[3]]) 
+    else:
         p[0] = None
 
 def p_stat_assign(p):
@@ -347,7 +335,7 @@ def p_type_boolean(p):
     #p[0] = Node(vtype='FUNCTION', syn_value=func, children=[p[3]])
 
 def p_epsilon(p):
-    '''epsilon : '''
+    '''epsilon :'''
     pass
 
 # Error rule for syntax errors
