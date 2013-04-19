@@ -20,6 +20,9 @@ class Lexer:
         'if' : 'IF',
         'elif' : 'ELIF',
         'else' : 'ELSE',
+        'pif' : 'PIF',
+        'pelif' : 'PELIF',
+        'pelse' : 'PELSE',
     }
 
     #add 'none' later

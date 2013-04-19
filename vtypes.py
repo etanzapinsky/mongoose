@@ -45,6 +45,9 @@ WHILE = "WHILE"
 IF = "IF"
 ELIF = "ELIF"
 ELSE = "ELSE"
+PIF = "PIF"
+PELIF = "PELIF"
+PELSE = "PELSE"
 
 #List Declarations
 LIST_TYPE = "LIST_TYPE"

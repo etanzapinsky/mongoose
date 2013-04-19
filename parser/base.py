@@ -99,6 +99,30 @@ def p_opt_else(p):
     else:
         p[0] = None
 
+def p_pif(p):
+    ''' stat : PIF '(' VFLOAT ')' '{' stat_list_wrapper '}' opt_pelifs opt_pelse                                               
+    '''
+    p[0] = Node(vtype=v.PIF, children=[Node(vtype=v.FLOAT_VALUE, syn_value=p[3]),p[6],p[8],p[9]])
+
+def p_opt_pelifs(p):
+    ''' opt_pelifs : epsilon                                                                                               
+                  | opt_pelifs PELIF '(' VFLOAT ')' '{' stat_list_wrapper '}'                                                 
+    '''
+    if len(p) == 9:
+        p[0] = Node(vtype=v.PELIF, children=[p[1],Node(vtype=v.FLOAT_VALUE, syn_value=p[4]),p[7]])
+    else: #len(p)==2                                                                                                      
+        p[0] = None
+
+def p_opt_pelse(p):
+    ''' opt_pelse : epsilon   
+                 | PELSE '{' stat_list_wrapper '}'                                                                     
+    '''
+    if len(p) == 5:
+        p[0] = Node(vtype=v.PELSE, children=[p[3]])
+    else:
+        p[0] = None
+
+
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
     '''
