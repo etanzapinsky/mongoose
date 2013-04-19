@@ -22,37 +22,62 @@ precedence = (
 start = 'stat_list_wrapper'
 
 def p_stat_list_wrapper(p):
-    '''stat_list_wrapper : NEWLINE stat_list
-               | stat_list
+    '''stat_list_wrapper : NEWLINE stat_list NEWLINE
+                         | NEWLINE stat_list
+                         | stat_list NEWLINE
+                         | stat_list 
     '''
     if len(p) == 3:
         p[0] = p[2]
-    else: #len(p) == 2
-        p[0] = p[1]
+    elif len(p) == 2:
+        if type(p[1]) is str:  
+            p[0] = p[2]
+        else:
+            p[0] = p[1]
+    else: #len(p) == 4
+        p[0] = p[2]
+
+#def p_stat_list_wrapper_2(p):
+#    ''' stat_list_wrapper : stat_list NEWLINE
+#    '''
+#    p[0] = p[1]
 
 #TODO: if statement_list has only 1 line, requires newline at end !!!!
-def p_stat_list(p):
-    '''stat_list : stat_list stat
+#def p_stat_list(p):
+#    '''stat_list : stat_list stat
+#    '''
+#    #if len(p) == 3:
+#    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
+#    #else: #len(p) == 2
+#    #    p[0] = p[1]
+
+def p_stat_opt(p):
+    ''' stat_opt : stat                                                                                              
     '''
-    #if len(p) == 3:
-    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
-    #else: #len(p) == 2
-    #    p[0] = p[1]
+    p[0] = p[1]
+
+def p_stat_opt_epsilon(p):
+    ''' stat_opt : epsilon  
+    '''
+    p[0] = None
 
 def p_stat_listn(p):
-    '''stat_list : stat_list stat_n
-                 | stat_n
+    '''stat_list : stat_n stat_opt
     '''
-    if len(p) == 3:
-        p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
-    else: #len(p) == 2      
-        p[0] = p[1]
+#    if len(p) == 3:
+    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
+ #   else: #len(p) == 2      
+ #      p[0] = p[1]
 
-#(fixed?) TODO: dont require last newline
+#(fixed?) TODO: dont require last newline                                                                               
 def p_statn(p):
-    '''stat_n : stat NEWLINE
+    '''stat_n : stat NEWLINE stat_n                                                                                      
+              | epsilon                                                                                             
     '''
-    p[0] = p[1] 
+    if len(p) == 4:
+        p[0] = Node(vtype=v.STAT_NEWLINE, children=[p[1],p[3]])
+    else:
+        p[0] = None
 
 #def p_stat_eps(p):
 #    '''stat : epsilon
@@ -60,10 +85,31 @@ def p_statn(p):
 #    p[0] = Node(vtype=v.EPSILON_STAT) 
 
 #(prob correct) unsure if literals should be in single quotes
+
+#TODO: (fix:) cant have newline before {
 def p_while(p):
     ''' stat : WHILE '(' expr ')' '{' stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.WHILE, children=[p[3], p[6]])
+
+#TODO: need newline before elif/else, maybe fix this
+def p_if(p):
+    ''' stat : IF '(' expr ')' '{' stat_list_wrapper '}' elif_stat NEWLINE ELSE '{' stat_list_wrapper '}'
+             | IF '(' expr ')' '{' stat_list_wrapper '}' elif_stat
+    ''' 
+    if len(p) == 14:
+        p[0] = Node(vtype=v.IF_ELSE, children=[p[3],p[6],p[8],p[12]])
+    else: #len(p)==9
+        p[0] = Node(vtype=v.IF, children=[p[3],p[6],p[8]])
+
+def p_elif_stat(p):
+    ''' elif_stat : NEWLINE ELIF '(' expr ')' '{' stat_list_wrapper '}' elif_stat
+                  | NEWLINE epsilon
+    '''
+    if len(p) == 10:
+        p[0] = Node(vtype=v.ELIF, children=[p[4],p[7],p[9]])
+    else: #len(p)==3
+        p[0] = None
 
 def p_stat_assign(p):
     '''stat : NAME '=' expr    
@@ -230,13 +276,13 @@ def p_conditionb(p):
             p[0] = Node(vtype=v.LESS_THAN, children=[p[1], p[3]]) 
     elif p[2] == '>':
             p[0] = Node(vtype=v.GREATER_THAN, children=[p[1], p[3]])
-    elif p[2] == 'GEQ':
+    elif p[2] == '>=':
             p[0] = Node(vtype=v.GREATER_THAN_EQUAL, children=[p[1], p[3]])
-    elif p[2] == 'LEQ':
+    elif p[2] == '<=':
             p[0] = Node(vtype=v.LESS_THAN_EQUAL, children=[p[1], p[3]])
-    elif p[2] == 'EQ':
+    elif p[2] == '==':
             p[0] = Node(vtype=v.EQUAL, children=[p[1], p[3]])
-    elif p[2] == 'NEQ':
+    elif p[2] == '!=':
             p[0] = Node(vtype=v.NOT_EQUAL, children=[p[1], p[3]])
 
 #def p_exprs(p):

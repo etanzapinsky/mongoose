@@ -17,6 +17,9 @@ class Lexer:
         'or' : 'OR',       
         'not' : 'NOT',
         'while' : 'WHILE',
+        'if' : 'IF',
+        'elif' : 'ELIF',
+        'else' : 'ELSE',
     }
 
     #add 'none' later
