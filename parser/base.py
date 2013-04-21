@@ -365,7 +365,7 @@ def p_epsilon(p):
 # Error rule for syntax errors
 def p_error(p):
     print p
-    print "Syntax error in input!"
+    print(u'Syntax error in input:\n\tInput: {}'.format(p))
 
 # Build the parser
 parser = yacc.yacc()
