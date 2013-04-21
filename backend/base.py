@@ -1,4 +1,5 @@
 from stdlib import boolean_ops, equality_ops, first_order_ops
+import vtypes as v
 
 # example symbol table entry: (type, value)
 SYMBOLS = dict()
@@ -24,7 +25,7 @@ def walk_ast(root):
     if root != None:
         for child in root.children:
             walk_ast(child)
-        if root.vtype == 'FUNCTION':
+        if root.vtype == v.FUNCTION:
             root.syn_value(*[child.syn_value for child in root.children])
         elif root.vtype in first_order_ops:
             root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
@@ -32,9 +33,9 @@ def walk_ast(root):
             root.syn_value = boolean_ops[root.vtype](*[child.syn_value for child in root.children])
         elif root.vtype in equality_ops:
             root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
-        elif root.vtype == 'ASSIGNMENT':
+        elif root.vtype == v.ASSIGNMENT:
             root.syn_value = assignment(*root.children)
-        elif root.vtype == 'IDENTIFIER':
+        elif root.vtype == v.IDENTIFIER:
             pass
 
     # How does this deal with return values? @todo
