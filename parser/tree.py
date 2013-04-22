@@ -1,5 +1,7 @@
 import vtypes as v
-from backend import walk_ast
+from backend import Backend
+
+backend = Backend()
 
 class Node:
     def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[]):
@@ -55,7 +57,7 @@ class Function(Node):
 
     def execute(self, *args):
         self._bind_params(*args)
-        r = walk_ast(self.statements)
+        r = backend.walk_ast(self.statements)
         # self.syn_value = Node(vtype=v.INTEGER_VALUE, syn_value=r.syn_value)
 
     def _bind_params(self, *args):
