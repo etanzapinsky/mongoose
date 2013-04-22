@@ -1,7 +1,7 @@
 from stdlib import boolean_ops, equality_ops, first_order_ops
 import vtypes as v
 
-# example symbol table entry: (type, value)
+# example symbol table entry: {symbol:(type, reference/value)}
 SYMBOLS = dict()
 SCOPES = [SYMBOLS]  # Use append() and pop()
 
@@ -26,7 +26,7 @@ def walk_ast(root):
         for child in root.children:
             walk_ast(child)
         if root.vtype == v.FUNCTION:
-            root.syn_value(*[child.syn_value for child in root.children])
+            root.syn_value = function(f=root, args=[child.syn_value for child in root.children])
         elif root.vtype in first_order_ops:
             root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
         elif root.vtype in boolean_ops:
@@ -49,5 +49,16 @@ def assignment(*nodes):
     global SCOPES
 
     x = nodes[0]
-    val = nodes[1] 
-    SCOPES[-1][x.symbol] = (val.vtype, val.syn_value)
+    value = nodes[1] 
+    SCOPES[-1][x.symbol] = value
+
+
+def function(f, args):
+    '''Evaluates the function. 
+    Example: f(x,y).'''
+    # global SCOPES
+
+    # x = nodes[0]
+    # val = nodes[1] 
+    # SCOPES[-1][x.symbol] = (val.vtype, val.syn_value)
+    return 'ZAP'
