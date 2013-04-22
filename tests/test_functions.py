@@ -2,7 +2,7 @@ import unittest
 import vtypes as v
 from nose.tools import *
 from parser import Node, Function
-from backend import walk_ast, SCOPES
+from backend import Backend
 from backend.stdlib import first_order_ops
 
 class FunctionsTests(unittest.TestCase):
@@ -28,11 +28,23 @@ class FunctionsTests(unittest.TestCase):
                                                       (self.y, v.INTEGER_VALUE)),
                                      expressions=[self.assignment_node,])
 
+        self.backend = Backend()
+        
+
     def test_bind_params(self):
         self.sum_function._bind_params(self.int_node_one, self.int_node_two)
         assert self.sum_function.bindings['x'] == self.int_node_one
 
-    def test_execute_statements(self):
+    def test_scopeless_add(self):
+        scopeless_add_node = Node(vtype=v.ADD, children=(self.int_node_one, self.int_node_two))
+        scopeless_add_function = Function(return_type=v.INTEGER_VALUE,
+                                               parameter_pairs=(),
+                                               expressions=[scopeless_add_node,])
+        scopeless_add_function.execute()
+
+    @nottest
+    def test_execute_statement_without_scope(self):
         self.sum_function.execute(self.int_node_one, self.int_node_two)
+        assert self.scope
         assert self.sum_function.bindings['z'] == self.int_node_three
         # assert self.sum_function.syn_value == self.int_node_three
