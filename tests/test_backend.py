@@ -165,5 +165,4 @@ class BackendTests(unittest.TestCase):
         assignment_node = Node(vtype=v.ASSIGNMENT, children=[x_node, val_node])
         walk_ast(assignment_node)
         symbol_record = SCOPES[-1][x_node.symbol]
-        eq_(symbol_record[0], val_node.vtype)
-        eq_(symbol_record[1], val_node.syn_value)
+        eq_(symbol_record, val_node)
