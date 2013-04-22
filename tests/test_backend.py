@@ -159,6 +159,7 @@ class BackendTests(unittest.TestCase):
         walk_ast(node)
         eq_(node.syn_value, False)
 
+    @nottest  # requires scope
     def test_assignment(self):
         x_node = Node(vtype=v.IDENTIFIER, symbol='x')
         val_node = self.int_node_two
