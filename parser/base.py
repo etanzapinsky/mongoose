@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import lexer
-from tree import Node
+from tree import Node, Function
 import vtypes as v
 # hack to get the tokens since they are a global variable in the lexer object
 tokens = lexer.tokens
@@ -57,7 +57,7 @@ def p_stat_opt_epsilon(p):
 def p_stat_listn(p):
     '''stat_list : stat_n stat_opt
     '''
-    p[0] = Node(vtype=v.STAT_LIST, children=[p[1], p[2]])
+    p[0] = Node(vtype=v.STATEMENT_LIST, children=[p[1], p[2]])
 
 # TODO: dont require last newline                                                                               
 def p_statn(p):
