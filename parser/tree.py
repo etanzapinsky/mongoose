@@ -1,3 +1,6 @@
+import vtypes as v
+from backend import walk_ast
+
 class Node:
     def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[]):
         """
@@ -38,3 +41,29 @@ class Node:
                                                                             inh_val=self.inh_value,
                                                                             syn_val=self.syn_value,
                                                                             kids=self.children)
+
+
+class Function(Node):
+    def __init__(self, return_type, parameter_pairs, expressions):
+        '''Called when a function is defined.
+        vtype checking is done in the frontend (parser)'''
+        Node.__init__(self, vtype=v.FUNCTION)
+        self.return_type = return_type
+        self.statements = Node(vtype=v.STATEMENT_LIST, children=expressions)
+        self.parameter_pairs = parameter_pairs
+        self.bindings = {}
+
+    def execute(self, *args):
+        self._bind_params(*args)
+        r = walk_ast(self.statements)
+        # self.syn_value = Node(vtype=v.INTEGER_VALUE, syn_value=r.syn_value)
+
+    def _bind_params(self, *args):
+        if len(args) != len(self.parameter_pairs):
+            raise Exception, "InvalidParameters (incorrect number of parameters)"
+        for arg, (id_node, vtype) in zip(args, self.parameter_pairs):
+            if arg.vtype != vtype:
+                raise TypeError, "Invalid parameter type"
+            self.bindings[id_node.symbol] = arg
+
+
