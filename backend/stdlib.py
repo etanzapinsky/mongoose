@@ -25,3 +25,10 @@ boolean_ops = {
       v.AND: lambda x, y: bool(x and y),  # as implemented, and/or operators take any types
       v.OR: lambda x, y: bool(x or y),
 }
+
+def assignment(scope, *nodes):
+    '''Stores the assigned value in the given scope. 
+    Example: x = val.'''
+    x = nodes[0]
+    value = nodes[1]
+    scope[x.symbol] = value
