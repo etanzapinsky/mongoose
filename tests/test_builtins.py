@@ -23,4 +23,4 @@ def _print():
 
 # by default our print function will be newline terminated, so have to include
 # that in the check
-eq_(_print(), 'hello world\n')
+# eq_(_print(), 'hello world\n')
