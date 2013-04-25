@@ -295,178 +295,178 @@ The environment’s and agents’ variables and functions at the uppermost level
 Functions can be defined in any of the 4 blocks of a Mongoose program, or outside of any of the 4 blocks. A function within a terminate or analysis block can only be called from within that block. The functions in the environment or agents, such as populate(), create(), destroy() or any user-defined functions there can be called from anywhere, via dot notation on the reference to an agent. Note that action() functions may only be called by the Mongoose interpreter. Functions defined outside any of the 4 types of blocks can be called from any of the 4 blocks as well.
 
 # Appendix A: Complete Grammar
-statement :
-expression
-selection-statement
-prob-selection-statement
-iteration-statement
-jump-statement
-assignment-statement
-block-statement
-function-definition
-function-call
-*
-
-expression :
-    ( expression )
-    boolean-expression
-    mathematical-expression
-    cast-expression
-    agent-access-expression
-relational-expression
-
-selection-statement :
-if (boolean-expression) { statement-list } if (boolean-expression) { statement-list } else {statement-list}
-if (boolean-expression) { statement-list } opt-elif else { statement-list } 
+    ```statement :
+    expression
+    selection-statement
+    prob-selection-statement
+    iteration-statement
+    jump-statement
+    assignment-statement
+    block-statement
+    function-definition
+    function-call
+    *
     
-opt-elif :
-    elif ( boolean-expression ) { statement-list } opt-elif
-    \epsilon
-
-prob-selection-statement :
-pif (float-expression) { statement-list } pif (float-expression) { statement-list } pelse {statement-list}
-pif (float-expression) { statement-list } opt-pelif pelse { statement-list } 
+    expression :
+        ( expression )
+        boolean-expression
+        mathematical-expression
+        cast-expression
+        agent-access-expression
+    relational-expression
     
-opt-pelif :
-    pelif ( float-expression ) { statement-list } opt-pelif
-    \epsilon
-
-iteration-statement :
-    for ( declaration-statement in list ) { statement-list }
-
-list :
-    [ type-list ]
-
-type-list :
-    type , type-list
-    type
-\epsilon
-
-jump-statement :
-    return expression
-
-assignment-statement :
-    identifier = expression
-
-block-statement :
-    block-name { statement-list }
-    { statement-list }
-
-block-name : 
-[agent|environment|analysis|terminate]
-
-function-call : 
-    identifier ( parameter-list )
-    { statement-list }
-
-boolean-expression :
-    boolean-expression and boolean-expression
-boolean-expression or boolean-expression
-not boolean-expression
-[true|false]
-
-# arithmetic precedence and associativity are defined using standard
-# mathematical conventions
-    mathematical-expression :
-    mathematical-expression + mathematical-expression
-    mathematical-expression - mathematical-expression
-    mathematical-expression * mathematical-expression
-    mathematical-expression / mathematical-expression
-    mathematical-expression % mathematical-expression
-    mathematical-expression ^ mathematical-expression
-    ( mathematical-expression )
-    - mathematical-expression
-    int
-    float
-
-int :
-    [0-9] int-suffix
-    - [0-9] int-suffix
-
-pos-int: 
-    [0-9] int-suffix
-
-int-suffix :
-    [0-9] int-suffix
-    epsilon
-
-float :
-    . int
-    int .
-    int . int
-
-cast-expression :
-    ( type ) identifier
-
-agent-access-expression :
-    identifier . identifier
-
-relational-expression :
-    mathematical-expression < mathematical-expression
-    mathematical-expression <= mathematical-expression
-    mathematical-expression > mathematical-expression
-    mathematical-expression >= mathematical-expression
-
-agent-instantiation :
-    agent identifier = agent-identifier ( parameter-list )
-
-identifier :
-    [_A-Za-z] identifier-suffix
+    selection-statement :
+    if (boolean-expression) { statement-list } if (boolean-expression) { statement-list } else {statement-list}
+    if (boolean-expression) { statement-list } opt-elif else { statement-list } 
+        
+    opt-elif :
+        elif ( boolean-expression ) { statement-list } opt-elif
+        \epsilon
     
-identifier-suffix :
-    [_A-Za-z0-9] identifier-suffix
-    \epsilon
-
-agent-identifier :
-    [A-Z] agent-identifier-suffix
+    prob-selection-statement :
+    pif (float-expression) { statement-list } pif (float-expression) { statement-list } pelse {statement-list}
+    pif (float-expression) { statement-list } opt-pelif pelse { statement-list } 
+        
+    opt-pelif :
+        pelif ( float-expression ) { statement-list } opt-pelif
+        \epsilon
     
-agent-identifier-suffix :
-    [_A-Za-z] agent-identifier-suffix
+    iteration-statement :
+        for ( declaration-statement in list ) { statement-list }
+    
+    list :
+        [ type-list ]
+    
+    type-list :
+        type , type-list
+        type
     \epsilon
-
-declaration-statement :
+    
+    jump-statement :
+        return expression
+    
+    assignment-statement :
+        identifier = expression
+    
+    block-statement :
+        block-name { statement-list }
+        { statement-list }
+    
+    block-name : 
+    [agent|environment|analysis|terminate]
+    
+    function-call : 
+        identifier ( parameter-list )
+        { statement-list }
+    
+    boolean-expression :
+        boolean-expression and boolean-expression
+    boolean-expression or boolean-expression
+    not boolean-expression
+    [true|false]
+    
+    # arithmetic precedence and associativity are defined using standard
+    # mathematical conventions
+        mathematical-expression :
+        mathematical-expression + mathematical-expression
+        mathematical-expression - mathematical-expression
+        mathematical-expression * mathematical-expression
+        mathematical-expression / mathematical-expression
+        mathematical-expression % mathematical-expression
+        mathematical-expression ^ mathematical-expression
+        ( mathematical-expression )
+        - mathematical-expression
+        int
+        float
+    
+    int :
+        [0-9] int-suffix
+        - [0-9] int-suffix
+    
+    pos-int: 
+        [0-9] int-suffix
+    
+    int-suffix :
+        [0-9] int-suffix
+        epsilon
+    
+    float :
+        . int
+        int .
+        int . int
+    
+    cast-expression :
+        ( type ) identifier
+    
+    agent-access-expression :
+        identifier . identifier
+    
+    relational-expression :
+        mathematical-expression < mathematical-expression
+        mathematical-expression <= mathematical-expression
+        mathematical-expression > mathematical-expression
+        mathematical-expression >= mathematical-expression
+    
+    agent-instantiation :
+        agent identifier = agent-identifier ( parameter-list )
+    
+    identifier :
+        [_A-Za-z] identifier-suffix
+        
+    identifier-suffix :
+        [_A-Za-z0-9] identifier-suffix
+        \epsilon
+    
+    agent-identifier :
+        [A-Z] agent-identifier-suffix
+        
+    agent-identifier-suffix :
+        [_A-Za-z] agent-identifier-suffix
+        \epsilon
+    
+    declaration-statement :
+        complex-type identifier
+        complex-type assignment-statement
+    
+    list-declaration :
+        type list-constructor
+    
+    list-constructor :
+        [ ] list-constructor
+    [ ]
+    
+    function-definition :
+        complex-type identifier ( parameter-list ) { statement-list }
+        pos-int : complex-type identifier ( parameter-list )  { 
+    statement-list }
+    
+    parameter-list:
+        complex-type identifier , parameter-list
     complex-type identifier
-    complex-type assignment-statement
-
-list-declaration :
-    type list-constructor
-
-list-constructor :
-    [ ] list-constructor
-[ ]
-
-function-definition :
-    complex-type identifier ( parameter-list ) { statement-list }
-    pos-int : complex-type identifier ( parameter-list )  { 
-statement-list }
-
-parameter-list:
-    complex-type identifier , parameter-list
-complex-type identifier
-\epsilon
-
-statement-list :
-statement \n statement-list
-statement \n
-epsilon
-pass
-
-complex-type :
-    type
-    list-declaration
-
-type :
-[int|float|string|bool|none]
-identifier
-
-terminating-condition :
-    optional-pos-int-colon ( boolean-expression ) function-call
-
-action-def :
-    none optional-pos-int-colon action ( parameter-list ) { 
-statement-list }
-
-optional-pos-int-colon :
-    pos-int :
-    function-call :
     \epsilon
+    
+    statement-list :
+    statement \n statement-list
+    statement \n
+    epsilon
+    pass
+    
+    complex-type :
+        type
+        list-declaration
+    
+    type :
+    [int|float|string|bool|none]
+    identifier
+    
+    terminating-condition :
+        optional-pos-int-colon ( boolean-expression ) function-call
+    
+    action-def :
+        none optional-pos-int-colon action ( parameter-list ) { 
+    statement-list }
+    
+    optional-pos-int-colon :
+        pos-int :
+        function-call :
+        \epsilon
