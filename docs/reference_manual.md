@@ -94,7 +94,7 @@ In Mongoose, lists have a public length field that holds the list’s length.
 ### Functions
 
 Functions in Mongoose are very similar to those in Java or C. They are defined as follows:
-return_type function_name() {expression}
+    return_type function_name() {expression}
 Since Mongoose is a pass-by-reference language, parameters to functions get passed by reference, except for primitives which get passed by value. Mongoose supports anonymous functions in certain contexts, which are defined as: {expression}.
 
 ### Agent Definitions
@@ -174,7 +174,7 @@ A probabilistic value in Mongoose is an expression such as the following:
 This is a pipe-separated, parenthesized list of colon-separated weight-value pairs wi,vi, where each wi is a positive integer. The wi are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ wi (for all i) is the denominator of the probability).
 
 As another  example, one may assign the value of a die-roll as such:
-int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)
+    int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)
 If a chosen vi is not of the same type as the left-hand-side variable, it will be implicitly cast, if possible. If not, a runtime error will be thrown.
 
 A weight wi must be provided for each each value to use this construct; otherwise a syntax error will be thrown.
@@ -226,7 +226,7 @@ Lists are declared with the type of the list, followed by one or more square bra
 
 ### Function Declaration
 Functions in Mongoose are declared like so:
-type function() {code block}
+    type function() {code block}
 
 ## Initialization
 
@@ -245,14 +245,14 @@ Mongoose lists are dynamic, so they do not require initialization — they may b
 
 ### Statements
 There are a couple of different types of statements:
-statement :
-expression
-selection-statement
-prob-selection-statement
-iteration-statement
-jump-statement
-assignment-statement
-block-statement
+    statement :
+    expression
+    selection-statement
+    prob-selection-statement
+    iteration-statement
+    jump-statement
+    assignment-statement
+    block-statement
 Individual statements are terminated by the newline (\n) character; a statement list must contain at least one statement. The pass keyword is provided for cases in which a statement list must fulfil this requirement without actually doing anything; this keyword is a statement, but does nothing.
 
 ### Expressions
@@ -365,17 +365,17 @@ not boolean-expression
 
 # arithmetic precedence and associativity are defined using standard
 # mathematical conventions
-mathematical-expression :
-mathematical-expression + mathematical-expression
-mathematical-expression - mathematical-expression
-mathematical-expression * mathematical-expression
-mathematical-expression / mathematical-expression
-mathematical-expression % mathematical-expression
-mathematical-expression ^ mathematical-expression
-( mathematical-expression )
-- mathematical-expression
-int
-float
+    mathematical-expression :
+    mathematical-expression + mathematical-expression
+    mathematical-expression - mathematical-expression
+    mathematical-expression * mathematical-expression
+    mathematical-expression / mathematical-expression
+    mathematical-expression % mathematical-expression
+    mathematical-expression ^ mathematical-expression
+    ( mathematical-expression )
+    - mathematical-expression
+    int
+    float
 
 int :
     [0-9] int-suffix
@@ -402,8 +402,8 @@ agent-access-expression :
 relational-expression :
     mathematical-expression < mathematical-expression
     mathematical-expression <= mathematical-expression
-mathematical-expression > mathematical-expression
-mathematical-expression >= mathematical-expression
+    mathematical-expression > mathematical-expression
+    mathematical-expression >= mathematical-expression
 
 agent-instantiation :
     agent identifier = agent-identifier ( parameter-list )
