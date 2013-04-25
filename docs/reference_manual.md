@@ -217,8 +217,8 @@ The default values for various types are as follows: none for objects, the empty
 
 ### Agent/Environment Declaration
 Only agents can have objects of their type instantiated by the programmer. Agents and environments are declared by defining them as such:
-agent AgentName() {...}
-environment {...}
+    ```agent AgentName() {...}
+    environment {...}
 Note that the first letter of AgentName()is capitalized; this is a requirement, and without it a lexer error will be emitted. Mongoose is opinionated about the naming of its agent definitions.
 
 ### List Declaration
@@ -226,7 +226,7 @@ Lists are declared with the type of the list, followed by one or more square bra
 
 ### Function Declaration
 Functions in Mongoose are declared like so:
-```type function() {code block}
+    ```type function() {code block}
 
 ## Initialization
 
@@ -245,7 +245,7 @@ Mongoose lists are dynamic, so they do not require initialization — they may b
 
 ### Statements
 There are a couple of different types of statements:
-    statement :
+    ```statement :
     expression
     selection-statement
     prob-selection-statement
