@@ -59,6 +59,7 @@ class FunctionsTests(unittest.TestCase):
         self.sum_function.execute(self.int_node_one, self.int_node_two)
         # assert self.sum_function.syn_value == self.int_node_three
 
+    @nottest
     def test_execute_sum_with_return_function(self):
         self.sum_with_return_function.execute(self.int_node_one, self.int_node_two)
         print self.sum_with_return_function.syn_value
