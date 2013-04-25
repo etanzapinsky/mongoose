@@ -1,6 +1,5 @@
-from stdlib import assignment, boolean_ops, equality_ops, evaluate_function, first_order_ops
+from stdlib import assign, boolean_ops, equality_ops, first_order_ops
 import vtypes as v
-
 
 class Backend():
 
@@ -8,9 +7,11 @@ class Backend():
         symbols = dict()
         self.scopes = [symbols]
 
-    def walk_ast(self, root):
+    def walk_ast(self, root, siblings=None, parent=None):
 
-        scope = self.scopes[-1]
+        # not popping b/c we only pop when *destroying* scope
+        # (here we are just modifying)
+        scope = backend.scopes[-1]
 
         # this is obviously not extentable since the content of an arg for a function
         # can be an arbitrary expression, this is just to get something working
@@ -42,10 +43,16 @@ class Backend():
             elif root.vtype in equality_ops:
                 root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
             elif root.vtype == v.ASSIGNMENT:
-                root.syn_value = assignment(scope, *root.children)
+                assign(backend.scopes[-1], root.children)  # scopes modified via side effect
             elif root.vtype == v.IDENTIFIER:
-                root.syn_value = scope[root.symbol]
+                root.syn_value = root.symbol
+            elif root.vtype in v.STATEMENT_NEWLINE:
+                self.walk_ast(root.children[0])  # @todo only works for assignment? [what about declaration? anything else?]
+                raise 'implement assignment and declaration first'
+            elif root.vtype in v.RETURN_STATEMENT:
+                root.syn_value = self.walk_ast(root.children)
 
+        return root.syn_value
         # How does this deal with return values? @todo
 
 backend = Backend()  # backend is a global singleton variable
