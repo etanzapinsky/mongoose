@@ -27,4 +27,3 @@ class ScopeTests(unittest.TestCase):
                                      parameter_pairs=((self.x, v.INTEGER_VALUE),
                                                       (self.y, v.INTEGER_VALUE)),
                                      expressions=[self.assignment_node,])
-
