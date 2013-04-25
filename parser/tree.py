@@ -16,6 +16,12 @@ class Node:
     # Useful for testing 
     def __eq__(self, other):
 
+        if (self is  None and other is not None) or (self is not None and other is None): 
+            return False               
+
+        if self is None and other is None:
+            return True
+
         if self.vtype != other.vtype:
             # We're currently just raising a python error #FIXME @todo
             raise TypeError, "'{}' is not comparable with '{}'".format(self.vtype, other.vtype)
@@ -24,10 +30,13 @@ class Node:
 
         if self.children == None:
             return bool(self.inh_value == other.inh_value and
-                        self.syn_value == other.syn_value)
+                        self.syn_value == other.syn_value and
+                        self.symbol == other.symbol ) 
+
         else:
             self_comp = bool(self.inh_value == other.inh_value and
-                             self.syn_value == other.syn_value)
+                             self.syn_value == other.syn_value and
+                             self.symbol == other.symbol )
             return self_comp and all([self_c == other_c for self_c, other_c in
                                   zip(sorted(self.children), sorted(other.children))])
 
