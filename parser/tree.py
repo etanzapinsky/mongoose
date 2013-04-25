@@ -41,7 +41,7 @@ class Node:
                              self.syn_value == other.syn_value and
                              self.symbol == other.symbol )
             return self_comp and all([self_c == other_c for self_c, other_c in
-                                  zip(sorted(self.children), sorted(other.children))])
+                                  zip(self.children, other.children)])
 
     # Useful for debugging
     def __str__(self):
