@@ -1,3 +1,1 @@
-# remember the underscore before print for now, look in lexer.py for
-# explination --> if someone can fix this that would be great!
-_print("hello world")
+int x = 1 + 2
