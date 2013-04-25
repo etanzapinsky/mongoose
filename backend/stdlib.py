@@ -25,3 +25,10 @@ boolean_ops = {
       v.AND: lambda x, y: bool(x and y),  # as implemented, and/or operators take any types
       v.OR: lambda x, y: bool(x or y),
 }
+
+def assign(scope, nodes):
+    '''Modifies the scope parameter (side effect!) by inserting the assigned value.
+    Example: x = val.'''
+    x = nodes[0]  # FIXME
+    value = nodes[1]
+    scope[x.symbol] = value

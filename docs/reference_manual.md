@@ -94,7 +94,7 @@ In Mongoose, lists have a public length field that holds the list’s length.
 ### Functions
 
 Functions in Mongoose are very similar to those in Java or C. They are defined as follows:
-```return_type function_name() {expression}```
+return_type function_name() {expression}
 Since Mongoose is a pass-by-reference language, parameters to functions get passed by reference, except for primitives which get passed by value. Mongoose supports anonymous functions in certain contexts, which are defined as: {expression}.
 
 ### Agent Definitions
@@ -174,7 +174,7 @@ A probabilistic value in Mongoose is an expression such as the following:
 This is a pipe-separated, parenthesized list of colon-separated weight-value pairs wi,vi, where each wi is a positive integer. The wi are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ wi (for all i) is the denominator of the probability).
 
 As another  example, one may assign the value of a die-roll as such:
-``` int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)```
+int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)
 If a chosen vi is not of the same type as the left-hand-side variable, it will be implicitly cast, if possible. If not, a runtime error will be thrown.
 
 A weight wi must be provided for each each value to use this construct; otherwise a syntax error will be thrown.
@@ -217,8 +217,8 @@ The default values for various types are as follows: none for objects, the empty
 
 ### Agent/Environment Declaration
 Only agents can have objects of their type instantiated by the programmer. Agents and environments are declared by defining them as such:
-    ```agent AgentName() {...}```
-    ```environment {...}```
+agent AgentName() {...}
+environment {...}
 Note that the first letter of AgentName()is capitalized; this is a requirement, and without it a lexer error will be emitted. Mongoose is opinionated about the naming of its agent definitions.
 
 ### List Declaration
@@ -226,7 +226,7 @@ Lists are declared with the type of the list, followed by one or more square bra
 
 ### Function Declaration
 Functions in Mongoose are declared like so:
-```type function() {code block}```
+type function() {code block}
 
 ## Initialization
 
@@ -245,14 +245,14 @@ Mongoose lists are dynamic, so they do not require initialization — they may b
 
 ### Statements
 There are a couple of different types of statements:
-    ```statement :
-    expression
-    selection-statement
-    prob-selection-statement
-    iteration-statement
-    jump-statement
-    assignment-statement
-    block-statement
+statement :
+expression
+selection-statement
+prob-selection-statement
+iteration-statement
+jump-statement
+assignment-statement
+block-statement
 Individual statements are terminated by the newline (\n) character; a statement list must contain at least one statement. The pass keyword is provided for cases in which a statement list must fulfil this requirement without actually doing anything; this keyword is a statement, but does nothing.
 
 ### Expressions
@@ -264,17 +264,15 @@ The selection statement evaluates an expression and, based on the boolean value 
 ### Probabilistic Selection: pif/pelif/pelse
 Randomness is a very important aspect of simulations. As such, Mongoose includes an easy syntax for probabilistic selection, which mimics Python’s if()-elif()-else statements of deterministic selection. A probabilistic selection statement contains one pif() block at the beginning, may end with a pelse block, and can zero or more pelif() blocks in between. At most one of the blocks will ever execute. 
 Like an if or elif command, each pif and pelif contains an expression in parentheses that determines whether the block executes or not. However, these expressions are positive floating point probabilities, which must sum to 1 in each probabilistic selection statement if no pelse block is involved, and must sum to a number less than or equal to 1 if a pelse block is involved. For example, in the code below, 
-
-    pif(0.3) {
-        A()
-    }
-    pelif(0.5) {
-        B()
-    }
-    pelse {
-        C()
-    }
-
+pif(0.3) {
+A()
+}
+pelif(0.5) {
+    B()
+}
+pelse {
+    C()
+}
 A() will be called with 0.3 probability, B() will be called with 0.5 probability, and C() will be called with 1 - 0.3 - 0.5 = 0.2 probability. Not adhering to these conventions regarding probabilities summing to 1 will result in a runtime error.
 
 ### Iteration: for Loops
@@ -295,178 +293,178 @@ The environment’s and agents’ variables and functions at the uppermost level
 Functions can be defined in any of the 4 blocks of a Mongoose program, or outside of any of the 4 blocks. A function within a terminate or analysis block can only be called from within that block. The functions in the environment or agents, such as populate(), create(), destroy() or any user-defined functions there can be called from anywhere, via dot notation on the reference to an agent. Note that action() functions may only be called by the Mongoose interpreter. Functions defined outside any of the 4 types of blocks can be called from any of the 4 blocks as well.
 
 # Appendix A: Complete Grammar
-    ```statement :
-    expression
-    selection-statement
-    prob-selection-statement
-    iteration-statement
-    jump-statement
-    assignment-statement
-    block-statement
-    function-definition
-    function-call
-    *
+statement :
+expression
+selection-statement
+prob-selection-statement
+iteration-statement
+jump-statement
+assignment-statement
+block-statement
+function-definition
+function-call
+*
+
+expression :
+    ( expression )
+    boolean-expression
+    mathematical-expression
+    cast-expression
+    agent-access-expression
+relational-expression
+
+selection-statement :
+if (boolean-expression) { statement-list } if (boolean-expression) { statement-list } else {statement-list}
+if (boolean-expression) { statement-list } opt-elif else { statement-list } 
     
-    expression :
-        ( expression )
-        boolean-expression
-        mathematical-expression
-        cast-expression
-        agent-access-expression
-    relational-expression
-    
-    selection-statement :
-    if (boolean-expression) { statement-list } if (boolean-expression) { statement-list } else {statement-list}
-    if (boolean-expression) { statement-list } opt-elif else { statement-list } 
-        
-    opt-elif :
-        elif ( boolean-expression ) { statement-list } opt-elif
-        \epsilon
-    
-    prob-selection-statement :
-    pif (float-expression) { statement-list } pif (float-expression) { statement-list } pelse {statement-list}
-    pif (float-expression) { statement-list } opt-pelif pelse { statement-list } 
-        
-    opt-pelif :
-        pelif ( float-expression ) { statement-list } opt-pelif
-        \epsilon
-    
-    iteration-statement :
-        for ( declaration-statement in list ) { statement-list }
-    
-    list :
-        [ type-list ]
-    
-    type-list :
-        type , type-list
-        type
+opt-elif :
+    elif ( boolean-expression ) { statement-list } opt-elif
     \epsilon
+
+prob-selection-statement :
+pif (float-expression) { statement-list } pif (float-expression) { statement-list } pelse {statement-list}
+pif (float-expression) { statement-list } opt-pelif pelse { statement-list } 
     
-    jump-statement :
-        return expression
-    
-    assignment-statement :
-        identifier = expression
-    
-    block-statement :
-        block-name { statement-list }
-        { statement-list }
-    
-    block-name : 
-    [agent|environment|analysis|terminate]
-    
-    function-call : 
-        identifier ( parameter-list )
-        { statement-list }
-    
-    boolean-expression :
-        boolean-expression and boolean-expression
-    boolean-expression or boolean-expression
-    not boolean-expression
-    [true|false]
-    
-    # arithmetic precedence and associativity are defined using standard
-    # mathematical conventions
-        mathematical-expression :
-        mathematical-expression + mathematical-expression
-        mathematical-expression - mathematical-expression
-        mathematical-expression * mathematical-expression
-        mathematical-expression / mathematical-expression
-        mathematical-expression % mathematical-expression
-        mathematical-expression ^ mathematical-expression
-        ( mathematical-expression )
-        - mathematical-expression
-        int
-        float
-    
-    int :
-        [0-9] int-suffix
-        - [0-9] int-suffix
-    
-    pos-int: 
-        [0-9] int-suffix
-    
-    int-suffix :
-        [0-9] int-suffix
-        epsilon
-    
-    float :
-        . int
-        int .
-        int . int
-    
-    cast-expression :
-        ( type ) identifier
-    
-    agent-access-expression :
-        identifier . identifier
-    
-    relational-expression :
-        mathematical-expression < mathematical-expression
-        mathematical-expression <= mathematical-expression
-        mathematical-expression > mathematical-expression
-        mathematical-expression >= mathematical-expression
-    
-    agent-instantiation :
-        agent identifier = agent-identifier ( parameter-list )
-    
-    identifier :
-        [_A-Za-z] identifier-suffix
-        
-    identifier-suffix :
-        [_A-Za-z0-9] identifier-suffix
-        \epsilon
-    
-    agent-identifier :
-        [A-Z] agent-identifier-suffix
-        
-    agent-identifier-suffix :
-        [_A-Za-z] agent-identifier-suffix
-        \epsilon
-    
-    declaration-statement :
-        complex-type identifier
-        complex-type assignment-statement
-    
-    list-declaration :
-        type list-constructor
-    
-    list-constructor :
-        [ ] list-constructor
-    [ ]
-    
-    function-definition :
-        complex-type identifier ( parameter-list ) { statement-list }
-        pos-int : complex-type identifier ( parameter-list )  { 
-    statement-list }
-    
-    parameter-list:
-        complex-type identifier , parameter-list
-    complex-type identifier
+opt-pelif :
+    pelif ( float-expression ) { statement-list } opt-pelif
     \epsilon
-    
-    statement-list :
-    statement \n statement-list
-    statement \n
+
+iteration-statement :
+    for ( declaration-statement in list ) { statement-list }
+
+list :
+    [ type-list ]
+
+type-list :
+    type , type-list
+    type
+\epsilon
+
+jump-statement :
+    return expression
+
+assignment-statement :
+    identifier = expression
+
+block-statement :
+    block-name { statement-list }
+    { statement-list }
+
+block-name : 
+[agent|environment|analysis|terminate]
+
+function-call : 
+    identifier ( parameter-list )
+    { statement-list }
+
+boolean-expression :
+    boolean-expression and boolean-expression
+boolean-expression or boolean-expression
+not boolean-expression
+[true|false]
+
+# arithmetic precedence and associativity are defined using standard
+# mathematical conventions
+mathematical-expression :
+mathematical-expression + mathematical-expression
+mathematical-expression - mathematical-expression
+mathematical-expression * mathematical-expression
+mathematical-expression / mathematical-expression
+mathematical-expression % mathematical-expression
+mathematical-expression ^ mathematical-expression
+( mathematical-expression )
+- mathematical-expression
+int
+float
+
+int :
+    [0-9] int-suffix
+    - [0-9] int-suffix
+
+pos-int: 
+    [0-9] int-suffix
+
+int-suffix :
+    [0-9] int-suffix
     epsilon
-    pass
+
+float :
+    . int
+    int .
+    int . int
+
+cast-expression :
+    ( type ) identifier
+
+agent-access-expression :
+    identifier . identifier
+
+relational-expression :
+    mathematical-expression < mathematical-expression
+    mathematical-expression <= mathematical-expression
+mathematical-expression > mathematical-expression
+mathematical-expression >= mathematical-expression
+
+agent-instantiation :
+    agent identifier = agent-identifier ( parameter-list )
+
+identifier :
+    [_A-Za-z] identifier-suffix
     
-    complex-type :
-        type
-        list-declaration
+identifier-suffix :
+    [_A-Za-z0-9] identifier-suffix
+    \epsilon
+
+agent-identifier :
+    [A-Z] agent-identifier-suffix
     
-    type :
-    [int|float|string|bool|none]
-    identifier
-    
-    terminating-condition :
-        optional-pos-int-colon ( boolean-expression ) function-call
-    
-    action-def :
-        none optional-pos-int-colon action ( parameter-list ) { 
-    statement-list }
-    
-    optional-pos-int-colon :
-        pos-int :
-        function-call :
-        \epsilon
+agent-identifier-suffix :
+    [_A-Za-z] agent-identifier-suffix
+    \epsilon
+
+declaration-statement :
+    complex-type identifier
+    complex-type assignment-statement
+
+list-declaration :
+    type list-constructor
+
+list-constructor :
+    [ ] list-constructor
+[ ]
+
+function-definition :
+    complex-type identifier ( parameter-list ) { statement-list }
+    pos-int : complex-type identifier ( parameter-list )  { 
+statement-list }
+
+parameter-list:
+    complex-type identifier , parameter-list
+complex-type identifier
+\epsilon
+
+statement-list :
+statement \n statement-list
+statement \n
+epsilon
+pass
+
+complex-type :
+    type
+    list-declaration
+
+type :
+[int|float|string|bool|none]
+identifier
+
+terminating-condition :
+    optional-pos-int-colon ( boolean-expression ) function-call
+
+action-def :
+    none optional-pos-int-colon action ( parameter-list ) { 
+statement-list }
+
+optional-pos-int-colon :
+    pos-int :
+    function-call :
+    \epsilon
