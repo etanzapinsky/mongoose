@@ -100,5 +100,11 @@ class Lexer:
             tokens.append([tok.type, tok.value])
         return tokens
 
+
 lexer = Lexer()
 lexer.build()
+
+if __name__ == '__main__':
+    pass
+
+
