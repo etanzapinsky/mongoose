@@ -266,7 +266,7 @@ Randomness is a very important aspect of simulations. As such, Mongoose includes
 Like an if or elif command, each pif and pelif contains an expression in parentheses that determines whether the block executes or not. However, these expressions are positive floating point probabilities, which must sum to 1 in each probabilistic selection statement if no pelse block is involved, and must sum to a number less than or equal to 1 if a pelse block is involved. For example, in the code below, 
 
     pif(0.3) {
-    A()
+        A()
     }
     pelif(0.5) {
         B()
