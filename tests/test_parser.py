@@ -22,6 +22,14 @@ class ParserTests(unittest.TestCase):
     def test_print_node():
         eq_(parser.parse(r'"hello"').__str__(),'[Node: None STRING, None, hello, []]')
 
+    def test_if(self):
+	src = "if(x==6) { \n y=5 \n } \n"
+	result = parser.parse(src)
+	expected = Node(vtype=
+	
+	assert result == expected
+	
+
     def test_assignment_decl(self):
         src = "int x = 5\n"
         expected = Node(vtype=v.STAT_LIST, children=[
