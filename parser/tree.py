@@ -1,7 +1,5 @@
 import vtypes as v
-from backend import Backend
-
-backend = Backend()
+from backend import backend
 
 class Node:
     def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[]):

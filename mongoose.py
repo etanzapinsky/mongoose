@@ -2,9 +2,7 @@
 
 import sys
 from parser import parser
-from backend import Backend
-
-backend = Backend()
+from backend import backend
 
 def main():
     if len(sys.argv) != 2:

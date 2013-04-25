@@ -47,3 +47,5 @@ class Backend():
                 root.syn_value = scope[root.symbol]
 
         # How does this deal with return values? @todo
+
+backend = Backend()  # backend is a global singleton variable

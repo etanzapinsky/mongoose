@@ -3,7 +3,7 @@ import vtypes as v
 
 from nose.tools import *
 from parser import Node
-from backend import Backend
+from backend import backend
 from backend.stdlib import first_order_ops
 
 

@@ -2,7 +2,7 @@ import unittest
 import vtypes as v
 from nose.tools import *
 from parser import Node, Function
-from backend import Backend
+from backend import backend
 from backend.stdlib import first_order_ops
 
 class ScopeTests(unittest.TestCase):
@@ -27,6 +27,4 @@ class ScopeTests(unittest.TestCase):
                                      parameter_pairs=((self.x, v.INTEGER_VALUE),
                                                       (self.y, v.INTEGER_VALUE)),
                                      expressions=[self.assignment_node,])
-
-        self.backend = Backend()
 
