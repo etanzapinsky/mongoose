@@ -65,7 +65,7 @@ def p_statn(p):
               | epsilon                                                                                             
     '''
     if len(p) == 4:
-        p[0] = Node(vtype=v.STAT_NEWLINE, children=[p[1],p[3]])
+        p[0] = Node(vtype=v.STATEMENT_NEWLINE, children=[p[1],p[3]])
     else:
         p[0] = None
 
