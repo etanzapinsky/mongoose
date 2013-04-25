@@ -94,7 +94,7 @@ In Mongoose, lists have a public length field that holds the list’s length.
 ### Functions
 
 Functions in Mongoose are very similar to those in Java or C. They are defined as follows:
-    return_type function_name() {expression}
+```return_type function_name() {expression}
 Since Mongoose is a pass-by-reference language, parameters to functions get passed by reference, except for primitives which get passed by value. Mongoose supports anonymous functions in certain contexts, which are defined as: {expression}.
 
 ### Agent Definitions
@@ -226,7 +226,7 @@ Lists are declared with the type of the list, followed by one or more square bra
 
 ### Function Declaration
 Functions in Mongoose are declared like so:
-    type function() {code block}
+```type function() {code block}
 
 ## Initialization
 
@@ -264,15 +264,17 @@ The selection statement evaluates an expression and, based on the boolean value 
 ### Probabilistic Selection: pif/pelif/pelse
 Randomness is a very important aspect of simulations. As such, Mongoose includes an easy syntax for probabilistic selection, which mimics Python’s if()-elif()-else statements of deterministic selection. A probabilistic selection statement contains one pif() block at the beginning, may end with a pelse block, and can zero or more pelif() blocks in between. At most one of the blocks will ever execute. 
 Like an if or elif command, each pif and pelif contains an expression in parentheses that determines whether the block executes or not. However, these expressions are positive floating point probabilities, which must sum to 1 in each probabilistic selection statement if no pelse block is involved, and must sum to a number less than or equal to 1 if a pelse block is involved. For example, in the code below, 
-pif(0.3) {
-A()
-}
-pelif(0.5) {
-    B()
-}
-pelse {
-    C()
-}
+
+    pif(0.3) {
+    A()
+    }
+    pelif(0.5) {
+        B()
+    }
+    pelse {
+        C()
+    }
+
 A() will be called with 0.3 probability, B() will be called with 0.5 probability, and C() will be called with 1 - 0.3 - 0.5 = 0.2 probability. Not adhering to these conventions regarding probabilities summing to 1 will result in a runtime error.
 
 ### Iteration: for Loops
