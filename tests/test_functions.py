@@ -23,7 +23,7 @@ class FunctionsTests(unittest.TestCase):
         self.assignment_node = Node(vtype=v.ASSIGNMENT, children=[self.z, self.int_node_add])
 
         # return z
-        self.z_statement = Node(vtype=v.STATEMENT_NEWLINE, children=[self.z,])
+        self.z_statement = Node(vtype=v.STATEMENT, children=[self.z,])
         self.return_node = Node(vtype=v.RETURN_STATEMENT, syn_value=self.z_statement)
 
         # Functions

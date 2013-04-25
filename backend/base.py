@@ -46,8 +46,9 @@ class Backend():
                 assign(backend.scopes[-1], root.children)  # scopes modified via side effect
             elif root.vtype == v.IDENTIFIER:
                 root.syn_value = root.symbol
-            elif root.vtype in v.STATEMENT_NEWLINE:
-                self.walk_ast(root.children[0])  # @todo only works for assignment? [what about declaration? anything else?]
+            elif root.vtype == v.STATEMENT:
+                for kid in root.children:
+                    self.walk_ast(kid)
                 raise 'implement assignment and declaration first'
             elif root.vtype in v.RETURN_STATEMENT:
                 root.syn_value = self.walk_ast(root.children)

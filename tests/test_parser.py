@@ -24,8 +24,8 @@ class ParserTests(unittest.TestCase):
 
     def test_assignment_decl(self):
         src = "int x = 5\n"
-        expected = Node(vtype=v.STAT_LIST, children=[
-                       Node(vtype=v.STAT_NEWLINE, children=[
+        expected = Node(vtype=v.STATEMENT_LIST, children=[
+                       Node(vtype=v.STATEMENT, children=[
                            Node(vtype=v.DECLARATION_ASSIGNMENT,children=[
                                 Node(vtype=v.DECLARATION,children=[
                                     Node(vtype=v.LIST_TYPE,inh_value='', children=[
