@@ -26,9 +26,9 @@ boolean_ops = {
       v.OR: lambda x, y: bool(x or y),
 }
 
-def assignment(scope, *nodes):
-    '''Stores the assigned value in the given scope. 
+def assign(scope, nodes):
+    '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
-    x = nodes[0]
+    x = nodes[0]  # FIXME
     value = nodes[1]
     scope[x.symbol] = value
