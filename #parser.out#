@@ -1,0 +1,2615 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> stat_list_wrapper
+Rule 1     stat_list_wrapper -> NEWLINE stat_list NEWLINE
+Rule 2     stat_list_wrapper -> NEWLINE stat_list
+Rule 3     stat_list_wrapper -> stat_list
+Rule 4     stat_list_wrapper -> stat_list NEWLINE
+Rule 5     stat_list -> stat_n stat_opt
+Rule 6     stat_n -> stat NEWLINE stat_n
+Rule 7     stat_n -> epsilon
+Rule 8     stat_opt -> stat
+Rule 9     stat_opt -> epsilon
+Rule 10    stat -> WHILE ( expr ) { stat_list_wrapper }
+Rule 11    stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+Rule 12    stat -> IF ( expr ) { stat_list_wrapper } elif_stat
+Rule 13    elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat
+Rule 14    elif_stat -> NEWLINE epsilon
+Rule 15    stat -> NAME = expr
+Rule 16    stat -> decl = expr
+Rule 17    stat -> decl
+Rule 18    expr -> b_expr
+Rule 19    arith_expr -> arith_expr + term
+Rule 20    arith_expr -> arith_expr - term
+Rule 21    arith_expr -> term
+Rule 22    term -> term * factor
+Rule 23    term -> term / factor
+Rule 24    term -> term % factor
+Rule 25    term -> factor
+Rule 26    factor -> factor ^ pow
+Rule 27    factor -> pow
+Rule 28    pow -> - arith_expr
+Rule 29    pow -> VINTEGER
+Rule 30    pow -> VFLOAT
+Rule 31    pow -> VBOOLEAN
+Rule 32    pow -> VSTRING
+Rule 33    pow -> NAME
+Rule 34    pow -> ( expr )
+Rule 35    b_expr -> b_expr OR b_term
+Rule 36    b_expr -> b_term
+Rule 37    b_term -> b_term AND b_factor
+Rule 38    b_term -> b_factor
+Rule 39    b_factor -> NOT b_primary
+Rule 40    b_factor -> b_primary
+Rule 41    b_primary -> b_condition
+Rule 42    b_primary -> arith_expr
+Rule 43    b_condition -> arith_expr < arith_expr
+Rule 44    b_condition -> arith_expr > arith_expr
+Rule 45    b_condition -> arith_expr GEQ arith_expr
+Rule 46    b_condition -> arith_expr LEQ arith_expr
+Rule 47    b_condition -> arith_expr EQ arith_expr
+Rule 48    b_condition -> arith_expr NEQ arith_expr
+Rule 49    decl -> list_type NAME
+Rule 50    list_type -> type brack
+Rule 51    brack -> [ VINTEGER ] brack
+Rule 52    brack -> [ ] brack
+Rule 53    brack -> epsilon
+Rule 54    type -> INTEGER
+Rule 55    type -> FLOAT
+Rule 56    type -> STRING
+Rule 57    type -> BOOLEAN
+Rule 58    epsilon -> <empty>
+
+Terminals, with rules where they appear
+
+%                    : 24
+(                    : 10 11 12 13 34
+)                    : 10 11 12 13 34
+*                    : 22
++                    : 19
+-                    : 20 28
+/                    : 23
+<                    : 43
+=                    : 15 16
+>                    : 44
+AND                  : 37
+BOOLEAN              : 57
+ELIF                 : 13
+ELSE                 : 11
+EQ                   : 47
+FLOAT                : 55
+GEQ                  : 45
+IF                   : 11 12
+INTEGER              : 54
+LEQ                  : 46
+NAME                 : 15 33 49
+NEQ                  : 48
+NEWLINE              : 1 1 2 4 6 11 13 14
+NOT                  : 39
+OR                   : 35
+STRING               : 56
+VBOOLEAN             : 31
+VFLOAT               : 30
+VINTEGER             : 29 51
+VSTRING              : 32
+WHILE                : 10
+[                    : 51 52
+]                    : 51 52
+^                    : 26
+error                : 
+{                    : 10 11 11 12 13
+}                    : 10 11 11 12 13
+
+Nonterminals, with rules where they appear
+
+arith_expr           : 19 20 28 42 43 43 44 44 45 45 46 46 47 47 48 48
+b_condition          : 41
+b_expr               : 18 35
+b_factor             : 37 38
+b_primary            : 39 40
+b_term               : 35 36 37
+brack                : 50 51 52
+decl                 : 16 17
+elif_stat            : 11 12 13
+epsilon              : 7 9 14 53
+expr                 : 10 11 12 13 15 16 34
+factor               : 22 23 24 25 26
+list_type            : 49
+pow                  : 26 27
+stat                 : 6 8
+stat_list            : 1 2 3 4
+stat_list_wrapper    : 10 11 11 12 13 0
+stat_n               : 5 6
+stat_opt             : 5
+term                 : 19 20 21 22 23 24
+type                 : 50
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . stat_list_wrapper
+    (1) stat_list_wrapper -> . NEWLINE stat_list NEWLINE
+    (2) stat_list_wrapper -> . NEWLINE stat_list
+    (3) stat_list_wrapper -> . stat_list
+    (4) stat_list_wrapper -> . stat_list NEWLINE
+    (5) stat_list -> . stat_n stat_opt
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    NEWLINE         shift and go to state 4
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    $end            reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+  ! NEWLINE         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    epsilon                        shift and go to state 9
+    stat_n                         shift and go to state 2
+    type                           shift and go to state 6
+    stat_list_wrapper              shift and go to state 16
+    stat_list                      shift and go to state 10
+
+state 1
+
+    (16) stat -> decl . = expr
+    (17) stat -> decl .
+
+    =               shift and go to state 17
+    NEWLINE         reduce using rule 17 (stat -> decl .)
+    $end            reduce using rule 17 (stat -> decl .)
+    }               reduce using rule 17 (stat -> decl .)
+
+
+state 2
+
+    (5) stat_list -> stat_n . stat_opt
+    (8) stat_opt -> . stat
+    (9) stat_opt -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    NEWLINE         reduce using rule 58 (epsilon -> .)
+    $end            reduce using rule 58 (epsilon -> .)
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 18
+    stat_opt                       shift and go to state 19
+    list_type                      shift and go to state 15
+    epsilon                        shift and go to state 20
+    type                           shift and go to state 6
+
+state 3
+
+    (10) stat -> WHILE . ( expr ) { stat_list_wrapper }
+
+    (               shift and go to state 21
+
+
+state 4
+
+    (1) stat_list_wrapper -> NEWLINE . stat_list NEWLINE
+    (2) stat_list_wrapper -> NEWLINE . stat_list
+    (5) stat_list -> . stat_n stat_opt
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    NEWLINE         reduce using rule 58 (epsilon -> .)
+    $end            reduce using rule 58 (epsilon -> .)
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    stat_n                         shift and go to state 2
+    type                           shift and go to state 6
+    epsilon                        shift and go to state 9
+    stat_list                      shift and go to state 22
+
+state 5
+
+    (54) type -> INTEGER .
+
+    [               reduce using rule 54 (type -> INTEGER .)
+    NAME            reduce using rule 54 (type -> INTEGER .)
+
+
+state 6
+
+    (50) list_type -> type . brack
+    (51) brack -> . [ VINTEGER ] brack
+    (52) brack -> . [ ] brack
+    (53) brack -> . epsilon
+    (58) epsilon -> .
+
+    [               shift and go to state 25
+    NAME            reduce using rule 58 (epsilon -> .)
+
+    epsilon                        shift and go to state 24
+    brack                          shift and go to state 23
+
+state 7
+
+    (6) stat_n -> stat . NEWLINE stat_n
+
+    NEWLINE         shift and go to state 26
+
+
+state 8
+
+    (56) type -> STRING .
+
+    [               reduce using rule 56 (type -> STRING .)
+    NAME            reduce using rule 56 (type -> STRING .)
+
+
+state 9
+
+    (7) stat_n -> epsilon .
+
+    WHILE           reduce using rule 7 (stat_n -> epsilon .)
+    IF              reduce using rule 7 (stat_n -> epsilon .)
+    NAME            reduce using rule 7 (stat_n -> epsilon .)
+    INTEGER         reduce using rule 7 (stat_n -> epsilon .)
+    FLOAT           reduce using rule 7 (stat_n -> epsilon .)
+    STRING          reduce using rule 7 (stat_n -> epsilon .)
+    BOOLEAN         reduce using rule 7 (stat_n -> epsilon .)
+    NEWLINE         reduce using rule 7 (stat_n -> epsilon .)
+    }               reduce using rule 7 (stat_n -> epsilon .)
+    $end            reduce using rule 7 (stat_n -> epsilon .)
+
+
+state 10
+
+    (3) stat_list_wrapper -> stat_list .
+    (4) stat_list_wrapper -> stat_list . NEWLINE
+
+    $end            reduce using rule 3 (stat_list_wrapper -> stat_list .)
+    }               reduce using rule 3 (stat_list_wrapper -> stat_list .)
+    NEWLINE         shift and go to state 27
+
+
+state 11
+
+    (11) stat -> IF . ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF . ( expr ) { stat_list_wrapper } elif_stat
+
+    (               shift and go to state 28
+
+
+state 12
+
+    (15) stat -> NAME . = expr
+
+    =               shift and go to state 29
+
+
+state 13
+
+    (55) type -> FLOAT .
+
+    [               reduce using rule 55 (type -> FLOAT .)
+    NAME            reduce using rule 55 (type -> FLOAT .)
+
+
+state 14
+
+    (57) type -> BOOLEAN .
+
+    [               reduce using rule 57 (type -> BOOLEAN .)
+    NAME            reduce using rule 57 (type -> BOOLEAN .)
+
+
+state 15
+
+    (49) decl -> list_type . NAME
+
+    NAME            shift and go to state 30
+
+
+state 16
+
+    (0) S' -> stat_list_wrapper .
+
+
+
+state 17
+
+    (16) stat -> decl = . expr
+    (18) expr -> . b_expr
+    (35) b_expr -> . b_expr OR b_term
+    (36) b_expr -> . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 41
+    b_expr                         shift and go to state 35
+    expr                           shift and go to state 43
+    b_primary                      shift and go to state 45
+    arith_expr                     shift and go to state 42
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    pow                            shift and go to state 32
+    b_condition                    shift and go to state 48
+
+state 18
+
+    (8) stat_opt -> stat .
+
+    NEWLINE         reduce using rule 8 (stat_opt -> stat .)
+    $end            reduce using rule 8 (stat_opt -> stat .)
+    }               reduce using rule 8 (stat_opt -> stat .)
+
+
+state 19
+
+    (5) stat_list -> stat_n stat_opt .
+
+    NEWLINE         reduce using rule 5 (stat_list -> stat_n stat_opt .)
+    $end            reduce using rule 5 (stat_list -> stat_n stat_opt .)
+    }               reduce using rule 5 (stat_list -> stat_n stat_opt .)
+
+
+state 20
+
+    (9) stat_opt -> epsilon .
+
+    NEWLINE         reduce using rule 9 (stat_opt -> epsilon .)
+    $end            reduce using rule 9 (stat_opt -> epsilon .)
+    }               reduce using rule 9 (stat_opt -> epsilon .)
+
+
+state 21
+
+    (10) stat -> WHILE ( . expr ) { stat_list_wrapper }
+    (18) expr -> . b_expr
+    (35) b_expr -> . b_expr OR b_term
+    (36) b_expr -> . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 41
+    b_expr                         shift and go to state 35
+    expr                           shift and go to state 49
+    b_primary                      shift and go to state 45
+    arith_expr                     shift and go to state 42
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    pow                            shift and go to state 32
+    b_condition                    shift and go to state 48
+
+state 22
+
+    (1) stat_list_wrapper -> NEWLINE stat_list . NEWLINE
+    (2) stat_list_wrapper -> NEWLINE stat_list .
+
+    NEWLINE         shift and go to state 50
+    $end            reduce using rule 2 (stat_list_wrapper -> NEWLINE stat_list .)
+    }               reduce using rule 2 (stat_list_wrapper -> NEWLINE stat_list .)
+
+
+state 23
+
+    (50) list_type -> type brack .
+
+    NAME            reduce using rule 50 (list_type -> type brack .)
+
+
+state 24
+
+    (53) brack -> epsilon .
+
+    NAME            reduce using rule 53 (brack -> epsilon .)
+
+
+state 25
+
+    (51) brack -> [ . VINTEGER ] brack
+    (52) brack -> [ . ] brack
+
+    VINTEGER        shift and go to state 52
+    ]               shift and go to state 51
+
+
+state 26
+
+    (6) stat_n -> stat NEWLINE . stat_n
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    NEWLINE         reduce using rule 58 (epsilon -> .)
+    $end            reduce using rule 58 (epsilon -> .)
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    epsilon                        shift and go to state 9
+    stat_n                         shift and go to state 53
+    type                           shift and go to state 6
+
+state 27
+
+    (4) stat_list_wrapper -> stat_list NEWLINE .
+
+    $end            reduce using rule 4 (stat_list_wrapper -> stat_list NEWLINE .)
+    }               reduce using rule 4 (stat_list_wrapper -> stat_list NEWLINE .)
+
+
+state 28
+
+    (11) stat -> IF ( . expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( . expr ) { stat_list_wrapper } elif_stat
+    (18) expr -> . b_expr
+    (35) b_expr -> . b_expr OR b_term
+    (36) b_expr -> . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 41
+    b_expr                         shift and go to state 35
+    expr                           shift and go to state 54
+    b_primary                      shift and go to state 45
+    arith_expr                     shift and go to state 42
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    pow                            shift and go to state 32
+    b_condition                    shift and go to state 48
+
+state 29
+
+    (15) stat -> NAME = . expr
+    (18) expr -> . b_expr
+    (35) b_expr -> . b_expr OR b_term
+    (36) b_expr -> . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 41
+    b_expr                         shift and go to state 35
+    expr                           shift and go to state 55
+    b_primary                      shift and go to state 45
+    arith_expr                     shift and go to state 42
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    pow                            shift and go to state 32
+    b_condition                    shift and go to state 48
+
+state 30
+
+    (49) decl -> list_type NAME .
+
+    =               reduce using rule 49 (decl -> list_type NAME .)
+    NEWLINE         reduce using rule 49 (decl -> list_type NAME .)
+    $end            reduce using rule 49 (decl -> list_type NAME .)
+    }               reduce using rule 49 (decl -> list_type NAME .)
+
+
+state 31
+
+    (33) pow -> NAME .
+
+    ^               reduce using rule 33 (pow -> NAME .)
+    *               reduce using rule 33 (pow -> NAME .)
+    /               reduce using rule 33 (pow -> NAME .)
+    %               reduce using rule 33 (pow -> NAME .)
+    <               reduce using rule 33 (pow -> NAME .)
+    >               reduce using rule 33 (pow -> NAME .)
+    GEQ             reduce using rule 33 (pow -> NAME .)
+    LEQ             reduce using rule 33 (pow -> NAME .)
+    EQ              reduce using rule 33 (pow -> NAME .)
+    NEQ             reduce using rule 33 (pow -> NAME .)
+    +               reduce using rule 33 (pow -> NAME .)
+    -               reduce using rule 33 (pow -> NAME .)
+    AND             reduce using rule 33 (pow -> NAME .)
+    OR              reduce using rule 33 (pow -> NAME .)
+    NEWLINE         reduce using rule 33 (pow -> NAME .)
+    $end            reduce using rule 33 (pow -> NAME .)
+    }               reduce using rule 33 (pow -> NAME .)
+    )               reduce using rule 33 (pow -> NAME .)
+
+
+state 32
+
+    (27) factor -> pow .
+
+    ^               reduce using rule 27 (factor -> pow .)
+    *               reduce using rule 27 (factor -> pow .)
+    /               reduce using rule 27 (factor -> pow .)
+    %               reduce using rule 27 (factor -> pow .)
+    +               reduce using rule 27 (factor -> pow .)
+    -               reduce using rule 27 (factor -> pow .)
+    AND             reduce using rule 27 (factor -> pow .)
+    OR              reduce using rule 27 (factor -> pow .)
+    NEWLINE         reduce using rule 27 (factor -> pow .)
+    $end            reduce using rule 27 (factor -> pow .)
+    }               reduce using rule 27 (factor -> pow .)
+    )               reduce using rule 27 (factor -> pow .)
+    <               reduce using rule 27 (factor -> pow .)
+    >               reduce using rule 27 (factor -> pow .)
+    GEQ             reduce using rule 27 (factor -> pow .)
+    LEQ             reduce using rule 27 (factor -> pow .)
+    EQ              reduce using rule 27 (factor -> pow .)
+    NEQ             reduce using rule 27 (factor -> pow .)
+
+
+state 33
+
+    (30) pow -> VFLOAT .
+
+    ^               reduce using rule 30 (pow -> VFLOAT .)
+    *               reduce using rule 30 (pow -> VFLOAT .)
+    /               reduce using rule 30 (pow -> VFLOAT .)
+    %               reduce using rule 30 (pow -> VFLOAT .)
+    <               reduce using rule 30 (pow -> VFLOAT .)
+    >               reduce using rule 30 (pow -> VFLOAT .)
+    GEQ             reduce using rule 30 (pow -> VFLOAT .)
+    LEQ             reduce using rule 30 (pow -> VFLOAT .)
+    EQ              reduce using rule 30 (pow -> VFLOAT .)
+    NEQ             reduce using rule 30 (pow -> VFLOAT .)
+    +               reduce using rule 30 (pow -> VFLOAT .)
+    -               reduce using rule 30 (pow -> VFLOAT .)
+    AND             reduce using rule 30 (pow -> VFLOAT .)
+    OR              reduce using rule 30 (pow -> VFLOAT .)
+    NEWLINE         reduce using rule 30 (pow -> VFLOAT .)
+    $end            reduce using rule 30 (pow -> VFLOAT .)
+    }               reduce using rule 30 (pow -> VFLOAT .)
+    )               reduce using rule 30 (pow -> VFLOAT .)
+
+
+state 34
+
+    (29) pow -> VINTEGER .
+
+    ^               reduce using rule 29 (pow -> VINTEGER .)
+    *               reduce using rule 29 (pow -> VINTEGER .)
+    /               reduce using rule 29 (pow -> VINTEGER .)
+    %               reduce using rule 29 (pow -> VINTEGER .)
+    <               reduce using rule 29 (pow -> VINTEGER .)
+    >               reduce using rule 29 (pow -> VINTEGER .)
+    GEQ             reduce using rule 29 (pow -> VINTEGER .)
+    LEQ             reduce using rule 29 (pow -> VINTEGER .)
+    EQ              reduce using rule 29 (pow -> VINTEGER .)
+    NEQ             reduce using rule 29 (pow -> VINTEGER .)
+    +               reduce using rule 29 (pow -> VINTEGER .)
+    -               reduce using rule 29 (pow -> VINTEGER .)
+    AND             reduce using rule 29 (pow -> VINTEGER .)
+    OR              reduce using rule 29 (pow -> VINTEGER .)
+    NEWLINE         reduce using rule 29 (pow -> VINTEGER .)
+    $end            reduce using rule 29 (pow -> VINTEGER .)
+    }               reduce using rule 29 (pow -> VINTEGER .)
+    )               reduce using rule 29 (pow -> VINTEGER .)
+
+
+state 35
+
+    (18) expr -> b_expr .
+    (35) b_expr -> b_expr . OR b_term
+
+    NEWLINE         reduce using rule 18 (expr -> b_expr .)
+    $end            reduce using rule 18 (expr -> b_expr .)
+    }               reduce using rule 18 (expr -> b_expr .)
+    )               reduce using rule 18 (expr -> b_expr .)
+    OR              shift and go to state 56
+
+
+state 36
+
+    (34) pow -> ( . expr )
+    (18) expr -> . b_expr
+    (35) b_expr -> . b_expr OR b_term
+    (36) b_expr -> . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 41
+    b_expr                         shift and go to state 35
+    expr                           shift and go to state 57
+    b_primary                      shift and go to state 45
+    arith_expr                     shift and go to state 42
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    pow                            shift and go to state 32
+    b_condition                    shift and go to state 48
+
+state 37
+q
+    (28) pow -> - . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 58
+    factor                         shift and go to state 38
+
+state 38
+
+    (25) term -> factor .
+    (26) factor -> factor . ^ pow
+
+  ! shift/reduce conflict for ^ resolved as shift
+    +               reduce using rule 25 (term -> factor .)
+    -               reduce using rule 25 (term -> factor .)
+    *               reduce using rule 25 (term -> factor .)
+    /               reduce using rule 25 (term -> factor .)
+    %               reduce using rule 25 (term -> factor .)
+    <               reduce using rule 25 (term -> factor .)
+    >               reduce using rule 25 (term -> factor .)
+    GEQ             reduce using rule 25 (term -> factor .)
+    LEQ             reduce using rule 25 (term -> factor .)
+    EQ              reduce using rule 25 (term -> factor .)
+    NEQ             reduce using rule 25 (term -> factor .)
+    AND             reduce using rule 25 (term -> factor .)
+    OR              reduce using rule 25 (term -> factor .)
+    NEWLINE         reduce using rule 25 (term -> factor .)
+    $end            reduce using rule 25 (term -> factor .)
+    }               reduce using rule 25 (term -> factor .)
+    )               reduce using rule 25 (term -> factor .)
+    ^               shift and go to state 59
+
+  ! ^               [ reduce using rule 25 (term -> factor .) ]
+
+
+state 39
+
+    (31) pow -> VBOOLEAN .
+
+    ^               reduce using rule 31 (pow -> VBOOLEAN .)
+    *               reduce using rule 31 (pow -> VBOOLEAN .)
+    /               reduce using rule 31 (pow -> VBOOLEAN .)
+    %               reduce using rule 31 (pow -> VBOOLEAN .)
+    <               reduce using rule 31 (pow -> VBOOLEAN .)
+    >               reduce using rule 31 (pow -> VBOOLEAN .)
+    GEQ             reduce using rule 31 (pow -> VBOOLEAN .)
+    LEQ             reduce using rule 31 (pow -> VBOOLEAN .)
+    EQ              reduce using rule 31 (pow -> VBOOLEAN .)
+    NEQ             reduce using rule 31 (pow -> VBOOLEAN .)
+    +               reduce using rule 31 (pow -> VBOOLEAN .)
+    -               reduce using rule 31 (pow -> VBOOLEAN .)
+    AND             reduce using rule 31 (pow -> VBOOLEAN .)
+    OR              reduce using rule 31 (pow -> VBOOLEAN .)
+    NEWLINE         reduce using rule 31 (pow -> VBOOLEAN .)
+    $end            reduce using rule 31 (pow -> VBOOLEAN .)
+    }               reduce using rule 31 (pow -> VBOOLEAN .)
+    )               reduce using rule 31 (pow -> VBOOLEAN .)
+
+
+state 40
+
+    (21) arith_expr -> term .
+    (22) term -> term . * factor
+    (23) term -> term . / factor
+    (24) term -> term . % factor
+
+  ! shift/reduce conflict for * resolved as shift
+  ! shift/reduce conflict for / resolved as shift
+  ! shift/reduce conflict for % resolved as shift
+    +               reduce using rule 21 (arith_expr -> term .)
+    -               reduce using rule 21 (arith_expr -> term .)
+    AND             reduce using rule 21 (arith_expr -> term .)
+    OR              reduce using rule 21 (arith_expr -> term .)
+    NEWLINE         reduce using rule 21 (arith_expr -> term .)
+    $end            reduce using rule 21 (arith_expr -> term .)
+    }               reduce using rule 21 (arith_expr -> term .)
+    )               reduce using rule 21 (arith_expr -> term .)
+    <               reduce using rule 21 (arith_expr -> term .)
+    >               reduce using rule 21 (arith_expr -> term .)
+    GEQ             reduce using rule 21 (arith_expr -> term .)
+    LEQ             reduce using rule 21 (arith_expr -> term .)
+    EQ              reduce using rule 21 (arith_expr -> term .)
+    NEQ             reduce using rule 21 (arith_expr -> term .)
+    ^               reduce using rule 21 (arith_expr -> term .)
+    *               shift and go to state 60
+    /               shift and go to state 62
+    %               shift and go to state 61
+
+  ! *               [ reduce using rule 21 (arith_expr -> term .) ]
+  ! /               [ reduce using rule 21 (arith_expr -> term .) ]
+  ! %               [ reduce using rule 21 (arith_expr -> term .) ]
+
+
+state 41
+
+    (36) b_expr -> b_term .
+    (37) b_term -> b_term . AND b_factor
+
+    OR              reduce using rule 36 (b_expr -> b_term .)
+    )               reduce using rule 36 (b_expr -> b_term .)
+    NEWLINE         reduce using rule 36 (b_expr -> b_term .)
+    $end            reduce using rule 36 (b_expr -> b_term .)
+    }               reduce using rule 36 (b_expr -> b_term .)
+    AND             shift and go to state 63
+
+
+state 42
+
+    (42) b_primary -> arith_expr .
+    (43) b_condition -> arith_expr . < arith_expr
+    (44) b_condition -> arith_expr . > arith_expr
+    (45) b_condition -> arith_expr . GEQ arith_expr
+    (46) b_condition -> arith_expr . LEQ arith_expr
+    (47) b_condition -> arith_expr . EQ arith_expr
+    (48) b_condition -> arith_expr . NEQ arith_expr
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 42 (b_primary -> arith_expr .)
+    OR              reduce using rule 42 (b_primary -> arith_expr .)
+    NEWLINE         reduce using rule 42 (b_primary -> arith_expr .)
+    $end            reduce using rule 42 (b_primary -> arith_expr .)
+    }               reduce using rule 42 (b_primary -> arith_expr .)
+    )               reduce using rule 42 (b_primary -> arith_expr .)
+    <               shift and go to state 70
+    >               shift and go to state 71
+    GEQ             shift and go to state 64
+    LEQ             shift and go to state 67
+    EQ              shift and go to state 69
+    NEQ             shift and go to state 68
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 43
+
+    (16) stat -> decl = expr .
+
+    NEWLINE         reduce using rule 16 (stat -> decl = expr .)
+    $end            reduce using rule 16 (stat -> decl = expr .)
+    }               reduce using rule 16 (stat -> decl = expr .)
+
+
+state 44
+
+    (32) pow -> VSTRING .
+
+    ^               reduce using rule 32 (pow -> VSTRING .)
+    *               reduce using rule 32 (pow -> VSTRING .)
+    /               reduce using rule 32 (pow -> VSTRING .)
+    %               reduce using rule 32 (pow -> VSTRING .)
+    <               reduce using rule 32 (pow -> VSTRING .)
+    >               reduce using rule 32 (pow -> VSTRING .)
+    GEQ             reduce using rule 32 (pow -> VSTRING .)
+    LEQ             reduce using rule 32 (pow -> VSTRING .)
+    EQ              reduce using rule 32 (pow -> VSTRING .)
+    NEQ             reduce using rule 32 (pow -> VSTRING .)
+    +               reduce using rule 32 (pow -> VSTRING .)
+    -               reduce using rule 32 (pow -> VSTRING .)
+    AND             reduce using rule 32 (pow -> VSTRING .)
+    OR              reduce using rule 32 (pow -> VSTRING .)
+    NEWLINE         reduce using rule 32 (pow -> VSTRING .)
+    $end            reduce using rule 32 (pow -> VSTRING .)
+    }               reduce using rule 32 (pow -> VSTRING .)
+    )               reduce using rule 32 (pow -> VSTRING .)
+
+
+state 45
+
+    (40) b_factor -> b_primary .
+
+    AND             reduce using rule 40 (b_factor -> b_primary .)
+    OR              reduce using rule 40 (b_factor -> b_primary .)
+    )               reduce using rule 40 (b_factor -> b_primary .)
+    NEWLINE         reduce using rule 40 (b_factor -> b_primary .)
+    $end            reduce using rule 40 (b_factor -> b_primary .)
+    }               reduce using rule 40 (b_factor -> b_primary .)
+
+
+state 46
+
+    (38) b_term -> b_factor .
+
+    AND             reduce using rule 38 (b_term -> b_factor .)
+    OR              reduce using rule 38 (b_term -> b_factor .)
+    )               reduce using rule 38 (b_term -> b_factor .)
+    NEWLINE         reduce using rule 38 (b_term -> b_factor .)
+    $end            reduce using rule 38 (b_term -> b_factor .)
+    }               reduce using rule 38 (b_term -> b_factor .)
+
+
+state 47
+
+    (39) b_factor -> NOT . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 42
+    pow                            shift and go to state 32
+    b_primary                      shift and go to state 72
+    factor                         shift and go to state 38
+    b_condition                    shift and go to state 48
+
+state 48
+
+    (41) b_primary -> b_condition .
+
+    AND             reduce using rule 41 (b_primary -> b_condition .)
+    OR              reduce using rule 41 (b_primary -> b_condition .)
+    NEWLINE         reduce using rule 41 (b_primary -> b_condition .)
+    $end            reduce using rule 41 (b_primary -> b_condition .)
+    }               reduce using rule 41 (b_primary -> b_condition .)
+    )               reduce using rule 41 (b_primary -> b_condition .)
+
+
+state 49
+
+    (10) stat -> WHILE ( expr . ) { stat_list_wrapper }
+
+    )               shift and go to state 73
+
+
+state 50
+
+    (1) stat_list_wrapper -> NEWLINE stat_list NEWLINE .
+
+    $end            reduce using rule 1 (stat_list_wrapper -> NEWLINE stat_list NEWLINE .)
+    }               reduce using rule 1 (stat_list_wrapper -> NEWLINE stat_list NEWLINE .)
+
+
+state 51
+
+    (52) brack -> [ ] . brack
+    (51) brack -> . [ VINTEGER ] brack
+    (52) brack -> . [ ] brack
+    (53) brack -> . epsilon
+    (58) epsilon -> .
+
+    [               shift and go to state 25
+    NAME            reduce using rule 58 (epsilon -> .)
+
+    epsilon                        shift and go to state 24
+    brack                          shift and go to state 74
+
+state 52
+
+    (51) brack -> [ VINTEGER . ] brack
+
+    ]               shift and go to state 75
+
+
+state 53
+
+    (6) stat_n -> stat NEWLINE stat_n .
+
+    WHILE           reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    IF              reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    NAME            reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    INTEGER         reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    FLOAT           reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    STRING          reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    BOOLEAN         reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    NEWLINE         reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    }               reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+    $end            reduce using rule 6 (stat_n -> stat NEWLINE stat_n .)
+
+
+state 54
+
+    (11) stat -> IF ( expr . ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( expr . ) { stat_list_wrapper } elif_stat
+
+    )               shift and go to state 76
+
+
+state 55
+
+    (15) stat -> NAME = expr .
+
+    NEWLINE         reduce using rule 15 (stat -> NAME = expr .)
+    $end            reduce using rule 15 (stat -> NAME = expr .)
+    }               reduce using rule 15 (stat -> NAME = expr .)
+
+
+state 56
+
+    (35) b_expr -> b_expr OR . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 77
+    arith_expr                     shift and go to state 42
+    pow                            shift and go to state 32
+    b_primary                      shift and go to state 45
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    b_condition                    shift and go to state 48
+
+state 57
+
+    (34) pow -> ( expr . )
+
+    )               shift and go to state 78
+
+
+state 58
+
+    (28) pow -> - arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    ^               reduce using rule 28 (pow -> - arith_expr .)
+    *               reduce using rule 28 (pow -> - arith_expr .)
+    /               reduce using rule 28 (pow -> - arith_expr .)
+    %               reduce using rule 28 (pow -> - arith_expr .)
+    <               reduce using rule 28 (pow -> - arith_expr .)
+    >               reduce using rule 28 (pow -> - arith_expr .)
+    GEQ             reduce using rule 28 (pow -> - arith_expr .)
+    LEQ             reduce using rule 28 (pow -> - arith_expr .)
+    EQ              reduce using rule 28 (pow -> - arith_expr .)
+    NEQ             reduce using rule 28 (pow -> - arith_expr .)
+    +               reduce using rule 28 (pow -> - arith_expr .)
+    -               reduce using rule 28 (pow -> - arith_expr .)
+    AND             reduce using rule 28 (pow -> - arith_expr .)
+    OR              reduce using rule 28 (pow -> - arith_expr .)
+    NEWLINE         reduce using rule 28 (pow -> - arith_expr .)
+    $end            reduce using rule 28 (pow -> - arith_expr .)
+    }               reduce using rule 28 (pow -> - arith_expr .)
+    )               reduce using rule 28 (pow -> - arith_expr .)
+
+  ! +               [ shift and go to state 65 ]
+  ! -               [ shift and go to state 66 ]
+
+
+state 59
+
+    (26) factor -> factor ^ . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 79
+
+state 60
+
+    (22) term -> term * . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    factor                         shift and go to state 80
+
+state 61
+
+    (24) term -> term % . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    factor                         shift and go to state 81
+
+state 62
+
+    (23) term -> term / . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    factor                         shift and go to state 82
+
+state 63
+
+    (37) b_term -> b_term AND . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 42
+    pow                            shift and go to state 32
+    b_primary                      shift and go to state 45
+    b_factor                       shift and go to state 83
+    factor                         shift and go to state 38
+    b_condition                    shift and go to state 48
+
+state 64
+
+    (45) b_condition -> arith_expr GEQ . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 84
+    factor                         shift and go to state 38
+
+state 65
+
+    (19) arith_expr -> arith_expr + . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 85
+    factor                         shift and go to state 38
+
+state 66
+
+    (20) arith_expr -> arith_expr - . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 86
+    factor                         shift and go to state 38
+
+state 67
+
+    (46) b_condition -> arith_expr LEQ . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 87
+    factor                         shift and go to state 38
+
+state 68
+
+    (48) b_condition -> arith_expr NEQ . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 88
+    factor                         shift and go to state 38
+
+state 69
+
+    (47) b_condition -> arith_expr EQ . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 89
+    factor                         shift and go to state 38
+
+state 70
+
+    (43) b_condition -> arith_expr < . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 90
+    factor                         shift and go to state 38
+
+state 71
+
+    (44) b_condition -> arith_expr > . arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    pow                            shift and go to state 32
+    term                           shift and go to state 40
+    arith_expr                     shift and go to state 91
+    factor                         shift and go to state 38
+
+state 72
+
+    (39) b_factor -> NOT b_primary .
+
+    AND             reduce using rule 39 (b_factor -> NOT b_primary .)
+    OR              reduce using rule 39 (b_factor -> NOT b_primary .)
+    )               reduce using rule 39 (b_factor -> NOT b_primary .)
+    NEWLINE         reduce using rule 39 (b_factor -> NOT b_primary .)
+    $end            reduce using rule 39 (b_factor -> NOT b_primary .)
+    }               reduce using rule 39 (b_factor -> NOT b_primary .)
+
+
+state 73
+
+    (10) stat -> WHILE ( expr ) . { stat_list_wrapper }
+
+    {               shift and go to state 92
+
+
+state 74
+
+    (52) brack -> [ ] brack .
+
+    NAME            reduce using rule 52 (brack -> [ ] brack .)
+
+
+state 75
+
+    (51) brack -> [ VINTEGER ] . brack
+    (51) brack -> . [ VINTEGER ] brack
+    (52) brack -> . [ ] brack
+    (53) brack -> . epsilon
+    (58) epsilon -> .
+
+    [               shift and go to state 25
+    NAME            reduce using rule 58 (epsilon -> .)
+
+    epsilon                        shift and go to state 24
+    brack                          shift and go to state 93
+
+state 76
+
+    (11) stat -> IF ( expr ) . { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( expr ) . { stat_list_wrapper } elif_stat
+
+    {               shift and go to state 94
+
+
+state 77
+
+    (35) b_expr -> b_expr OR b_term .
+    (37) b_term -> b_term . AND b_factor
+
+    OR              reduce using rule 35 (b_expr -> b_expr OR b_term .)
+    )               reduce using rule 35 (b_expr -> b_expr OR b_term .)
+    NEWLINE         reduce using rule 35 (b_expr -> b_expr OR b_term .)
+    $end            reduce using rule 35 (b_expr -> b_expr OR b_term .)
+    }               reduce using rule 35 (b_expr -> b_expr OR b_term .)
+    AND             shift and go to state 63
+
+
+state 78
+
+    (34) pow -> ( expr ) .
+
+    ^               reduce using rule 34 (pow -> ( expr ) .)
+    *               reduce using rule 34 (pow -> ( expr ) .)
+    /               reduce using rule 34 (pow -> ( expr ) .)
+    %               reduce using rule 34 (pow -> ( expr ) .)
+    <               reduce using rule 34 (pow -> ( expr ) .)
+    >               reduce using rule 34 (pow -> ( expr ) .)
+    GEQ             reduce using rule 34 (pow -> ( expr ) .)
+    LEQ             reduce using rule 34 (pow -> ( expr ) .)
+    EQ              reduce using rule 34 (pow -> ( expr ) .)
+    NEQ             reduce using rule 34 (pow -> ( expr ) .)
+    +               reduce using rule 34 (pow -> ( expr ) .)
+    -               reduce using rule 34 (pow -> ( expr ) .)
+    AND             reduce using rule 34 (pow -> ( expr ) .)
+    OR              reduce using rule 34 (pow -> ( expr ) .)
+    NEWLINE         reduce using rule 34 (pow -> ( expr ) .)
+    $end            reduce using rule 34 (pow -> ( expr ) .)
+    }               reduce using rule 34 (pow -> ( expr ) .)
+    )               reduce using rule 34 (pow -> ( expr ) .)
+
+
+state 79
+
+    (26) factor -> factor ^ pow .
+
+    ^               reduce using rule 26 (factor -> factor ^ pow .)
+    *               reduce using rule 26 (factor -> factor ^ pow .)
+    /               reduce using rule 26 (factor -> factor ^ pow .)
+    %               reduce using rule 26 (factor -> factor ^ pow .)
+    +               reduce using rule 26 (factor -> factor ^ pow .)
+    -               reduce using rule 26 (factor -> factor ^ pow .)
+    AND             reduce using rule 26 (factor -> factor ^ pow .)
+    OR              reduce using rule 26 (factor -> factor ^ pow .)
+    NEWLINE         reduce using rule 26 (factor -> factor ^ pow .)
+    $end            reduce using rule 26 (factor -> factor ^ pow .)
+    }               reduce using rule 26 (factor -> factor ^ pow .)
+    )               reduce using rule 26 (factor -> factor ^ pow .)
+    <               reduce using rule 26 (factor -> factor ^ pow .)
+    >               reduce using rule 26 (factor -> factor ^ pow .)
+    GEQ             reduce using rule 26 (factor -> factor ^ pow .)
+    LEQ             reduce using rule 26 (factor -> factor ^ pow .)
+    EQ              reduce using rule 26 (factor -> factor ^ pow .)
+    NEQ             reduce using rule 26 (factor -> factor ^ pow .)
+
+
+state 80
+
+    (22) term -> term * factor .
+    (26) factor -> factor . ^ pow
+
+    +               reduce using rule 22 (term -> term * factor .)
+    -               reduce using rule 22 (term -> term * factor .)
+    *               reduce using rule 22 (term -> term * factor .)
+    /               reduce using rule 22 (term -> term * factor .)
+    %               reduce using rule 22 (term -> term * factor .)
+    <               reduce using rule 22 (term -> term * factor .)
+    >               reduce using rule 22 (term -> term * factor .)
+    GEQ             reduce using rule 22 (term -> term * factor .)
+    LEQ             reduce using rule 22 (term -> term * factor .)
+    EQ              reduce using rule 22 (term -> term * factor .)
+    NEQ             reduce using rule 22 (term -> term * factor .)
+    AND             reduce using rule 22 (term -> term * factor .)
+    OR              reduce using rule 22 (term -> term * factor .)
+    NEWLINE         reduce using rule 22 (term -> term * factor .)
+    $end            reduce using rule 22 (term -> term * factor .)
+    }               reduce using rule 22 (term -> term * factor .)
+    )               reduce using rule 22 (term -> term * factor .)
+    ^               shift and go to state 59
+
+  ! ^               [ reduce using rule 22 (term -> term * factor .) ]
+
+
+state 81
+
+    (24) term -> term % factor .
+    (26) factor -> factor . ^ pow
+
+    +               reduce using rule 24 (term -> term % factor .)
+    -               reduce using rule 24 (term -> term % factor .)
+    *               reduce using rule 24 (term -> term % factor .)
+    /               reduce using rule 24 (term -> term % factor .)
+    %               reduce using rule 24 (term -> term % factor .)
+    <               reduce using rule 24 (term -> term % factor .)
+    >               reduce using rule 24 (term -> term % factor .)
+    GEQ             reduce using rule 24 (term -> term % factor .)
+    LEQ             reduce using rule 24 (term -> term % factor .)
+    EQ              reduce using rule 24 (term -> term % factor .)
+    NEQ             reduce using rule 24 (term -> term % factor .)
+    AND             reduce using rule 24 (term -> term % factor .)
+    OR              reduce using rule 24 (term -> term % factor .)
+    NEWLINE         reduce using rule 24 (term -> term % factor .)
+    $end            reduce using rule 24 (term -> term % factor .)
+    }               reduce using rule 24 (term -> term % factor .)
+    )               reduce using rule 24 (term -> term % factor .)
+    ^               shift and go to state 59
+
+  ! ^               [ reduce using rule 24 (term -> term % factor .) ]
+
+
+state 82
+
+    (23) term -> term / factor .
+    (26) factor -> factor . ^ pow
+
+    +               reduce using rule 23 (term -> term / factor .)
+    -               reduce using rule 23 (term -> term / factor .)
+    *               reduce using rule 23 (term -> term / factor .)
+    /               reduce using rule 23 (term -> term / factor .)
+    %               reduce using rule 23 (term -> term / factor .)
+    <               reduce using rule 23 (term -> term / factor .)
+    >               reduce using rule 23 (term -> term / factor .)
+    GEQ             reduce using rule 23 (term -> term / factor .)
+    LEQ             reduce using rule 23 (term -> term / factor .)
+    EQ              reduce using rule 23 (term -> term / factor .)
+    NEQ             reduce using rule 23 (term -> term / factor .)
+    AND             reduce using rule 23 (term -> term / factor .)
+    OR              reduce using rule 23 (term -> term / factor .)
+    NEWLINE         reduce using rule 23 (term -> term / factor .)
+    $end            reduce using rule 23 (term -> term / factor .)
+    }               reduce using rule 23 (term -> term / factor .)
+    )               reduce using rule 23 (term -> term / factor .)
+    ^               shift and go to state 59
+
+  ! ^               [ reduce using rule 23 (term -> term / factor .) ]
+
+
+state 83
+
+    (37) b_term -> b_term AND b_factor .
+
+    AND             reduce using rule 37 (b_term -> b_term AND b_factor .)
+    OR              reduce using rule 37 (b_term -> b_term AND b_factor .)
+    )               reduce using rule 37 (b_term -> b_term AND b_factor .)
+    NEWLINE         reduce using rule 37 (b_term -> b_term AND b_factor .)
+    $end            reduce using rule 37 (b_term -> b_term AND b_factor .)
+    }               reduce using rule 37 (b_term -> b_term AND b_factor .)
+
+
+state 84
+
+    (45) b_condition -> arith_expr GEQ arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 45 (b_condition -> arith_expr GEQ arith_expr .)
+    OR              reduce using rule 45 (b_condition -> arith_expr GEQ arith_expr .)
+    )               reduce using rule 45 (b_condition -> arith_expr GEQ arith_expr .)
+    NEWLINE         reduce using rule 45 (b_condition -> arith_expr GEQ arith_expr .)
+    $end            reduce using rule 45 (b_condition -> arith_expr GEQ arith_expr .)
+    }               reduce using rule 45 (b_condition -> arith_expr GEQ arith_expr .)
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 85
+
+    (19) arith_expr -> arith_expr + term .
+    (22) term -> term . * factor
+    (23) term -> term . / factor
+    (24) term -> term . % factor
+
+    +               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    -               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    AND             reduce using rule 19 (arith_expr -> arith_expr + term .)
+    OR              reduce using rule 19 (arith_expr -> arith_expr + term .)
+    NEWLINE         reduce using rule 19 (arith_expr -> arith_expr + term .)
+    $end            reduce using rule 19 (arith_expr -> arith_expr + term .)
+    }               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    )               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    <               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    >               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    GEQ             reduce using rule 19 (arith_expr -> arith_expr + term .)
+    LEQ             reduce using rule 19 (arith_expr -> arith_expr + term .)
+    EQ              reduce using rule 19 (arith_expr -> arith_expr + term .)
+    NEQ             reduce using rule 19 (arith_expr -> arith_expr + term .)
+    ^               reduce using rule 19 (arith_expr -> arith_expr + term .)
+    *               shift and go to state 60
+    /               shift and go to state 62
+    %               shift and go to state 61
+
+  ! *               [ reduce using rule 19 (arith_expr -> arith_expr + term .) ]
+  ! /               [ reduce using rule 19 (arith_expr -> arith_expr + term .) ]
+  ! %               [ reduce using rule 19 (arith_expr -> arith_expr + term .) ]
+
+
+state 86
+
+    (20) arith_expr -> arith_expr - term .
+    (22) term -> term . * factor
+    (23) term -> term . / factor
+    (24) term -> term . % factor
+
+    +               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    -               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    AND             reduce using rule 20 (arith_expr -> arith_expr - term .)
+    OR              reduce using rule 20 (arith_expr -> arith_expr - term .)
+    NEWLINE         reduce using rule 20 (arith_expr -> arith_expr - term .)
+    $end            reduce using rule 20 (arith_expr -> arith_expr - term .)
+    }               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    )               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    <               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    >               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    GEQ             reduce using rule 20 (arith_expr -> arith_expr - term .)
+    LEQ             reduce using rule 20 (arith_expr -> arith_expr - term .)
+    EQ              reduce using rule 20 (arith_expr -> arith_expr - term .)
+    NEQ             reduce using rule 20 (arith_expr -> arith_expr - term .)
+    ^               reduce using rule 20 (arith_expr -> arith_expr - term .)
+    *               shift and go to state 60
+    /               shift and go to state 62
+    %               shift and go to state 61
+
+  ! *               [ reduce using rule 20 (arith_expr -> arith_expr - term .) ]
+  ! /               [ reduce using rule 20 (arith_expr -> arith_expr - term .) ]
+  ! %               [ reduce using rule 20 (arith_expr -> arith_expr - term .) ]
+
+
+state 87
+
+    (46) b_condition -> arith_expr LEQ arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 46 (b_condition -> arith_expr LEQ arith_expr .)
+    OR              reduce using rule 46 (b_condition -> arith_expr LEQ arith_expr .)
+    )               reduce using rule 46 (b_condition -> arith_expr LEQ arith_expr .)
+    NEWLINE         reduce using rule 46 (b_condition -> arith_expr LEQ arith_expr .)
+    $end            reduce using rule 46 (b_condition -> arith_expr LEQ arith_expr .)
+    }               reduce using rule 46 (b_condition -> arith_expr LEQ arith_expr .)
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 88
+
+    (48) b_condition -> arith_expr NEQ arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 48 (b_condition -> arith_expr NEQ arith_expr .)
+    OR              reduce using rule 48 (b_condition -> arith_expr NEQ arith_expr .)
+    )               reduce using rule 48 (b_condition -> arith_expr NEQ arith_expr .)
+    NEWLINE         reduce using rule 48 (b_condition -> arith_expr NEQ arith_expr .)
+    $end            reduce using rule 48 (b_condition -> arith_expr NEQ arith_expr .)
+    }               reduce using rule 48 (b_condition -> arith_expr NEQ arith_expr .)
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 89
+
+    (47) b_condition -> arith_expr EQ arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 47 (b_condition -> arith_expr EQ arith_expr .)
+    OR              reduce using rule 47 (b_condition -> arith_expr EQ arith_expr .)
+    )               reduce using rule 47 (b_condition -> arith_expr EQ arith_expr .)
+    NEWLINE         reduce using rule 47 (b_condition -> arith_expr EQ arith_expr .)
+    $end            reduce using rule 47 (b_condition -> arith_expr EQ arith_expr .)
+    }               reduce using rule 47 (b_condition -> arith_expr EQ arith_expr .)
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 90
+
+    (43) b_condition -> arith_expr < arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 43 (b_condition -> arith_expr < arith_expr .)
+    OR              reduce using rule 43 (b_condition -> arith_expr < arith_expr .)
+    )               reduce using rule 43 (b_condition -> arith_expr < arith_expr .)
+    NEWLINE         reduce using rule 43 (b_condition -> arith_expr < arith_expr .)
+    $end            reduce using rule 43 (b_condition -> arith_expr < arith_expr .)
+    }               reduce using rule 43 (b_condition -> arith_expr < arith_expr .)
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 91
+
+    (44) b_condition -> arith_expr > arith_expr .
+    (19) arith_expr -> arith_expr . + term
+    (20) arith_expr -> arith_expr . - term
+
+    AND             reduce using rule 44 (b_condition -> arith_expr > arith_expr .)
+    OR              reduce using rule 44 (b_condition -> arith_expr > arith_expr .)
+    )               reduce using rule 44 (b_condition -> arith_expr > arith_expr .)
+    NEWLINE         reduce using rule 44 (b_condition -> arith_expr > arith_expr .)
+    $end            reduce using rule 44 (b_condition -> arith_expr > arith_expr .)
+    }               reduce using rule 44 (b_condition -> arith_expr > arith_expr .)
+    +               shift and go to state 65
+    -               shift and go to state 66
+
+
+state 92
+
+    (10) stat -> WHILE ( expr ) { . stat_list_wrapper }
+    (1) stat_list_wrapper -> . NEWLINE stat_list NEWLINE
+    (2) stat_list_wrapper -> . NEWLINE stat_list
+    (3) stat_list_wrapper -> . stat_list
+    (4) stat_list_wrapper -> . stat_list NEWLINE
+    (5) stat_list -> . stat_n stat_opt
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    NEWLINE         shift and go to state 4
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+  ! NEWLINE         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    stat_n                         shift and go to state 2
+    type                           shift and go to state 6
+    epsilon                        shift and go to state 9
+    stat_list_wrapper              shift and go to state 95
+    stat_list                      shift and go to state 10
+
+state 93
+
+    (51) brack -> [ VINTEGER ] brack .
+
+    NAME            reduce using rule 51 (brack -> [ VINTEGER ] brack .)
+
+
+state 94
+
+    (11) stat -> IF ( expr ) { . stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( expr ) { . stat_list_wrapper } elif_stat
+    (1) stat_list_wrapper -> . NEWLINE stat_list NEWLINE
+    (2) stat_list_wrapper -> . NEWLINE stat_list
+    (3) stat_list_wrapper -> . stat_list
+    (4) stat_list_wrapper -> . stat_list NEWLINE
+    (5) stat_list -> . stat_n stat_opt
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    NEWLINE         shift and go to state 4
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+  ! NEWLINE         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    stat_n                         shift and go to state 2
+    type                           shift and go to state 6
+    epsilon                        shift and go to state 9
+    stat_list_wrapper              shift and go to state 96
+    stat_list                      shift and go to state 10
+
+state 95
+
+    (10) stat -> WHILE ( expr ) { stat_list_wrapper . }
+
+    }               shift and go to state 97
+
+
+state 96
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper . } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( expr ) { stat_list_wrapper . } elif_stat
+
+    }               shift and go to state 98
+
+
+state 97
+
+    (10) stat -> WHILE ( expr ) { stat_list_wrapper } .
+
+    NEWLINE         reduce using rule 10 (stat -> WHILE ( expr ) { stat_list_wrapper } .)
+    $end            reduce using rule 10 (stat -> WHILE ( expr ) { stat_list_wrapper } .)
+    }               reduce using rule 10 (stat -> WHILE ( expr ) { stat_list_wrapper } .)
+
+
+state 98
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } . elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( expr ) { stat_list_wrapper } . elif_stat
+    (13) elif_stat -> . NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat
+    (14) elif_stat -> . NEWLINE epsilon
+
+    NEWLINE         shift and go to state 99
+
+    elif_stat                      shift and go to state 100
+
+state 99
+
+    (13) elif_stat -> NEWLINE . ELIF ( expr ) { stat_list_wrapper } elif_stat
+    (14) elif_stat -> NEWLINE . epsilon
+    (58) epsilon -> .
+
+    ELIF            shift and go to state 101
+    NEWLINE         reduce using rule 58 (epsilon -> .)
+    $end            reduce using rule 58 (epsilon -> .)
+    }               reduce using rule 58 (epsilon -> .)
+
+    epsilon                        shift and go to state 102
+
+state 100
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } elif_stat . NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> IF ( expr ) { stat_list_wrapper } elif_stat .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 103
+    $end            reduce using rule 12 (stat -> IF ( expr ) { stat_list_wrapper } elif_stat .)
+    }               reduce using rule 12 (stat -> IF ( expr ) { stat_list_wrapper } elif_stat .)
+
+  ! NEWLINE         [ reduce using rule 12 (stat -> IF ( expr ) { stat_list_wrapper } elif_stat .) ]
+
+
+state 101
+
+    (13) elif_stat -> NEWLINE ELIF . ( expr ) { stat_list_wrapper } elif_stat
+
+    (               shift and go to state 104
+
+
+state 102
+
+    (14) elif_stat -> NEWLINE epsilon .
+
+    NEWLINE         reduce using rule 14 (elif_stat -> NEWLINE epsilon .)
+    $end            reduce using rule 14 (elif_stat -> NEWLINE epsilon .)
+    }               reduce using rule 14 (elif_stat -> NEWLINE epsilon .)
+
+
+state 103
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE . ELSE { stat_list_wrapper }
+
+    ELSE            shift and go to state 105
+
+
+state 104
+
+    (13) elif_stat -> NEWLINE ELIF ( . expr ) { stat_list_wrapper } elif_stat
+    (18) expr -> . b_expr
+    (35) b_expr -> . b_expr OR b_term
+    (36) b_expr -> . b_term
+    (37) b_term -> . b_term AND b_factor
+    (38) b_term -> . b_factor
+    (39) b_factor -> . NOT b_primary
+    (40) b_factor -> . b_primary
+    (41) b_primary -> . b_condition
+    (42) b_primary -> . arith_expr
+    (43) b_condition -> . arith_expr < arith_expr
+    (44) b_condition -> . arith_expr > arith_expr
+    (45) b_condition -> . arith_expr GEQ arith_expr
+    (46) b_condition -> . arith_expr LEQ arith_expr
+    (47) b_condition -> . arith_expr EQ arith_expr
+    (48) b_condition -> . arith_expr NEQ arith_expr
+    (19) arith_expr -> . arith_expr + term
+    (20) arith_expr -> . arith_expr - term
+    (21) arith_expr -> . term
+    (22) term -> . term * factor
+    (23) term -> . term / factor
+    (24) term -> . term % factor
+    (25) term -> . factor
+    (26) factor -> . factor ^ pow
+    (27) factor -> . pow
+    (28) pow -> . - arith_expr
+    (29) pow -> . VINTEGER
+    (30) pow -> . VFLOAT
+    (31) pow -> . VBOOLEAN
+    (32) pow -> . VSTRING
+    (33) pow -> . NAME
+    (34) pow -> . ( expr )
+
+    NOT             shift and go to state 47
+    -               shift and go to state 37
+    VINTEGER        shift and go to state 34
+    VFLOAT          shift and go to state 33
+    VBOOLEAN        shift and go to state 39
+    VSTRING         shift and go to state 44
+    NAME            shift and go to state 31
+    (               shift and go to state 36
+
+    term                           shift and go to state 40
+    b_term                         shift and go to state 41
+    b_expr                         shift and go to state 35
+    expr                           shift and go to state 106
+    b_primary                      shift and go to state 45
+    arith_expr                     shift and go to state 42
+    b_factor                       shift and go to state 46
+    factor                         shift and go to state 38
+    pow                            shift and go to state 32
+    b_condition                    shift and go to state 48
+
+state 105
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE . { stat_list_wrapper }
+
+    {               shift and go to state 107
+
+
+state 106
+
+    (13) elif_stat -> NEWLINE ELIF ( expr . ) { stat_list_wrapper } elif_stat
+
+    )               shift and go to state 108
+
+
+state 107
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { . stat_list_wrapper }
+    (1) stat_list_wrapper -> . NEWLINE stat_list NEWLINE
+    (2) stat_list_wrapper -> . NEWLINE stat_list
+    (3) stat_list_wrapper -> . stat_list
+    (4) stat_list_wrapper -> . stat_list NEWLINE
+    (5) stat_list -> . stat_n stat_opt
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    NEWLINE         shift and go to state 4
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+  ! NEWLINE         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    stat_n                         shift and go to state 2
+    type                           shift and go to state 6
+    epsilon                        shift and go to state 9
+    stat_list_wrapper              shift and go to state 109
+    stat_list                      shift and go to state 10
+
+state 108
+
+    (13) elif_stat -> NEWLINE ELIF ( expr ) . { stat_list_wrapper } elif_stat
+
+    {               shift and go to state 110
+
+
+state 109
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper . }
+
+    }               shift and go to state 111
+
+
+state 110
+
+    (13) elif_stat -> NEWLINE ELIF ( expr ) { . stat_list_wrapper } elif_stat
+    (1) stat_list_wrapper -> . NEWLINE stat_list NEWLINE
+    (2) stat_list_wrapper -> . NEWLINE stat_list
+    (3) stat_list_wrapper -> . stat_list
+    (4) stat_list_wrapper -> . stat_list NEWLINE
+    (5) stat_list -> . stat_n stat_opt
+    (6) stat_n -> . stat NEWLINE stat_n
+    (7) stat_n -> . epsilon
+    (10) stat -> . WHILE ( expr ) { stat_list_wrapper }
+    (11) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper }
+    (12) stat -> . IF ( expr ) { stat_list_wrapper } elif_stat
+    (15) stat -> . NAME = expr
+    (16) stat -> . decl = expr
+    (17) stat -> . decl
+    (58) epsilon -> .
+    (49) decl -> . list_type NAME
+    (50) list_type -> . type brack
+    (54) type -> . INTEGER
+    (55) type -> . FLOAT
+    (56) type -> . STRING
+    (57) type -> . BOOLEAN
+
+  ! shift/reduce conflict for WHILE resolved as shift
+  ! shift/reduce conflict for IF resolved as shift
+  ! shift/reduce conflict for NAME resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for INTEGER resolved as shift
+  ! shift/reduce conflict for FLOAT resolved as shift
+  ! shift/reduce conflict for STRING resolved as shift
+  ! shift/reduce conflict for BOOLEAN resolved as shift
+    NEWLINE         shift and go to state 4
+    WHILE           shift and go to state 3
+    IF              shift and go to state 11
+    NAME            shift and go to state 12
+    }               reduce using rule 58 (epsilon -> .)
+    INTEGER         shift and go to state 5
+    FLOAT           shift and go to state 13
+    STRING          shift and go to state 8
+    BOOLEAN         shift and go to state 14
+
+  ! WHILE           [ reduce using rule 58 (epsilon -> .) ]
+  ! IF              [ reduce using rule 58 (epsilon -> .) ]
+  ! NAME            [ reduce using rule 58 (epsilon -> .) ]
+  ! INTEGER         [ reduce using rule 58 (epsilon -> .) ]
+  ! FLOAT           [ reduce using rule 58 (epsilon -> .) ]
+  ! STRING          [ reduce using rule 58 (epsilon -> .) ]
+  ! BOOLEAN         [ reduce using rule 58 (epsilon -> .) ]
+  ! NEWLINE         [ reduce using rule 58 (epsilon -> .) ]
+
+    decl                           shift and go to state 1
+    stat                           shift and go to state 7
+    list_type                      shift and go to state 15
+    stat_n                         shift and go to state 2
+    type                           shift and go to state 6
+    epsilon                        shift and go to state 9
+    stat_list_wrapper              shift and go to state 112
+    stat_list                      shift and go to state 10
+
+state 111
+
+    (11) stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper } .
+
+    NEWLINE         reduce using rule 11 (stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper } .)
+    $end            reduce using rule 11 (stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper } .)
+    }               reduce using rule 11 (stat -> IF ( expr ) { stat_list_wrapper } elif_stat NEWLINE ELSE { stat_list_wrapper } .)
+
+
+state 112
+
+    (13) elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper . } elif_stat
+
+    }               shift and go to state 113
+
+
+state 113
+
+    (13) elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper } . elif_stat
+    (13) elif_stat -> . NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat
+    (14) elif_stat -> . NEWLINE epsilon
+
+    NEWLINE         shift and go to state 99
+
+    elif_stat                      shift and go to state 114
+
+state 114
+
+    (13) elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat .
+
+    NEWLINE         reduce using rule 13 (elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat .)
+    $end            reduce using rule 13 (elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat .)
+    }               reduce using rule 13 (elif_stat -> NEWLINE ELIF ( expr ) { stat_list_wrapper } elif_stat .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for WHILE in state 0 resolved as shift
+WARNING: shift/reduce conflict for IF in state 0 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 0 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 0 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 0 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 0 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 0 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 0 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 4 resolved as shift
+WARNING: shift/reduce conflict for IF in state 4 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 4 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 4 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 4 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 4 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 4 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 26 resolved as shift
+WARNING: shift/reduce conflict for IF in state 26 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 26 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 26 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 26 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 26 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 26 resolved as shift
+WARNING: shift/reduce conflict for ^ in state 38 resolved as shift
+WARNING: shift/reduce conflict for * in state 40 resolved as shift
+WARNING: shift/reduce conflict for / in state 40 resolved as shift
+WARNING: shift/reduce conflict for % in state 40 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 92 resolved as shift
+WARNING: shift/reduce conflict for IF in state 92 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 92 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 92 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 92 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 92 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 92 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 92 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 94 resolved as shift
+WARNING: shift/reduce conflict for IF in state 94 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 94 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 94 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 94 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 94 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 94 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 94 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 100 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 107 resolved as shift
+WARNING: shift/reduce conflict for IF in state 107 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 107 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 107 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 107 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 107 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 107 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 107 resolved as shift
+WARNING: shift/reduce conflict for WHILE in state 110 resolved as shift
+WARNING: shift/reduce conflict for IF in state 110 resolved as shift
+WARNING: shift/reduce conflict for NAME in state 110 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 110 resolved as shift
+WARNING: shift/reduce conflict for INTEGER in state 110 resolved as shift
+WARNING: shift/reduce conflict for FLOAT in state 110 resolved as shift
+WARNING: shift/reduce conflict for STRING in state 110 resolved as shift
+WARNING: shift/reduce conflict for BOOLEAN in state 110 resolved as shift

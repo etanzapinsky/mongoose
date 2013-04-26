@@ -228,6 +228,30 @@ def p_power(p):
     #else: #len(p) == 3                                                                                                 
     p[0] = Node(vtype=v.UMINUS, children=[p[2]])
 
+def p_weighted_values(p):
+    ''' pow : '(' weighted_val_stat ')'
+    '''
+    p[0] = p[2]
+
+def p_weighted_val_stat(p):
+    ''' weighted_val_stat : weighted_val_clause weighted_val_clause_pipe
+    '''
+    p[0] = Node(vtype=v.WEIGHTED_VALUE_STAT, children=[p[1],p[2]])
+
+def p_clause_pipe(p):
+    ''' weighted_val_clause_pipe : '|' weighted_val_stat 
+                                 | epsilon
+    '''
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None
+
+def p_weighted_val_clause(p):
+    ''' weighted_val_clause : VINTEGER ':' pow
+    '''
+    p[0] = Node(vtype=v.WEIGHTED_VALUE_CLAUSE, children=[Node(vtype=v.INTEGER_VALUE, syn_value=p[1]),p[3]])
+
 def p_integer(p):
     ''' pow : VINTEGER '''
     p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1])#p[1], Depends on responsibility to decide value (backend) 

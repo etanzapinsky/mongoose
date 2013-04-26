@@ -1,0 +1,570 @@
+Last login: Fri Apr  5 15:08:26 on ttys000
+dyn-160-39-205-223:~ meirfischer$ which gcc
+dyn-160-39-205-223:~ meirfischer$ ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+==> This script will install:
+/usr/local/bin/brew
+/usr/local/Library/...
+/usr/local/share/man/man1/brew.1
+==> The following directories will be made group writable:
+/usr/local/.
+/usr/local/bin
+==> The following directories will have their group set to admin:
+/usr/local/.
+/usr/local/bin
+
+Press ENTER to continue or any other key to abort
+==> /usr/bin/sudo /bin/chmod g+rwx /usr/local/. /usr/local/bin
+Password:
+==> /usr/bin/sudo /usr/bin/chgrp admin /usr/local/. /usr/local/bin
+==> Downloading and Installing Homebrew...
+remote: Counting objects: 107452, done.
+remote: Compressing objects: 100% (44662/44662), done.
+remote: Total 107452 (delta 76389), reused 90065 (delta 61881)
+Receiving objects: 100% (107452/107452), 16.23 MiB | 3.05 MiB/s, done.
+Resolving deltas: 100% (76389/76389), done.
+From https://github.com/mxcl/homebrew
+ * [new branch]      master     -> origin/master
+HEAD is now at a015b80 aalib: ensure build doesn't use X11
+Warning: Install the "Command Line Tools for Xcode": http://connect.apple.com
+==> Installation successful!
+You should run `brew doctor' *before* you install anything.
+Now type: brew help
+dyn-160-39-205-223:~ meirfischer$ brew install python
+Warning: You have not agreed to the Xcode license.
+Builds will fail! Agree to the license by opening Xcode.app or running:
+    xcodebuild -license
+==> Installing python dependency: pkg-config
+==> Downloading https://downloads.sf.net/project/machomebrew/Bottles/pkg-config-0.28.mountain_lion.bottle.tar.g
+######################################################################## 100.0%
+==> Pouring pkg-config-0.28.mountain_lion.bottle.tar.gz
+ð  /usr/local/Cellar/pkg-config/0.28: 10 files, 636K
+==> Installing python dependency: readline
+==> Downloading http://ftpmirror.gnu.org/readline/readline-6.2.tar.gz
+######################################################################## 100.0%
+==> Patching
+patching file callback.c
+patching file input.c
+patching file patchlevel
+patching file support/shobj-conf
+patching file vi_mode.c
+==> ./configure --prefix=/usr/local/Cellar/readline/6.2.4 --mandir=/usr/local/Cellar/readline/6.2.4/share/man -
+==> make install
+==> Caveats
+This formula is keg-only: so it was not symlinked into /usr/local.
+
+OS X provides the BSD libedit library, which shadows libreadline.
+In order to prevent conflicts when programs look for libreadline we are
+defaulting this GNU Readline installation to keg-only.
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you'll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/readline/lib
+    CPPFLAGS: -I/usr/local/opt/readline/include
+
+==> Summary
+ð  /usr/local/Cellar/readline/6.2.4: 31 files, 1.6M, built in 61 seconds
+==> Installing python dependency: sqlite
+==> Downloading http://sqlite.org/2013/sqlite-autoconf-3071601.tar.gz
+######################################################################## 100.0%
+==> ./configure --prefix=/usr/local/Cellar/sqlite/3.7.16.1 --enable-dynamic-extensions
+==> make install
+==> Caveats
+This formula is keg-only: so it was not symlinked into /usr/local.
+
+Mac OS X already provides this software and installing another version in
+parallel can cause all kinds of trouble.
+
+OS X already provides (an older) sqlite3.
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you'll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/sqlite/lib
+    CPPFLAGS: -I/usr/local/opt/sqlite/include
+
+==> Summary
+ð  /usr/local/Cellar/sqlite/3.7.16.1: 9 files, 1.9M, built in 34 seconds
+==> Installing python dependency: gdbm
+==> Downloading http://ftpmirror.gnu.org/gdbm/gdbm-1.10.tar.gz
+######################################################################## 100.0%
+==> ./configure --prefix=/usr/local/Cellar/gdbm/1.10 --mandir=/usr/local/Cellar/gdbm/1.10/share/man --infodir=/
+==> make install
+ð  /usr/local/Cellar/gdbm/1.10: 11 files, 236K, built in 27 seconds
+==> Installing python
+==> Downloading http://www.python.org/ftp/python/2.7.3/Python-2.7.3.tar.bz2
+######################################################################## 100.0%
+==> Downloading patches
+######################################################################## 100.0%
+==> Patching
+patching file Lib/shutil.py
+patching file Lib/test/test_shutil.py
+patching file Modules/errnomodule.c
+==> ./configure --prefix=/usr/local/Cellar/python/2.7.3 --enable-ipv6 --datarootdir=/usr/local/Cellar/python/2.
+==> make
+==> make install PYTHONAPPSDIR=/usr/local/Cellar/python/2.7.3
+==> make frameworkinstallextras PYTHONAPPSDIR=/usr/local/Cellar/python/2.7.3/share/python
+==> Downloading https://pypi.python.org/packages/source/d/distribute/distribute-0.6.35.tar.gz
+######################################################################## 100.0%
+==> /usr/local/Cellar/python/2.7.3/bin/python -s setup.py --no-user-cfg install --force --verbose --install-lib
+==> Downloading https://pypi.python.org/packages/source/p/pip/pip-1.3.1.tar.gz
+######################################################################## 100.0%
+==> /usr/local/Cellar/python/2.7.3/bin/python -s setup.py --no-user-cfg install --force --verbose --install-lib
+==> Caveats
+Homebrew's Python framework
+  /usr/local/Cellar/python/2.7.3/Frameworks/Python.framework
+
+Python demo
+  /usr/local/share/python/Extras
+
+Distribute and Pip have been installed. To update them
+  pip install --upgrade distribute
+  pip install --upgrade pip
+
+To symlink "Idle" and the "Python Launcher" to ~/Applications
+  `brew linkapps`
+
+You can install Python packages with (the outdated easy_install or)
+  `pip install <your_favorite_package>`
+
+They will install into the site-package directory
+  /usr/local/lib/python2.7/site-packages
+
+Executable python scripts will be put in:
+  /usr/local/share/python
+so you may want to put "/usr/local/share/python" in your PATH, too.
+
+See: https://github.com/mxcl/homebrew/wiki/Homebrew-and-Python
+==> Summary
+ð  /usr/local/Cellar/python/2.7.3: 5169 files, 79M, built in 2.7 minutes
+dyn-160-39-205-223:~ meirfischer$ brew install pip
+Error: No available formula for pip
+pip is installed by `brew install python`
+dyn-160-39-205-223:~ meirfischer$ brew install python-pip
+Error: No available formula for python-pip 
+dyn-160-39-205-223:~ meirfischer$ brew search pip
+aespipe		         brew-pip lesspipe    pipebench	pipemeter   spiped	pipeviewer
+
+If you meant `pip' precisely:
+
+pip is installed by `brew install python`
+dyn-160-39-205-223:~ meirfischer$ brew install brew-pip
+Warning: You have not agreed to the Xcode license.
+Builds will fail! Agree to the license by opening Xcode.app or running:
+    xcodebuild -license
+==> Downloading https://github.com/josh/brew-pip/archive/v0.1.2.tar.gz
+######################################################################## 100.0%
+ð  /usr/local/Cellar/brew-pip/0.1.2: 4 files, 16K, built in 2 seconds
+dyn-160-39-205-223:~ meirfischer$ which pip
+/usr/local/bin/pip
+dyn-160-39-205-223:~ meirfischer$ pip install virtualenvwrapper
+Downloading/unpacking virtualenvwrapper
+  Downloading virtualenvwrapper-3.7.tar.gz (184kB): 184kB downloaded
+  Running setup.py egg_info for package virtualenvwrapper
+    
+Downloading/unpacking virtualenv (from virtualenvwrapper)
+  Downloading virtualenv-1.9.1.tar.gz (2.0MB): 2.0MB downloaded
+  Running setup.py egg_info for package virtualenv
+    
+    warning: no previously-included files matching '*' found under directory 'docs/_templates'
+    warning: no previously-included files matching '*' found under directory 'docs/_build'
+Downloading/unpacking virtualenv-clone (from virtualenvwrapper)
+  Downloading virtualenv-clone-0.2.4.tar.gz
+  Running setup.py egg_info for package virtualenv-clone
+    
+Downloading/unpacking stevedore (from virtualenvwrapper)
+  Downloading stevedore-0.8.tar.gz (94kB): 94kB downloaded
+  Running setup.py egg_info for package stevedore
+    
+    warning: no files found matching '*.py' under directory 'tests'
+Requirement already satisfied (use --upgrade to upgrade): distribute in /usr/local/lib/python2.7/site-packages/distribute-0.6.35-py2.7.egg (from stevedore->virtualenvwrapper)
+Installing collected packages: virtualenvwrapper, virtualenv, virtualenv-clone, stevedore
+  Running setup.py install for virtualenvwrapper
+    
+    changing mode of build/scripts-2.7/virtualenvwrapper.sh from 644 to 755
+    changing mode of build/scripts-2.7/virtualenvwrapper_lazy.sh from 644 to 755
+    Skipping installation of /usr/local/lib/python2.7/site-packages/virtualenvwrapper/__init__.py (namespace package)
+    Installing /usr/local/lib/python2.7/site-packages/virtualenvwrapper-3.7-py2.7-nspkg.pth
+    changing mode of /usr/local/share/python/virtualenvwrapper.sh to 755
+    changing mode of /usr/local/share/python/virtualenvwrapper_lazy.sh to 755
+  Running setup.py install for virtualenv
+    
+    warning: no previously-included files matching '*' found under directory 'docs/_templates'
+    warning: no previously-included files matching '*' found under directory 'docs/_build'
+    Installing virtualenv script to /usr/local/share/python
+    Installing virtualenv-2.7 script to /usr/local/share/python
+  Running setup.py install for virtualenv-clone
+    
+    Installing virtualenv-clone script to /usr/local/share/python
+  Running setup.py install for stevedore
+    
+    warning: no files found matching '*.py' under directory 'tests'
+Successfully installed virtualenvwrapper virtualenv virtualenv-clone stevedore
+Cleaning up...
+dyn-160-39-205-223:~ meirfischer$ which python
+/usr/bin/python
+dyn-160-39-205-223:~ meirfischer$ ls /usr/local/Cellar
+brew-pip	     gdbm	     pkg-config	python		readline	sqlite
+dyn-160-39-205-223:~ meirfischer$ sudo mv /usr/bin/python /usr/bin/python_BACK 
+Password:
+dyn-160-39-205-223:~ meirfischer$ which python
+/usr/local/bin/python
+dyn-160-39-205-223:~ meirfischer$ export $PATH="/usr/local/bin/python:$PATH"
+-bash: export: `/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin=/usr/local/bin/python:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin': not a valid identifier
+dyn-160-39-205-223:~ meirfischer$ export $PATH="/usr/local/bin/python:$(PATH)"
+-bash: PATH: command not found
+-bash: export: `/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin=/usr/local/bin/python:': not a valid identifier
+dyn-160-39-205-223:~ meirfischer$ export PATH="/usr/local/bin/python:$PATH"
+dyn-160-39-205-223:~ meirfischer$ nano ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ source ~/.bash_profile 
+dyn-160-39-205-223:~ meirfischer$ which python
+/usr/local/bin/python
+dyn-160-39-205-223:~ meirfischer$ ls /usr/local/Cellar/python
+2.7.3
+dyn-160-39-205-223:~ meirfischer$ ls /usr/local/bin/
+2to3              dumpcap           idle2.7           pydoc2            python2.7-config  smtpd2.7.py
+2to3-2            easy_install      mergecap          pydoc2.7          pythonw           smtpd2.py
+2to3-2.7          easy_install-2.7  pip               python            pythonw2          testgdbm
+brew              editcap           pip-2.7           python-config     pythonw2.7        text2pcap
+brew-pip          github            pkg-config        python2           randpkt           tshark
+capinfos          idle              ply-3.4/          python2-config    rawshark          wireshark
+dftest            idle2             pydoc             python2.7         smtpd.py          
+dyn-160-39-205-223:~ meirfischer$ pip install virtualenvwrapper
+Requirement already satisfied (use --upgrade to upgrade): virtualenvwrapper in /usr/local/lib/python2.7/site-packages
+Requirement already satisfied (use --upgrade to upgrade): virtualenv in /usr/local/lib/python2.7/site-packages (from virtualenvwrapper)
+Requirement already satisfied (use --upgrade to upgrade): virtualenv-clone in /usr/local/lib/python2.7/site-packages (from virtualenvwrapper)
+Requirement already satisfied (use --upgrade to upgrade): stevedore in /usr/local/lib/python2.7/site-packages (from virtualenvwrapper)
+Requirement already satisfied (use --upgrade to upgrade): distribute in /usr/local/lib/python2.7/site-packages/distribute-0.6.35-py2.7.egg (from stevedore->virtualenvwrapper)
+Cleaning up...
+dyn-160-39-205-223:~ meirfischer$ $ export WORKON_HOME=~/Envs
+-bash: $: command not found
+dyn-160-39-205-223:~ meirfischer$ export WORKON_HOME=~/Envs
+dyn-160-39-205-223:~ meirfischer$ mkdir -p $WORKON_HOME
+dyn-160-39-205-223:~ meirfischer$ source /usr/local/bin/virtualenvwrapper.sh
+-bash: /usr/local/bin/virtualenvwrapper.sh: No such file or directory
+dyn-160-39-205-223:~ meirfischer$ which virtualenvwrapper.sh
+dyn-160-39-205-223:~ meirfischer$ source /usr/local/Cellar/
+brew-pip/   gdbm/       pkg-config/ python/     readline/   sqlite/     
+dyn-160-39-205-223:~ meirfischer$ source /usr/local/share/
+aclocal/ doc/     man/     python/  
+dyn-160-39-205-223:~ meirfischer$ source /usr/local/share/python/
+Extras/                    virtualenv-2.7             virtualenvwrapper.sh       
+virtualenv                 virtualenv-clone           virtualenvwrapper_lazy.sh  
+dyn-160-39-205-223:~ meirfischer$ source /usr/local/share/python/virtualenvwrapper.sh 
+dyn-160-39-205-223:~ meirfischer$ mk
+mkbom              mkfile             mknod              mktemp             
+mkdir              mkfontdir          mkpassdb           mktmpenv           
+mkextunpack        mkfontscale        mkproject          mkvirtualenv       
+mkfifo             mklocale           mkproject_help     mkvirtualenv_help  
+dyn-160-39-205-223:~ meirfischer$ nano ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ nano ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ cat ~/.bash_profile
+export PATH="/usr/local/bin/python:$PATH"
+source /usr/local/share/python/virtualenvwrapper.sh 
+dyn-160-39-205-223:~ meirfischer$ mkvirtualenv mongoose
+ERROR: virtualenvwrapper could not find virtualenv in your path
+dyn-160-39-205-223:~ meirfischer$ pip install virtualenv
+Requirement already satisfied (use --upgrade to upgrade): virtualenv in /usr/local/lib/python2.7/site-packages
+Cleaning up...
+dyn-160-39-205-223:~ meirfischer$ echo $PATH
+/usr/local/bin/python:/usr/local/bin/python:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin
+dyn-160-39-205-223:~ meirfischer$ nano ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ mkvirtualenv mongoose
+ERROR: virtualenvwrapper could not find virtualenv in your path
+dyn-160-39-205-223:~ meirfischer$ emacs ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ mkvirtualenv mongoose
+ERROR: virtualenvwrapper could not find virtualenv in your path
+dyn-160-39-205-223:~ meirfischer$ source ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ mkvirtualenv mongoose
+ERROR: virtualenvwrapper could not find virtualenv in your path
+dyn-160-39-205-223:~ meirfischer$ pip install virtualenv
+Requirement already satisfied (use --upgrade to upgrade): virtualenv in /usr/local/lib/python2.7/site-packages
+Cleaning up...
+dyn-160-39-205-223:~ meirfischer$ /usr/local/lib/python2.7/site-packages/
+distribute-0.6.35-py2.7.egg/           virtualenv_clone-0.2.4-py2.7.egg-info/
+pip-1.3.1-py2.7.egg/                   virtualenv_support/
+stevedore/                             virtualenvwrapper/
+stevedore-0.8-py2.7.egg-info/          virtualenvwrapper-3.7-py2.7.egg-info/
+virtualenv-1.9.1-py2.7.egg-info/       
+dyn-160-39-205-223:~ meirfischer$ mkvirtualenv
+ERROR: virtualenvwrapper could not find virtualenv in your path
+dyn-160-39-205-223:~ meirfischer$ echo $PATH
+/usr/local/lib/python2.7/site-packages:/usr/local/bin/python2.7:/usr/local/bin/python:/usr/local/bin/python:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin
+dyn-160-39-205-223:~ meirfischer$ /usr/local/
+.git/       Frameworks/ bin/        include/    opt/        
+Cellar/     Library/    git/        lib/        share/      
+dyn-160-39-205-223:~ meirfischer$ /usr/local/bin/
+2to3              dumpcap           mergecap          pydoc2.7          pythonw           smtpd2.py
+2to3-2            easy_install      pip               python            pythonw2          testgdbm
+2to3-2.7          easy_install-2.7  pip-2.7           python-config     pythonw2.7        text2pcap
+brew              editcap           pkg-config        python2           randpkt           tshark
+brew-pip          idle              ply-3.4/          python2-config    rawshark          wireshark
+capinfos          idle2             pydoc             python2.7         smtpd.py          
+dftest            idle2.7           pydoc2            python2.7-config  smtpd2.7.py       
+dyn-160-39-205-223:~ meirfischer$ /usr/local/share/python/
+Extras/                    virtualenv-2.7             virtualenvwrapper.sh       
+virtualenv                 virtualenv-clone           virtualenvwrapper_lazy.sh  
+dyn-160-39-205-223:~ meirfischer$ /usr/local/share/python/
+dyn-160-39-205-223:~ meirfischer$ nano ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ echo $PATH
+/usr/local/lib/python2.7/site-packages:/usr/local/bin/python2.7:/usr/local/bin/python:/usr/local/bin/python:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/local/git/bin
+dyn-160-39-205-223:~ meirfischer$ source ~/.bash_profile
+dyn-160-39-205-223:~ meirfischer$ mkvirtualenv mongoose
+New python executable in mongoose/bin/python
+Installing setuptools............done.
+Installing pip...............done.
+(mongoose)dyn-160-39-205-223:~ meirfischer$ deactivate mongoose
+dyn-160-39-205-223:~ meirfischer$ workon mongoose
+(mongoose)dyn-160-39-205-223:~ meirfischer$ git clone https://github.com/etanzapinsky/mongoose.git
+(mongoose)dyn-160-39-205-223:~ meirfischer$ pwd
+/Users/meirfischer
+(mongoose)dyn-160-39-205-223:~ meirfischer$ l
+-bash: l: command not found
+(mongoose)dyn-160-39-205-223:~ meirfischer$ ls
+#english#					Library				hello.py
+#samples.txt#										Movies				java.log.33792
+4119hw1v2														 Music    java.log.34922
+4731CV															 	    Pictures   matlab_crash_dump.34922-1
+Applications (Parallels)													    Public        normapp.py
+Desktop	     															    		   binomial.py   normapp.py~
+Documents																	   		  binomial.py~   shark
+Downloads																			  		  config    test.java
+Dropbox																						  	      contestapplet.conf  unnamed0.graphml
+Envs																							      			    contestapplet.conf.bak
+(mongoose)dyn-160-39-205-223:~ meirfischer$ cd Dropbox/
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ mkdir mongoose
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ git clone https://github.com/etanzapinsky/mongoose.git
+Cloning into 'mongoose'...
+fatal: Authentication failed
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ emacs ~/.ssh/config
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ ssh-
+ssh-add      ssh-agent    ssh-keygen   ssh-keyscan  
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ ssh-keygen 
+Generating public/private rsa key pair.
+Enter file in which to save the key (/Users/meirfischer/.ssh/id_rsa):                                        [ Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /Users/meirfischer/.ssh/id_rsa.
+Your public key has been saved in /Users/meirfischer/.ssh/id_rsa.pub.
+The key fingerprint is:
+9f:1b:ac:ea:85:e5:ce:49:87:01:db:08:63:7e:3a:2e meirfischer@dyn-160-39-205-223.dyn.columbia.edu
+The key's randomart image is:
++--[ RSA 2048]----+
+|                 |
+|                 |
+|    + .          |
+|   o o =         |
+|    . + S        |
+|     o + = .     |
+|    o . = *      |
+|  E. . = + o     |
+|   ...o.= .      |
++-----------------+
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ cd ~/.ssh
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ ls
+github_rsa			  github_rsa.pub	id_rsa		id_rsa.pub	known_hosts
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ cat id_rsa.pub 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUv2jDER8KUCH3dLsvYLVctDY8ja7Fuy6BDm6MYtIcTvTpDUx0FJ+vEMvqZJapnWF8LUQFreI6pTyO8Psx/4LVTHFxao4IDJy9xF4CvIeZY/lkL3NXmRvMVJUgPJfNvxwPdiqH5I/Y+sbYSqJK5rSjEcHDM+tNWKx4DL6HuRf/+UPOMgryjLVY9prSN1EF8UgdWsQNZk7jiOviCozTLAQKmby/uFqlZAOTq+TE9wXMjopN3h/Vxlj6e2Lmc/ik7n5qR9sccOYD3tuJ62606sSklARNVkjvcPbk8rotCZ4FoWj5a983cKE9UzvmuVbBI1JV0yaQZaC5/BDJneotC2zH meirfischer@dyn-160-39-205-223.dyn.columbia.edu
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ cd ..
+(mongoose)dyn-160-39-205-223:~ meirfischer$ cd ..
+(mongoose)dyn-160-39-205-223:Users meirfischer$ pwd
+/Users
+(mongoose)dyn-160-39-205-223:Users meirfischer$ ls
+Guest				   		Shared		meirfischer
+(mongoose)dyn-160-39-205-223:Users meirfischer$ cd meirfischer/
+(mongoose)dyn-160-39-205-223:~ meirfischer$ cd ~/.ssh
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ emacs config
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ ssh github.com
+/Users/meirfischer/.ssh/config: line 1: Bad configuration option: Host:
+/Users/meirfischer/.ssh/config: line 2: Bad configuration option: IdentityFile:
+/Users/meirfischer/.ssh/config: line 3: Bad configuration option: User:
+/Users/meirfischer/.ssh/config: terminating, 3 bad configuration options
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ emacs config
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ ssh github.com
+/Users/meirfischer/.ssh/config: line 1: Bad configuration option: Host:
+/Users/meirfischer/.ssh/config: line 2: Bad configuration option: IdentityFile:
+/Users/meirfischer/.ssh/config: line 3: Bad configuration option: User:
+/Users/meirfischer/.ssh/config: terminating, 3 bad configuration options
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ emacs config
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ ssh github.com
+PTY allocation request failed on channel 0
+Hi meirf! You've successfully authenticated, but GitHub does not provide shell access.
+Connection to github.com closed.
+(mongoose)dyn-160-39-205-223:.ssh meirfischer$ cd ~/Dropbox/
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ git clone ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDUv2jDER8KUCH3dLsvYLVctDY8ja7Fuy6BDm6MYtIcTvTpDUx0FJ+vEMvqZJapnWF8LUQFreI6pTyO8Psx/4LVTHFxao4IDJy9xF4CvIeZY/lkL3NXmRvMVJUgPJfNvxwPdiqH5I/Y+sbYSqJK5rSjEcHDM+tNWKx4DL6HuRf/+UPOMgryjLVY9prSN1EF8UgdWsQNZk7jiOviCozTLAQKmby/uFqlZAOTq+TE9wXMjopN3h/Vxlj6e2Lmc/ik7n5qR9sccOYD3tuJ62606sSklARNVkjvcPbk8rotCZ4FoWj5a983cKE9UzvmuVbBI1JV0yaQZaC5/BDJneotC2zH meirfischer@dyn-160-39-205-223.dyn.columbia.edu
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ cd ~/Dropbox/git@github.com:etanzapinsky/mongoose.git
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ git clone git@github.com:etanzapinsky/mongoose.git
+Cloning into 'mongoose'...
+remote: Counting objects: 56, done.
+remote: Compressing objects: 100% (37/37), done.
+remote: Total 56 (delta 21), reused 42 (delta 10)
+Receiving objects: 100% (56/56), 7.76 KiB, done.
+Resolving deltas: 100% (21/21), done.
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ ls
+1004 mesora			     		  DISCRETE MATH NOTES	Photos
+AIAA 						  	   Getting Started.pdf	Public
+AccessBigApple.apk					   Icon?			mongoose
+(mongoose)dyn-160-39-205-223:Dropbox meirfischer$ cd mongoose/
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ pwd
+/Users/meirfischer/Dropbox/mongoose
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ emacs ~/Envs/mongoose/bin/postactivate 
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ deactivate 
+dyn-160-39-205-223:mongoose meirfischer$ cd
+dyn-160-39-205-223:~ meirfischer$ workon mongoose
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ ls
+README.md			      		   code_samples		parser.py		stdlib.py
+__init__.py					   			lexer.py			print.mon	 tests
+backend.py												mongoose.py	  requirements.txt
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ pip install -r requirements.txt
+Downloading/unpacking ply==3.4 (from -r requirements.txt (line 1))
+  Downloading ply-3.4.tar.gz (138kB): 138kB downloaded
+  Running setup.py egg_info for package ply
+    
+Downloading/unpacking nose==1.2.1 (from -r requirements.txt (line 2))
+  Downloading nose-1.2.1.tar.gz (400kB): 400kB downloaded
+  Running setup.py egg_info for package nose
+    
+    no previously-included directories found matching 'doc/.build'
+Installing collected packages: ply, nose
+  Running setup.py install for ply
+    
+  Running setup.py install for nose
+    
+    no previously-included directories found matching 'doc/.build'
+    Installing nosetests script to /Users/meirfischer/Envs/mongoose/bin
+    Installing nosetests-2.7 script to /Users/meirfischer/Envs/mongoose/bin
+Successfully installed ply nose
+Cleaning up...
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ cp ~/bash_history install
+cp: /Users/meirfischer/bash_history: No such file or directory
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ cp ~/.bash_history install
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ emacs install 
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail ~/.bash_history 100 > install
+tail: 100: No such file or directory
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ man tail
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail ~/.bash_history 0b 100 > install
+tail: 0b: No such file or directory
+tail: 100: No such file or directory
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail ~/.bash_history -b 100 > install
+tail: -b: No such file or directory
+tail: 100: No such file or directory
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail -b 100 ~/.bash_history  > install
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ emacs install
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ man tail
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail -n 100 ~/.bash_history  > install
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ cat install
+emacs get16Quadrants.m 
+emacs get_NCC.m 
+emacs get_SSD.m 
+emacs get_descriptors.m 
+emacs get_dom_orientation.m 
+emacs get_features.m
+emacs match_features.m 
+emacs min_test_ratio.m 
+ls
+rm *~
+ls
+zip HW3_mlf2156 *
+ls
+emacs samples.txt
+emacs tutorial_algo.txt
+cd Documents/
+ls
+cd 47
+cd 4731HW3
+ls
+ls
+rm HW3_mlf2156.zip 
+zip HW3_mlf2156 *
+ls
+mkdir test
+cp HW3_mlf2156.zip test/
+cd test/
+ls
+unzip HW3_mlf2156.zip 
+ls
+echo
+clear
+python
+cd Documents/
+cd 4731HW3/
+ls
+emacs README.m 
+rm HW3_mlf2156.zip 
+zip HW3_mlf2156 * 
+cd Documents/4731HW3/
+ls
+emacs EXTRACREDIT_README.txt
+ls
+zip EXTRA_CREDIT_addendum *
+ls
+Downloads/
+cd Downloads/
+pwd
+ping google.com
+ping -n 10 www.ust.hk
+ping -c 10 www.ust.hk
+ping -c 10 www.ust.hk
+traceroute inria.fr
+traceroute www.inria.fr
+traceroute www.inria.fr
+traceroute www.inria.fr
+tracert www.inria.fr
+tracert www.inria.fr
+traceroute www.inria.fr
+traceroute www.inria.fr
+traceroute www.inria.fr
+traceroute www.inria.fr
+clear
+traceroute www.inria.fr
+tracert www.inria.fr
+tracert www.inria.fr
+traceroute www.inria.fr
+clear
+traceroute www.inria.fr
+traceroute www.inria.fr
+emacs normapp.py
+python normapp.py 
+emacs normapp.py
+python normapp.py 
+emacs normapp.py
+python normapp.py 
+emacs normapp.py
+python normapp.py 
+emacs normapp.py
+/Users/meirfischer/Downloads/arboratrix-2.0.0-pre20/bootstrap ; exit;
+cd Downloads/
+ls
+cd arboratrix-2.0.0-pre20
+ls
+bootstrap
+cd bootstrap
+emacs README 
+make
+make bootstrap 
+which make
+clear
+ls
+arboratrix
+b arboratrix
+c bootstrap 
+cc bootstrap 
+emacs bootstrap 
+make bootstrap
+pyhotn
+python
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ man tail
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail -n 100 ~/.bash_history  > install
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ tail ~/.bash_history 
+clear
+ls
+arboratrix
+b arboratrix
+c bootstrap 
+cc bootstrap 
+emacs bootstrap 
+make bootstrap
+pyhotn
+python
+(mongoose)dyn-160-39-205-223:mongoose meirfischer$ 
