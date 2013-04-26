@@ -9,9 +9,9 @@ def traversePost(root, indent): #postorder
         print root, "is a str. oops"
 
     if(root is not None ):
+        print '     '*indent + root.vtype,':',root.syn_value,':',root.symbol,':',root.inh_value
         for n in root.children:
                 traversePost(n, indent+1)
-        print '     '*indent + root.vtype,':',root.syn_value,':',root.symbol,':',root.inh_value
 
 if __name__ == "__main__": 
     #while True:
