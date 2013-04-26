@@ -50,9 +50,10 @@ PIF = "PIF"
 PELIF = "PELIF"
 PELSE = "PELSE"
 
-#List Declarations
+#List
 LIST_TYPE = "LIST_TYPE"
 BRACKET_DECL = "BRACKET_DECL"
+BRACKET_ACCESS = "BRACKET_ACCESS" #used for LHS assignment or RHS access. x[3] = y or x = y[3]
 
 #BLOCK KEYWORDS
 ENVIRONMENT = "ENVIRONMENT"

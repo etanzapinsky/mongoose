@@ -125,6 +125,7 @@ def p_opt_else(p):
     else:
         p[0] = None
 
+#VFLOAT is non-negative
 def p_pif(p):
     ''' stat : PIF '(' VFLOAT ')' '{' stat_list_wrapper '}' opt_pelifs opt_pelse                                               
     '''
@@ -150,9 +151,9 @@ def p_opt_pelse(p):
 
 
 def p_stat_assign(p):
-    '''stat : NAME '=' expr    
+    '''stat : NAME non_empty_brack '=' expr    
     '''
-    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1]), p[3]]) 
+    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1]), p[4]]) 
 
 def p_stat_decl_assign(p):
     '''stat : decl '=' expr                                                                                                  '''
@@ -247,6 +248,7 @@ def p_clause_pipe(p):
     else:
         p[0] = None
 
+#VINTEGER is non-negative
 def p_weighted_val_clause(p):
     ''' weighted_val_clause : VINTEGER ':' pow
     '''
@@ -371,6 +373,7 @@ def p_list_type(p):
     '''
     p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[2].inh_value) #TODO: change these (and below) to syn_value
 
+#VINTEGER is non-negative
 def p_bracket(p):
     ''' brack : '[' VINTEGER ']' brack
               | '[' ']' brack
@@ -382,6 +385,17 @@ def p_bracket(p):
         p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
     else:  
         p[0] = Node(vtype=v.BRACKET_DECL, inh_value='')
+
+#VINTEGER is non-negative
+def p_non_empty_bracket(p):
+    ''' non_empty_brack :  '[' VINTEGER ']' non_empty_brack
+                        | epsilon
+    '''
+    if len(p) == 5:
+        p[0] = Node(vtype=v.BRACKET_ACCESS, children=[p[4]], inh_value=p[1]+p[2]+p[3]+p[4].inh_value)
+    else:  
+        p[0] = Node(vtype=v.BRACKET_ACCESS, inh_value='')
+
 
 def p_type_int(p):
     '''type : INTEGER 
