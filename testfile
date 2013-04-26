@@ -1,11 +1,11 @@
-
-int foo(string x){
-int x = 5
+int[]  foo(string[][] s, boolean x){
+   int y = 5 
 }
 
 environment{
-	action{
+	populate{
+
 	}
-	populate{		
+	action{
 	}
 }

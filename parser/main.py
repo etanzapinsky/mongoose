@@ -1,5 +1,6 @@
 from parser import parser
 import sys
+import vtypes as v
 
 def traverse(root):
     traversePost(root, 0)
@@ -9,9 +10,13 @@ def traversePost(root, indent): #postorder
         print root, "is a str. oops"
 
     if(root is not None ):
-        print '     '*indent + root.vtype,':',root.syn_value,':',root.symbol,':',root.inh_value
-        for n in root.children:
-                traversePost(n, indent+1)
+        if(root.vtype==v.FUNCTION_DEFINITION):
+            print '     '*indent + root.__str__()#vtype,':',root.return_type,':',root.symbol,':',root.parameter_pairs
+            traversePost(root.statements, indent+1)
+        else: #regular Node
+            print '     '*indent + root.__str__()#vtype,':',root.syn_value,':',root.symbol,':',root.inh_value,':',root.params
+            for n in root.children:
+                    traversePost(n, indent+1)
 
 if __name__ == "__main__": 
     #while True:

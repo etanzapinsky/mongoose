@@ -1,7 +1,8 @@
 import ply.yacc as yacc
 from lexer import lexer
-from tree import Node, Function
+from tree import Node, FunctionDefinition
 import vtypes as v
+import re
 # hack to get the tokens since they are a global variable in the lexer object
 tokens = lexer.tokens
 
@@ -19,7 +20,7 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start = 'program'
+start =  'program' #'program'
 
 def p_program(p):
     ''' program : stat_list_wrapper environment stat_list_wrapper 
@@ -91,22 +92,24 @@ def p_statn(p):
         p[0] = None
 
 #TODO stat_list_wrapper causes problems , does not exlcude function def within function def or loops, etc.
+#list_type changed from return_type
 def p_function_def(p):
-    ''' stat : return_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
+    ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
     ''' 
-    p[0] = Node(vtype=v.FUNCTION_DEFINITION, symbol=p[2], children=[p[1],p[4],p[7]])
+    p[0] = FunctionDefinition(symbol=p[2], statements=[p[7]], return_type=re.sub('\d+','',p[1].inh_value), parameter_pairs=p[4].inh_value)
 
+#brack changed from empty_brack
 def p_formal_param(p):
-    ''' formal_param : type empty_brack NAME
+    ''' formal_param : type brack NAME
     '''
-    p[0] = Node(vtype=v.FORMAL_PARAM, symbol=p[3], children=[p[1],p[2]], inh_value=p[1]+p[2].inh_value)
+    p[0] = Node(vtype=v.FORMAL_PARAM, symbol=p[3], children=[p[1],p[2]], inh_value=p[1].syn_value+re.sub('\d+','',p[2].inh_value))
 
 def p_formal_param_list(p):
     ''' formal_param_list : formal_param formal_param_comma
                           | epsilon
     '''  
     if len(p) == 3:
-        p[0] = Node(vtype=v.FORMAL_PARAM_LIST, children=[p[1],p[2]])
+        p[0] = Node(vtype=v.FORMAL_PARAM_LIST, children=[p[1],p[2]], inh_value=p[1].inh_value+' '+p[1].symbol+','+(p[2].inh_value if p[2] != None else ''))
     else:
         p[0] = None
 
@@ -119,10 +122,11 @@ def p_formal_param_comma(p):
     else:
         p[0] = None
 
-def p_return_type(p):
-    ''' return_type : type empty_brack
-    '''
-    p[0] = Node(vtype=v.RETURN_TYPE, children=[p[1],p[2]], inh_value=p[1]+p[2].inh_value)
+#brack changed from empty_brack
+#def p_return_type(p):
+#    ''' return_type : type brack
+#    '''
+#    p[0] = Node(vtype=v.RETURN_TYPE, children=[p[1],p[2]], inh_value=p[1]+p[2].inh_value)
 
 #TODO: (fix:) cant have newline before {
 def p_while(p):
@@ -357,7 +361,7 @@ def p_decl(p):
 def p_list_type(p):
     ''' list_type : type brack
     '''
-    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[2].inh_value) #TODO: change these (and below) to syn_value
+    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[1].syn_value+p[2].inh_value) #TODO: change these (and below) to syn_value
 
 #VINTEGER is non-negative
 def p_bracket(p):
@@ -382,14 +386,14 @@ def p_non_empty_bracket(p):
     else:  
         p[0] = Node(vtype=v.BRACKET_ACCESS, inh_value='')
 
-def p_empty_bracket(p):
-    ''' empty_brack :  '[' ']' empty_brack
-                    | epsilon
-    '''
-    if len(p) == 5:
-        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value) #inh_value or syn_value
-    else:  
-        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, inh_value='')
+#def p_empty_bracket(p):
+#    ''' empty_brack :  '[' ']' empty_brack
+#                    | epsilon
+#    '''
+#    if len(p) == 5:
+#        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value) #inh_value or syn_value
+#    else:  
+#        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, inh_value='')
 
 def p_type_int(p):
     '''type : INTEGER 
