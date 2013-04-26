@@ -55,7 +55,7 @@ class Lexer:
     # token, the meaning, i.e. is one a function name, variable name or string
     # is derived from the symbols surronding it.
     
-    literals = "+-*/%^()=\'\"<>[]{}:|"    #type=value for single characters
+    literals = "+-*/%^()=\'\"<>[]{}:|,"    #type=value for single characters
         
     t_VSTRING = r'("[^"]*")|(\'[^\']*\')'
     t_VINTEGER = r'[0-9]+'
