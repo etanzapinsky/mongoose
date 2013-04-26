@@ -20,13 +20,17 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start =  'program' #'program'
+start =  'program'
 
 def p_program(p):
     ''' program : stat_list_wrapper environment stat_list_wrapper 
     '''
     p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[1],p[3]])#order: environment, then all other statements
 
+#def p_program_error(p):
+#    ''' program : stat_list_wrapper error stat_list_wrapper 
+#    '''
+#    print "Missing environment block!"
 
 def p_environment_1(p):
     ''' environment : ENVIRONMENT '{' stat_list_wrapper populate stat_list_wrapper action stat_list_wrapper  '}'
@@ -98,6 +102,11 @@ def p_function_def(p):
     ''' 
     p[0] = FunctionDefinition(symbol=p[2], statements=[p[7]], return_type=re.sub('\d+','',p[1].inh_value), parameter_pairs=p[4].inh_value)
 
+def p_stat_function_call(p):
+    ''' stat : function_call 
+    '''
+    p[0] = p[1]
+
 #brack changed from empty_brack
 def p_formal_param(p):
     ''' formal_param : type brack NAME
@@ -121,6 +130,34 @@ def p_formal_param_comma(p):
         p[0] = p[2]
     else:
         p[0] = None
+
+def p_function_call(p):
+    ''' function_call : NAME '(' actual_param_list ')'
+    '''
+    p[0] = Node(vtype=v.FUNCTION_CALL, symbol=p[1], children=[p[3]])
+
+def p_actual_param(p):
+    ''' actual_param : expr
+    '''
+    p[0] = p[1]
+
+def p_actual_param_list(p):
+    ''' actual_param_list : actual_param actual_param_comma
+                          | epsilon
+    '''  
+    if len(p) == 3:
+        p[0] = Node(vtype=v.ACTUAL_PARAM_LIST, children=[p[1],p[2]])
+    else:
+        p[0] = None
+
+def p_actual_param_comma(p):
+    ''' actual_param_comma : ',' actual_param_list
+                           | epsilon
+    '''     
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None 
 
 #brack changed from empty_brack
 #def p_return_type(p):
@@ -269,6 +306,11 @@ def p_weighted_val_clause(p):
     ''' weighted_val_clause : VINTEGER ':' pow
     '''
     p[0] = Node(vtype=v.WEIGHTED_VALUE_CLAUSE, children=[Node(vtype=v.INTEGER_VALUE, syn_value=p[1]),p[3]])
+
+def p_pow_function_call(p):
+    ''' pow : function_call
+    '''
+    p[0] = p[1]
 
 def p_integer(p):
     ''' pow : VINTEGER '''
