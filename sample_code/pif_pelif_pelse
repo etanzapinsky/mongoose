@@ -1,0 +1,7 @@
+pif(.3){
+    int x = 3
+} pelif (.5) {
+    int y = 7
+} pelse {
+    boolean qw = false
+}

@@ -42,7 +42,7 @@ def p_stat_list_wrapper(p):
 #    '''
 #    p[0] = p[1]
 
-#TODO: if statement_list has only 1 line, requires newline at end !!!!
+#TODO: statements require newline at end !!!!
 
 def p_stat_opt(p):
     ''' stat_opt : stat                                                                                              
@@ -75,7 +75,7 @@ def p_while(p):
     '''
     p[0] = Node(vtype=v.WHILE, children=[p[3], p[6]])
 
-#TODO: need newline before elif/else, maybe fix this
+#TODO: no newline allowed before elif/else, maybe fix this
 def p_if(p):
     ''' stat : IF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs opt_else  
     '''
