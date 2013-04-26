@@ -23,6 +23,9 @@ class Lexer:
         'pif' : 'PIF',
         'pelif' : 'PELIF',
         'pelse' : 'PELSE',
+        'environment' : 'ENVIRONMENT',
+        'populate' : 'POPULATE',
+        'action' : 'ACTION',
     }
 
     #add 'none' later

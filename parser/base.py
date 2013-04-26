@@ -19,7 +19,33 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start = 'stat_list_wrapper'
+start = 'program'#'stat_list_wrapper'
+
+def p_program(p):
+    ''' program : stat_list_wrapper environment stat_list_wrapper 
+    '''
+    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[1],p[3]])#order: environment, then all other statements
+
+
+def p_environment_1(p):
+    ''' environment : ENVIRONMENT '{' stat_list_wrapper populate stat_list_wrapper action stat_list_wrapper  '}'
+    '''
+    p[0] = Node(vtype=v.ENVIRONMENT, children=[p[4],p[6],p[3],p[5],p[7]])#order: populate, action, then all surrounding statements
+
+def p_environment_2(p):
+    ''' environment : ENVIRONMENT '{' stat_list_wrapper action stat_list_wrapper populate stat_list_wrapper  '}'
+    ''' 
+    p[0] = Node(vtype=v.ENVIRONMENT, children=[p[6],p[4],p[3],p[5],p[7]])#order: populate, action, then all surrounding statements 
+
+def p_populate(p):
+    ''' populate : POPULATE '{' stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.POPULATE, children=[p[3]])
+
+def p_action(p):
+    ''' action : ACTION '{' stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.ACTION, children=[p[3]])
 
 def p_stat_list_wrapper(p):
     '''stat_list_wrapper : NEWLINE stat_list NEWLINE
