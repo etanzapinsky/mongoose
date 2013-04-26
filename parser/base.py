@@ -153,7 +153,7 @@ def p_opt_pelse(p):
 def p_stat_assign(p):
     '''stat : NAME non_empty_brack '=' expr    
     '''
-    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1]), p[4]]) 
+    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]]), p[4]]) 
 
 def p_stat_decl_assign(p):
     '''stat : decl '=' expr                                                                                                  '''
@@ -271,8 +271,8 @@ def p_string(p):
     p[0] = Node(vtype=v.STRING_VALUE, syn_value=p[1])#p[1], see p_integer    
 
 def p_id(p):
-    ''' pow : NAME '''
-    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1])
+    ''' pow : NAME non_empty_brack '''
+    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]])
 
 def p_expr_paren(p):
     ''' pow : '(' expr ')'
