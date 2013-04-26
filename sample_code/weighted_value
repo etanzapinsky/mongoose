@@ -1,0 +1,14 @@
+int x = (1:5 | 3:4 | 7:8 )
+
+environment{
+	if((1:true | 3:false | 5:(true and false))){
+
+        }	
+	action{
+	
+	}
+	
+	populate{		
+	}
+	
+}
