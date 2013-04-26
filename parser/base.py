@@ -19,7 +19,7 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start = 'program'#'stat_list_wrapper'
+start = 'program'
 
 def p_program(p):
     ''' program : stat_list_wrapper environment stat_list_wrapper 
@@ -63,11 +63,6 @@ def p_stat_list_wrapper(p):
     else: #len(p) == 4
         p[0] = p[2]
 
-#def p_stat_list_wrapper_2(p):
-#    ''' stat_list_wrapper : stat_list NEWLINE
-#    '''
-#    p[0] = p[1]
-
 #TODO: statements require newline at end !!!!
 
 def p_stat_opt(p):
@@ -94,6 +89,40 @@ def p_statn(p):
         p[0] = Node(vtype=v.STATEMENT, children=[p[1],p[3]])
     else:
         p[0] = None
+
+#TODO stat_list_wrapper causes problems , does not exlcude function def within function def or loops, etc.
+def p_function_def(p):
+    ''' stat : return_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
+    ''' 
+    p[0] = Node(vtype=v.FUNCTION_DEFINITION, symbol=p[2], children=[p[1],p[4],p[7]])
+
+def p_formal_param(p):
+    ''' formal_param : type empty_brack NAME
+    '''
+    p[0] = Node(vtype=v.FORMAL_PARAM, symbol=p[3], children=[p[1],p[2]], inh_value=p[1]+p[2].inh_value)
+
+def p_formal_param_list(p):
+    ''' formal_param_list : formal_param formal_param_comma
+                          | epsilon
+    '''  
+    if len(p) == 3:
+        p[0] = Node(vtype=v.FORMAL_PARAM_LIST, children=[p[1],p[2]])
+    else:
+        p[0] = None
+
+def p_formal_param_comma(p):
+    ''' formal_param_comma : ',' formal_param_list
+                           | epsilon
+    '''     
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = None
+
+def p_return_type(p):
+    ''' return_type : type empty_brack
+    '''
+    p[0] = Node(vtype=v.RETURN_TYPE, children=[p[1],p[2]], inh_value=p[1]+p[2].inh_value)
 
 #TODO: (fix:) cant have newline before {
 def p_while(p):
@@ -164,21 +193,9 @@ def p_stat_decl(p):
     '''
     p[0] = p[1] 
 
-#def p_expr_a(p):
-#    '''expr : arith_expr'''
-#    p[0] = p[1]
-
 def p_expr_b(p):
     '''expr : b_expr'''
     p[0] = p[1]
-
-#def p_expr_s(p):
-#    '''expr : s_expr'''
-#    p[0] = p[1]
-
-#def p_expr_none(p):
-    #'''expr : NONE'''
-    #p[0] = None
 
 #uminus and NOT may be incorrect precedence
 def p_arith_expr(p):
@@ -193,8 +210,6 @@ def p_arith_expr(p):
             p[0] = Node(vtype=v.SUBTRACT, children=[p[1], p[3]])
     else: # len(p) == 2:
         p[0] = p[1]
-    #else: #len(p) == 3
-    #    p[0] = Node(vtype='UMINUS', children=[p[2]])
 
 def p_term(p):
     '''term : term '*' factor
@@ -223,10 +238,7 @@ def p_factor(p):
 
 def p_power(p):
     ''' pow : '-' arith_expr %prec UMINUS
-    '''# | '(' arith_expr ')' 
-    #if len(p) == 4:
-    #    p[0] = p[2] 
-    #else: #len(p) == 3                                                                                                 
+    '''                                                                             
     p[0] = Node(vtype=v.UMINUS, children=[p[2]])
 
 def p_weighted_values(p):
@@ -308,25 +320,13 @@ def p_factorb(p):
           
 def p_primaryb(p):
     ''' b_primary : b_condition   
-    ''' #| '(' b_expr ')' 
-    #if len(p) == 4:
-    #    p[0] = p[2] 
-    #else:
+    ''' 
     p[0] = p[1] 
 
 def p_primaryb_aexpr(p):
     ''' b_primary : arith_expr
     '''
-    p[0] = p[1] 
-
-#def p_bool_id(p):
-#    ''' b_primary : NAME 
-#    '''
-#    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1])
-
-#def p_primaryb_bool(p):
-#    ''' b_primary : VBOOLEAN '''
-#    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_value=p[1])#p[1], see p_integer   
+    p[0] = p[1]  
 
 def p_conditionb(p):
     ''' b_condition : arith_expr '<' arith_expr
@@ -348,20 +348,6 @@ def p_conditionb(p):
             p[0] = Node(vtype=v.EQUAL, children=[p[1], p[3]])
     elif p[2] == '!=':
             p[0] = Node(vtype=v.NOT_EQUAL, children=[p[1], p[3]])
-
-#def p_exprs(p):
-#    '''s_expr : s_expr '+' s_expr
-#              | VSTRING
-#    '''
-#    if len(p) == 4:
-#        p[0] = Node(vtype=v.CONCATENATE, children=[p[1], p[3]])
-#    else: #len(p) == 2
-#        p[0] = Node(vtype=v.STRING_VALUE, syn_value=p[1].strip("\'\""))
-
-#def p_string_id(p):
-#    ''' s_expr : NAME
-#    '''
-#    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1])
 
 def p_decl(p):
     '''decl : list_type NAME
@@ -396,6 +382,14 @@ def p_non_empty_bracket(p):
     else:  
         p[0] = Node(vtype=v.BRACKET_ACCESS, inh_value='')
 
+def p_empty_bracket(p):
+    ''' empty_brack :  '[' ']' empty_brack
+                    | epsilon
+    '''
+    if len(p) == 5:
+        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value) #inh_value or syn_value
+    else:  
+        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, inh_value='')
 
 def p_type_int(p):
     '''type : INTEGER 
