@@ -35,6 +35,8 @@ class Backend():
                 root.syn_value = evaluate_function(f=root, scope=scope,
                                                    args=[child.syn_value for child in root.children])
             elif root.vtype in first_order_ops:
+                for kid in root.children:
+                    backend.walk_ast(kid)
                 root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
             elif root.vtype in boolean_ops:
                 root.syn_value = boolean_ops[root.vtype](*[child.syn_value for child in root.children])
