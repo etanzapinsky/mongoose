@@ -99,8 +99,14 @@ def p_statn(p):
 #list_type changed from return_type
 def p_function_def(p):
     ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
-    ''' 
-    p[0] = FunctionDefinition(symbol=p[2], statements=[p[7]], return_type=re.sub('\d+','',p[1].inh_value), parameter_pairs=p[4].inh_value)
+    '''
+    parameter_pairs = p[4].inh_value
+    parameter_pairs = parameter_pairs[:-1]
+    parameter_pairs = parameter_pairs.split(",")
+    parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
+    p[0] = FunctionDefinition(symbol=p[2], statements=[p[7]],
+                              return_type=re.sub('\d+','',p[1].inh_value),
+                              parameter_pairs=parameter_pairs)
 
 def p_stat_function_call(p):
     ''' stat : function_call 

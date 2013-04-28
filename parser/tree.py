@@ -63,9 +63,6 @@ class FunctionDefinition(Node):
         self.return_type = return_type
         self.symbol = symbol
         self.statements = Node(vtype=v.STATEMENT_LIST, children=statements)
-        parameter_pairs = parameter_pairs[:-1]
-        parameter_pairs = parameter_pairs.split(",")
-        parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
         self.parameter_pairs = parameter_pairs
 
     def execute(self, *args):
@@ -83,7 +80,6 @@ class FunctionDefinition(Node):
             if arg.vtype != vtype:
                 raise TypeError, "Invalid parameter type"
             bindings[id_node.symbol] = arg
-
         return bindings
 
     def __eq__(self, other):
