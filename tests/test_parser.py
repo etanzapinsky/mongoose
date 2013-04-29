@@ -21,35 +21,59 @@ class ParserTests(unittest.TestCase):
     @nottest
     def test_print_node():
         eq_(parser.parse(r'"hello"').__str__(),'[Node: None STRING, None, hello, []]')
-
-    @nottest
-    def test_if(self):
-	src = "if(x==6) { \n y=5 \n } \n"
-	result = parser.parse(src)
-	expected = Node(vtype=
-	
-	assert result == expected
 	
 
     def test_assignment_decl(self):
-        src = "int x = 5\n"
-        expected = Node(vtype=v.STATEMENT_LIST, children=[
-                       Node(vtype=v.STATEMENT, children=[
-                           Node(vtype=v.DECLARATION_ASSIGNMENT,children=[
-                                Node(vtype=v.DECLARATION,children=[
-                                    Node(vtype=v.LIST_TYPE,inh_value='', children=[
-                                        Node(vtype=v.INT_KEYWORD,syn_value='int')
-                                       ,Node(vtype=v.BRACKET_DECL,inh_value='')
+        src = '''int x = 5\n
+        environment{\n 
+                populate{\n
+                }\n
+                action{\n
+                }\n
+        }\n
+        terminate{\n
+        }\n
+        analysis{\n
+        }''' # "int x = 5"
+        expected = Node(vtype=v.PROGRAM, children=[
+                       Node(vtype=v.AGENT_LIST, children=[None]),                           
+                       Node(vtype=v.ENVIRONMENT, children=[
+                           Node(vtype=v.POPULATE, children=[
+                               Node(vtype=v.STATEMENT_LIST, children=[None])
+                           ]),
+                           Node(vtype=v.ACTION, children=[
+                               Node(vtype=v.STATEMENT_LIST, children=[None])
+                           ]),
+                           Node(vtype=v.STATEMENT_LIST, children=[None]),
+                           Node(vtype=v.STATEMENT_LIST, children=[None]),
+                           Node(vtype=v.STATEMENT_LIST, children=[None])
+                       ]),
+                       Node(vtype=v.TERMINATE, children=[None]), 
+                       Node(vtype=v.ANALYSIS, children=[
+                           Node(vtype=v.STATEMENT_LIST, children=[None])
+                       ]),
+                       Node(vtype=v.STATEMENT_LIST, children=[
+                           Node(vtype=v.STATEMENT, children=[
+                               Node(vtype=v.DECLARATION_ASSIGNMENT,children=[
+                                    Node(vtype=v.DECLARATION,children=[
+                                        Node(vtype=v.LIST_TYPE,inh_value='int', children=[
+                                            Node(vtype=v.INT_KEYWORD,syn_value='int')
+                                           ,Node(vtype=v.BRACKET_DECL,inh_value='')
+                                        ])
+                                       ,Node(vtype=v.IDENTIFIER,symbol='x')
                                     ])
-                                   ,Node(vtype=v.IDENTIFIER,symbol='x')
+                                   ,Node(vtype=v.INTEGER_VALUE,syn_value='5')
                                 ])
-                               ,Node(vtype=v.INTEGER_VALUE,syn_value='5')
+                               ,None
+
                             ])
                            ,None
-                        
-                        ])
-                       ,None
-                    ])
+                        ]),
+                        Node(vtype=v.STATEMENT_LIST, children=[None]),
+                        Node(vtype=v.STATEMENT_LIST, children=[None]),
+                        Node(vtype=v.STATEMENT_LIST, children=[None]),
+                        Node(vtype=v.STATEMENT_LIST, children=[None])
+                    ])    
         
         result = parser.parse(src)
         assert isinstance(result,Node)
@@ -57,6 +81,28 @@ class ParserTests(unittest.TestCase):
         print result.__str__()
         print expected.__str__()
         assert result == expected
+
+
+#    @nottest
+#    def test_if(self):
+#	src = "if(x==6) { \n y=5 \n } \n"
+#	result = parser.parse(src) #have this
+#	expected = Node(vtype=v.STATEMENT_LIST, children=[
+#			Node(vtype.STATEMENT, children=[
+#				Node(v.type=IF, children=[ #hmm
+#					Node(vtype.STATEMENT_LIST, children=[
+#						Node(vtype.STATEMENT, children=[
+#							Node(vtype.ASSIGNMENT, children=[
+#								Node(v.type=IDENTIFIER, symbol ='y'	
+ #                                                       	
+#	assert result == expected #have this
+
+
+
+
+
+
+
 
     # TODO: use setup/teardown properly
     @nottest
