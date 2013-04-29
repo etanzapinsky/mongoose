@@ -125,9 +125,9 @@ def p_invariant(p):
     p[0] = Node(vtype=v.INVARIANT_CLAUSE, syn_value=p[1].syn_value, children=[p[3],p[6]])   
 
 
-#######################
+####################
 ## ANALYSIS BLOCK ##
-#######################
+####################
 
 def p_analysis_block(p):
     ''' analysis : ANALYSIS '{' stat_list_wrapper '}'
@@ -340,12 +340,6 @@ def p_stat_decl(p):
     '''stat : decl
     '''
     p[0] = p[1] 
-    symbol = p[1].symbol
-    #if not backend.scopes[-1].has_key(symbol):
-    backend.scopes[-1][symbol] = None
-    #else:
-    #    print "Error: variable "+symbol+" already defined"
-    #    raise SyntaxError
 
 ############################
 ## ARITHMETIC EXPRESSIONS ##
@@ -532,6 +526,8 @@ def p_decl(p):
     '''decl : list_type NAME
     '''
     p[0] = Node(vtype=v.DECLARATION, children=[p[1], Node(vtype=v.IDENTIFIER, symbol=p[2])]) #name is syn_value or symbol?
+    symbol = p[2]
+    backend.scopes[-1][symbol] = None
 
 def p_list_type(p):
     ''' list_type : type brack
