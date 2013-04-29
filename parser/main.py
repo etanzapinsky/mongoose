@@ -11,7 +11,7 @@ def traversePost(root, indent): #preorder
 
     if(root is not None ):
         if(root.vtype==v.FUNCTION_DEFINITION):
-            print root.__class__.__name__
+            #print root.__class__.__name__
             print '     '*indent + root.__str__()#vtype,':',root.return_type,':',root.symbol,':',root.parameter_pairs
             traversePost(root.statements, indent+1)
         else: #regular Node

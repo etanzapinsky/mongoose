@@ -20,7 +20,7 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start =  'invariant'#'program'
+start =  'invariant_list'#'program'
 
 ############
 ## BLOCKS ##
@@ -55,10 +55,56 @@ def p_action(p):
     '''
     p[0] = Node(vtype=v.ACTION, children=[p[3]])
 
+#
+
+def p_invariant_list_wrapper(p):
+    '''invariant_list_wrapper : NEWLINE invariant_list NEWLINE
+                         | NEWLINE invariant_list
+                         | invariant_list NEWLINE
+                         | invariant_list 
+    '''
+    if len(p) == 3:
+        p[0] = p[2]
+    elif len(p) == 2:
+        if type(p[1]) is str:  
+            p[0] = p[2]
+        else:
+            p[0] = p[1]
+    else: #len(p) == 4
+        p[0] = p[2]
+
+#TODO: invariantements require newline at end !!!!
+
+def p_invariant_opt(p):
+    ''' invariant_opt : invariant                                                                                              
+    '''
+    p[0] = p[1]
+
+def p_invariant_opt_epsilon(p):
+    ''' invariant_opt : epsilon  
+    '''
+    p[0] = None
+
+def p_invariant_listn(p):
+    '''invariant_list : invariant_n invariant_opt
+    '''
+    p[0] = Node(vtype=v.INVARIANT_LIST, children=[p[1], p[2]])
+
+# TODO: dont require last newline                                                                               
+def p_invariantn(p):
+    '''invariant_n : invariant NEWLINE invariant_n                                                                                      
+              | epsilon                                                                                             
+    '''
+    if len(p) == 4:
+        p[0] = Node(vtype=v.INVARIANT, children=[p[1],p[3]])
+    else:
+        p[0] = None
+#
+
 def p_invariant(p):
     ''' invariant : opt_frequency '(' expr ')' '{' stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.INVARIANT, syn_value=p[1].syn_value, children=[p[3],p[6]])   
+    p[0] = Node(vtype=v.INVARIANT_CLAUSE, syn_value=p[1].syn_value, children=[p[3],p[6]])   
 
 def p_opt_frequency(p):
     ''' opt_frequency : VINTEGER ':'
@@ -125,10 +171,13 @@ def p_statn(p):
 def p_function_def(p):
     ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
     '''
-    parameter_pairs = p[4].inh_value
-    parameter_pairs = parameter_pairs[:-1]
-    parameter_pairs = parameter_pairs.split(",")
-    parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
+    if p[4] is not None:
+        parameter_pairs = p[4].inh_value
+        parameter_pairs = parameter_pairs[:-1]
+        parameter_pairs = parameter_pairs.split(",")
+        parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
+    else:
+        parameter_pairs = []
     p[0] = Function(symbol=p[2], statements=p[7],
                               return_type=re.sub('\d+','',p[1].inh_value),
                               parameter_pairs=parameter_pairs)
