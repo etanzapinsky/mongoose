@@ -3,6 +3,7 @@ from lexer import lexer
 from tree import Node, Function
 import vtypes as v
 import re
+from backend import backend
 # hack to get the tokens since they are a global variable in the lexer object
 tokens = lexer.tokens
 
@@ -198,6 +199,7 @@ def p_function_def(p):
     p[0] = Function(symbol=p[2], statements=p[7],
                               return_type=re.sub('\d+','',p[1].inh_value),
                               parameter_pairs=parameter_pairs)
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_stat_function_call(p):
     ''' stat : function_call 
