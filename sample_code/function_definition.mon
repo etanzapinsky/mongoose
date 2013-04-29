@@ -1,0 +1,11 @@
+int[]  foo(string[][] s, boolean x){
+   int y = 5 
+}
+
+environment{
+	populate{
+
+	}
+	action{
+	}
+}

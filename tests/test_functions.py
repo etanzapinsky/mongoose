@@ -1,11 +1,11 @@
 import unittest
 import vtypes as v
 from nose.tools import *
-from parser import Node, Function
+from parser import Node, FunctionDefinition
 from backend import backend
 from backend.stdlib import first_order_ops
 
-class FunctionsTests(unittest.TestCase):
+class FunctionDefinitionsTests(unittest.TestCase):
     @classmethod
     def setup_class(self):
         # Constants
@@ -26,14 +26,14 @@ class FunctionsTests(unittest.TestCase):
         self.z_statement = Node(vtype=v.STATEMENT, children=[self.z,])
         self.return_node = Node(vtype=v.RETURN_STATEMENT, syn_value=self.z_statement)
 
-        # Functions
-        self.sum_function = Function(return_type=v.INTEGER_VALUE,
+        # FunctionDefinitions
+        self.sum_function = FunctionDefinition(return_type=v.INTEGER_VALUE,
                                      symbol='sum',
                                      parameter_pairs=((self.x, v.INTEGER_VALUE),
                                                       (self.y, v.INTEGER_VALUE)),
                                      statements=[self.assignment_node])
 
-        self.sum_with_return_function = Function(return_type=v.INTEGER_VALUE,
+        self.sum_with_return_function = FunctionDefinition(return_type=v.INTEGER_VALUE,
                                                  symbol='sum_with_return',
                                                  parameter_pairs=((self.x, v.INTEGER_VALUE),
                                                                (self.y, v.INTEGER_VALUE)),
@@ -49,7 +49,7 @@ class FunctionsTests(unittest.TestCase):
 
     def test_scopeless_add(self):
         scopeless_add_node = Node(vtype=v.ADD, children=(self.int_node_one, self.int_node_two))
-        scopeless_add_function = Function(return_type=v.INTEGER_VALUE,
+        scopeless_add_function = FunctionDefinition(return_type=v.INTEGER_VALUE,
                                            symbol="add",
                                            parameter_pairs=(),
                                            statements=[scopeless_add_node,])

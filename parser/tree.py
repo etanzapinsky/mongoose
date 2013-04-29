@@ -32,34 +32,37 @@ class Node:
             # @todo #FIXME expanding IDENTIFIER (so we can say x == 32)
 
         if self.children == None:
-            return bool(self.inh_value == other.inh_value and
-                        self.syn_value == other.syn_value and
-                        self.symbol == other.symbol ) 
+            return bool(self.inh_value == other.inh_value
+                        and self.syn_value == other.syn_value
+                        and self.symbol == other.symbol
+                        #and self.params == other.params
+                        ) 
 
         else:
-            self_comp = bool(self.inh_value == other.inh_value and
-                             self.syn_value == other.syn_value and
-                             self.symbol == other.symbol )
+            self_comp = bool(self.inh_value == other.inh_value
+                             and self.syn_value == other.syn_value
+                             and self.symbol == other.symbol
+                             #and self.params == other.params
+                             )
             return self_comp and all([self_c == other_c for self_c, other_c in
                                   zip(self.children, other.children)])
 
     # Useful for debugging
     def __str__(self):
-        return '[Node: {sym} {vtype}, {inh_val}, {syn_val}, {kids}]'.format(sym=self.symbol,
-                                                                            vtype=self.vtype,
-                                                                            inh_val=self.inh_value,
-                                                                            syn_val=self.syn_value,
-                                                                            kids=self.children)
-
+        return '{vtype} {sym}, {inh_val}, {syn_val}'.format(sym=self.symbol,
+                                                                vtype=self.vtype,
+                                                                inh_val=self.inh_value,
+                                                                syn_val=self.syn_value,
+                                                                )
 
 class Function(Node):
     def __init__(self, return_type, symbol, parameter_pairs, statements):
         '''Called when a function is defined.
         vtype checking is done in the frontend (parser)'''
-        Node.__init__(self, vtype=v.FUNCTION)
+        Node.__init__(self, vtype=v.FUNCTION_DEFINITION)
         self.return_type = return_type
         self.symbol = symbol
-        self.statements = Node(vtype=v.STATEMENT_LIST, children=statements)
+        self.statements = Node(vtype=v.STATEMENT_LIST, children=[statements])
         self.parameter_pairs = parameter_pairs
 
     def execute(self, *args):
@@ -77,5 +80,40 @@ class Function(Node):
             if arg.vtype != vtype:
                 raise TypeError, "Invalid parameter type"
             bindings[id_node.symbol] = arg
-
         return bindings
+
+    def __eq__(self, other):
+
+        if (self is  None and other is not None) or (self is not None and other is None): 
+            return False               
+
+        if self is None and other is None:
+            return True
+
+        if self.vtype != other.vtype:
+            # We're currently just raising a python error #FIXME @todo
+            raise TypeError, "'{}' is not comparable with '{}'".format(self.vtype, other.vtype)
+
+            # @todo #FIXME expanding IDENTIFIER (so we can say x == 32)
+
+        if self.statements == None:
+            return bool(self.return_type == other.return_type
+                        and self.parameter_pairs == other.parameter_pairs
+                        and self.symbol == other.symbol
+                        ) 
+
+        else:
+            self_comp = bool(self.return_type == other.return_type
+                        and self.parameter_pairs == other.parameter_pairs
+                        and self.symbol == other.symbol
+                        ) 
+            return self_comp and all([self_c == other_c for self_c, other_c in
+                                  zip(self.statements, other.statements)])
+
+
+    def __str__(self):
+        return '{vtype} {return_type}, {sym}, {parameter_pairs}'.format(sym=self.symbol,
+                                                                            return_type=self.return_type,
+                                                                            vtype=self.vtype,
+                                                                            parameter_pairs=self.parameter_pairs,
+                                                                            )

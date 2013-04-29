@@ -16,7 +16,7 @@ class Backend():
         # this is obviously not extentable since the content of an arg for a function
         # can be an arbitrary expression, this is just to get something working
         # ---
-        # Another issue is that this won't work recursively --> we have to think a
+        # Another issue is that this won't work recurssively --> we have to think a
         # little bit more about how we should recursively evaulate this function
         # what should it return / how should it interact with syn_value
         # ---
@@ -31,12 +31,12 @@ class Backend():
         # so we'll probably pass them in.
 
         if root != None:
-            for child in root.children:
-                self.walk_ast(child)
-            if root.vtype == v.FUNCTION:
+            if root.vtype == v.FUNCTION_DEFINITION:
                 root.syn_value = evaluate_function(f=root, scope=scope,
                                                    args=[child.syn_value for child in root.children])
             elif root.vtype in first_order_ops:
+                for kid in root.children:
+                    backend.walk_ast(kid)
                 root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
             elif root.vtype in boolean_ops:
                 root.syn_value = boolean_ops[root.vtype](*[child.syn_value for child in root.children])
@@ -46,14 +46,30 @@ class Backend():
                 assign(backend.scopes[-1], root.children)  # scopes modified via side effect
             elif root.vtype == v.IDENTIFIER:
                 root.syn_value = root.symbol
+            elif root.vtype == v.DECLARATION:
+                symbols = backend.scopes[-1]
+                root.inh_value = root.children[0].inh_value
+                root.symbol = root.children[1].symbol
+                symbols[root.symbol] = None # can we do this, or do we have a none type?
+            elif root.vtype == v.DECLARATION_ASSIGNMENT:
+                backend.walk_ast(root.children[0]) # the declaration
+                assign(backend.scopes[-1], root.children)
+            elif root.vtype == v.PROGRAM:
+                for kid in root.children:
+                    backend.walk_ast(kid)
+            elif root.vtype == v.STATEMENT_LIST:
+                for kid in root.children:
+                    backend.walk_ast(kid)
             elif root.vtype == v.STATEMENT:
                 for kid in root.children:
-                    self.walk_ast(kid)
-                raise 'implement assignment and declaration first'
+                    backend.walk_ast(kid)
+                # for debugging
+                # print root.children, backend.scopes
             elif root.vtype in v.RETURN_STATEMENT:
-                root.syn_value = self.walk_ast(root.children)
+                root.syn_value = backend.walk_ast(root.children)
 
-        return root.syn_value
+
+        # return root.syn_value
         # How does this deal with return values? @todo
 
 backend = Backend()  # backend is a global singleton variable

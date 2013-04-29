@@ -1,0 +1,24 @@
+if(7>=5){
+  int x = 4
+  if(false and false){
+     int[] r  	   
+  } else {
+    string h = "abc"
+    boolean[8][] pp
+  }
+} elif(2!=5){
+  boolean t = true
+} else {
+  float w = 4.8
+  if(9-3>=2){
+     boolean w = false	
+  }
+}
+environment{
+	action{
+
+        }
+	populate{
+
+	}
+}

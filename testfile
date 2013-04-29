@@ -1,0 +1,22 @@
+
+int x #u
+
+#int y
+
+environment{ ###yy
+
+	populate{
+
+	}
+
+	action{
+
+	}
+}
+
+terminate{
+
+}
+
+analysis{
+}

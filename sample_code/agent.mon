@@ -1,0 +1,96 @@
+
+agent A{
+
+      create(int[] x, string[][] y){
+
+      }
+      action{
+
+      }
+      destroy{
+
+      }
+}
+
+agent B{
+
+      create(){
+
+      }
+      destroy{
+
+      }
+      action{
+
+      }
+}
+
+agent C{
+
+      destroy{
+
+      }
+      create(){
+
+      }
+      action{
+
+      }
+}
+
+agent D{
+
+      destroy{
+
+      }
+      action{
+
+      }
+      create(){
+
+      }
+}
+
+agent E{
+
+      action{
+
+      }
+      destroy{
+
+      }
+      create(){
+
+      }
+}
+
+agent F{
+
+      action{
+
+      }
+      create(){
+
+      }
+      destroy{
+
+      }
+}
+
+environment{
+
+	populate{
+
+	}
+
+	action{
+
+	}
+}
+
+terminate{
+
+}
+
+analysis{
+}

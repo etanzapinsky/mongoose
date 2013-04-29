@@ -23,6 +23,14 @@ class Lexer:
         'pif' : 'PIF',
         'pelif' : 'PELIF',
         'pelse' : 'PELSE',
+        'environment' : 'ENVIRONMENT',
+        'populate' : 'POPULATE',
+        'action' : 'ACTION',
+        'terminate' : 'TERMINATE',
+        'analysis' : 'ANALYSIS',
+        'create' : 'CREATE',
+        'destroy' : 'DESTROY',
+        'agent' : 'AGENT',
     }
 
     #add 'none' later
@@ -37,6 +45,7 @@ class Lexer:
         'NEQ',
         'LEQ',
         'GEQ',
+        'COMMENT',
     ] + list(reserved.values())
 
     def __init__(self):
@@ -52,7 +61,7 @@ class Lexer:
     # token, the meaning, i.e. is one a function name, variable name or string
     # is derived from the symbols surronding it.
     
-    literals = "+-*/%^()=\'\"<>[]{}"    #type=value for single characters
+    literals = "+-*/%^()=\'\"<>[]{}:|,#"    #type=value for single characters
         
     t_VSTRING = r'("[^"]*")|(\'[^\']*\')'
     t_VINTEGER = r'[0-9]+'
@@ -62,6 +71,10 @@ class Lexer:
     t_LEQ = r'\<\='
     t_GEQ = r'\>\='
     
+    def t_COMMENT(self, t):
+        r'\#.*'
+        pass
+
     def t_VBOOLEAN(self, t):
         r'true|false'
         t.type = "VBOOLEAN"    

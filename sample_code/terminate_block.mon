@@ -1,0 +1,22 @@
+
+
+environment{
+
+	populate{
+
+	}
+	action{
+
+	}
+
+}
+
+terminate{
+    6:(foo()){
+	int[][] sum(){
+        }
+    }
+
+    (true){
+    }
+}

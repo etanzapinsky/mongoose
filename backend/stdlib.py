@@ -29,6 +29,7 @@ boolean_ops = {
 def assign(scope, nodes):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
-    x = nodes[0]  # FIXME
-    value = nodes[1]
-    scope[x.symbol] = value
+    try:
+        scope[nodes[0].symbol] = nodes[1].syn_value
+    except KeyError:
+        raise 'Varible does not exist'

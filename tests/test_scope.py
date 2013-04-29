@@ -1,7 +1,7 @@
 import unittest
 import vtypes as v
 from nose.tools import *
-from parser import Node, Function
+from parser import Node, FunctionDefinition
 from backend import backend
 from backend.stdlib import first_order_ops
 
@@ -22,8 +22,8 @@ class ScopeTests(unittest.TestCase):
         self.int_node_add = Node(vtype=v.ADD, children=(self.x, self.y))
         self.assignment_node = Node(vtype=v.ASSIGNMENT, children=[self.z, self.int_node_add])
 
-        # Functions
-        self.sum_function = Function(return_type=v.INTEGER_VALUE,
+        # FunctionDefinitions
+        self.sum_function = FunctionDefinition(return_type=v.INTEGER_VALUE,
                                      parameter_pairs=((self.x, v.INTEGER_VALUE),
                                                       (self.y, v.INTEGER_VALUE)),
                                      expressions=[self.assignment_node,])
