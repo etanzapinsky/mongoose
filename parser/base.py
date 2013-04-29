@@ -85,31 +85,37 @@ def p_agent_1_cda(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[7],p[9],p[4],p[6],p[8],p[10]])#create, destroy, action, then all statements in order
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_2_cad(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[9],p[7],p[4],p[6],p[8],p[10]])
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_3_dca(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper action stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[5],p[9],p[4],p[6],p[8],p[10]])
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_4_dac(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper create stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[9],p[5],p[4],p[6],p[8],p[10]])
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_5_adc(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[7],p[5],p[4],p[6],p[8],p[10]])
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_6_acd(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[5],p[7],p[4],p[6],p[8],p[10]])
+    backend.scopes[-1][p[2]] = p[0]
 
 def p_create(p):
     ''' create : CREATE '(' formal_param_list ')' '{' stat_list_wrapper '}'
