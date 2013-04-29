@@ -1,22 +1,11 @@
-
-int x #u
-
-#int y
-
-environment{ ###yy
-
+int x = 5
+environment{ 
 	populate{
-
 	}
-
 	action{
-
 	}
 }
-
 terminate{
-
 }
-
 analysis{
 }

@@ -22,6 +22,7 @@ class ParserTests(unittest.TestCase):
     def test_print_node():
         eq_(parser.parse(r'"hello"').__str__(),'[Node: None STRING, None, hello, []]')
 
+    @nottest
     def test_if(self):
 	src = "if(x==6) { \n y=5 \n } \n"
 	result = parser.parse(src)
