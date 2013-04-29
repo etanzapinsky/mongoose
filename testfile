@@ -3,6 +3,10 @@ int[][] foo(string s){
 
 }
 
+int foo(){
+
+}
+
 environment{
 
 	populate{

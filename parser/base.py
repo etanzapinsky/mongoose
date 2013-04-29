@@ -189,6 +189,7 @@ def p_statn(p):
 def p_function_def(p):
     ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
     '''
+    symbol = p[2]
     if p[4] is not None:
         parameter_pairs = p[4].inh_value
         parameter_pairs = parameter_pairs[:-1]
@@ -196,10 +197,14 @@ def p_function_def(p):
         parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
     else:
         parameter_pairs = []
-    p[0] = Function(symbol=p[2], statements=p[7],
+    p[0] = Function(symbol=symbol, statements=p[7],
                               return_type=re.sub('\d+','',p[1].inh_value),
                               parameter_pairs=parameter_pairs)
-    backend.scopes[-1][p[2]] = p[0]
+    if not backend.scopes[-1].has_key(symbol):
+        backend.scopes[-1][symbol] = p[0]
+    else:
+        print "Error: function "+symbol+" already defined"
+        raise SyntaxError
 
 def p_stat_function_call(p):
     ''' stat : function_call 
@@ -333,6 +338,7 @@ def p_stat_decl(p):
     '''stat : decl
     '''
     p[0] = p[1] 
+    #backend.scopes[-1][p[2]] = p[0]
 
 ############################
 ## ARITHMETIC EXPRESSIONS ##
