@@ -59,10 +59,10 @@ class Function(Node):
     def __init__(self, return_type, symbol, parameter_pairs, statements):
         '''Called when a function is defined.
         vtype checking is done in the frontend (parser)'''
-        Node.__init__(self, vtype=v.FUNCTION)
+        Node.__init__(self, vtype=v.FUNCTION_DEFINITION)
         self.return_type = return_type
         self.symbol = symbol
-        self.statements = Node(vtype=v.STATEMENT_LIST, children=statements)
+        self.statements = Node(vtype=v.STATEMENT_LIST, children=[statements])
         self.parameter_pairs = parameter_pairs
 
     def execute(self, *args):

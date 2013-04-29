@@ -37,7 +37,7 @@ class ParserTests(unittest.TestCase):
                                ,Node(vtype=v.INTEGER_VALUE,syn_value='5')
                             ])
                            ,None
-                           
+                        
                         ])
                        ,None
                     ])

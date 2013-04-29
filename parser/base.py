@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import lexer
-from tree import Node, FunctionDefinition
+from tree import Node, Function
 import vtypes as v
 import re
 # hack to get the tokens since they are a global variable in the lexer object
@@ -20,8 +20,11 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start =  'program'
+start =  'invariant'#'program'
 
+############
+## BLOCKS ##
+############
 def p_program(p):
     ''' program : stat_list_wrapper environment stat_list_wrapper 
     '''
@@ -51,6 +54,24 @@ def p_action(p):
     ''' action : ACTION '{' stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.ACTION, children=[p[3]])
+
+def p_invariant(p):
+    ''' invariant : opt_frequency '(' expr ')' '{' stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.INVARIANT, syn_value=p[1].syn_value, children=[p[3],p[6]])   
+
+def p_opt_frequency(p):
+    ''' opt_frequency : VINTEGER ':'
+                      | epsilon
+    '''
+    if len(p) == 3:
+        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1]) 
+    else:
+        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value='1') #default frequency == 1
+
+################
+## STATEMENTS ##
+################
 
 def p_stat_list_wrapper(p):
     '''stat_list_wrapper : NEWLINE stat_list NEWLINE
@@ -95,6 +116,10 @@ def p_statn(p):
     else:
         p[0] = None
 
+###############
+## FUNCTIONS ##
+###############
+
 #TODO stat_list_wrapper causes problems , does not exlcude function def within function def or loops, etc.
 #list_type changed from return_type
 def p_function_def(p):
@@ -104,7 +129,7 @@ def p_function_def(p):
     parameter_pairs = parameter_pairs[:-1]
     parameter_pairs = parameter_pairs.split(",")
     parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
-    p[0] = FunctionDefinition(symbol=p[2], statements=[p[7]],
+    p[0] = Function(symbol=p[2], statements=p[7],
                               return_type=re.sub('\d+','',p[1].inh_value),
                               parameter_pairs=parameter_pairs)
 
@@ -165,11 +190,9 @@ def p_actual_param_comma(p):
     else:
         p[0] = None 
 
-#brack changed from empty_brack
-#def p_return_type(p):
-#    ''' return_type : type brack
-#    '''
-#    p[0] = Node(vtype=v.RETURN_TYPE, children=[p[1],p[2]], inh_value=p[1]+p[2].inh_value)
+##################
+## CONTROL FLOW ##
+##################
 
 #TODO: (fix:) cant have newline before {
 def p_while(p):
@@ -225,6 +248,9 @@ def p_opt_pelse(p):
     else:
         p[0] = None
 
+##############################
+## DECLARATIONS/ASSIGNMENTS ##
+##############################
 
 def p_stat_assign(p):
     '''stat : NAME non_empty_brack '=' expr    
@@ -239,6 +265,10 @@ def p_stat_decl(p):
     '''stat : decl
     '''
     p[0] = p[1] 
+
+############################
+## ARITHMETIC EXPRESSIONS ##
+############################
 
 def p_expr_b(p):
     '''expr : b_expr'''
@@ -288,6 +318,10 @@ def p_power(p):
     '''                                                                             
     p[0] = Node(vtype=v.UMINUS, children=[p[2]])
 
+#####################
+## WEIGHTED VALUES ##
+#####################
+
 def p_weighted_values(p):
     ''' pow : '(' weighted_val_stat ')'
     '''
@@ -312,6 +346,10 @@ def p_weighted_val_clause(p):
     ''' weighted_val_clause : VINTEGER ':' pow
     '''
     p[0] = Node(vtype=v.WEIGHTED_VALUE_CLAUSE, children=[Node(vtype=v.INTEGER_VALUE, syn_value=p[1]),p[3]])
+
+################################
+## PRIMITIVES AND IDENTIFIERS ##
+################################
 
 def p_pow_function_call(p):
     ''' pow : function_call
@@ -342,6 +380,10 @@ def p_expr_paren(p):
     ''' pow : '(' expr ')'
     '''
     p[0] = p[2]
+
+#########################
+## BOOLEAN EXPRESSIONS ##
+#########################
 
 def p_exprb(p):
     ''' b_expr : b_expr OR b_term 
@@ -401,6 +443,10 @@ def p_conditionb(p):
     elif p[2] == '!=':
             p[0] = Node(vtype=v.NOT_EQUAL, children=[p[1], p[3]])
 
+################
+## LIST TYPES ##
+################
+
 def p_decl(p):
     '''decl : list_type NAME
     '''
@@ -434,14 +480,9 @@ def p_non_empty_bracket(p):
     else:  
         p[0] = Node(vtype=v.BRACKET_ACCESS, inh_value='')
 
-#def p_empty_bracket(p):
-#    ''' empty_brack :  '[' ']' empty_brack
-#                    | epsilon
-#    '''
-#    if len(p) == 5:
-#        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value) #inh_value or syn_value
-#    else:  
-#        p[0] = Node(vtype=v.BRACKET_FORMAL_PARAM_OR_RETURN_TYPE, inh_value='')
+########################
+## PRIMITIVE KEYWORDS ##
+########################
 
 def p_type_int(p):
     '''type : INTEGER 
