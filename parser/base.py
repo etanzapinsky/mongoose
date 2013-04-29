@@ -20,20 +20,22 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start =  'invariant_list'#'program'
+start =  'program'#'program'
 
-############
-## BLOCKS ##
-############
+
 def p_program(p):
-    ''' program : stat_list_wrapper environment stat_list_wrapper 
+    ''' program : stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper
     '''
-    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[1],p[3]])#order: environment, then all other statements
+    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[4],p[1],p[3],p[5]])#order: environment, terminate, then all other statements in order
 
 #def p_program_error(p):
 #    ''' program : stat_list_wrapper error stat_list_wrapper 
 #    '''
 #    print "Missing environment block!"
+
+#######################
+## ENVIRONMENT BLOCK ##
+#######################
 
 def p_environment_1(p):
     ''' environment : ENVIRONMENT '{' stat_list_wrapper populate stat_list_wrapper action stat_list_wrapper  '}'
@@ -55,7 +57,14 @@ def p_action(p):
     '''
     p[0] = Node(vtype=v.ACTION, children=[p[3]])
 
-#
+#####################
+## TERMINATE BLOCK ##
+#####################
+
+def p_terminate_block(p):
+    ''' terminate_block : TERMINATE '{' invariant_list_wrapper '}'
+    '''
+    p[0] = p[3]
 
 def p_invariant_list_wrapper(p):
     '''invariant_list_wrapper : NEWLINE invariant_list NEWLINE
@@ -99,7 +108,6 @@ def p_invariantn(p):
         p[0] = Node(vtype=v.INVARIANT, children=[p[1],p[3]])
     else:
         p[0] = None
-#
 
 def p_invariant(p):
     ''' invariant : opt_frequency '(' expr ')' '{' stat_list_wrapper '}'
