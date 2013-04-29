@@ -1,17 +1,10 @@
 
-int[][] foo(string s){
-
-}
-
-int foo(){
-
-}
-
 environment{
 
 	populate{
 
 	}
+
 	action{
 
 	}
@@ -19,12 +12,12 @@ environment{
 }
 
 terminate{
-    6:(foo()){
-	int[][] sum(){
-        }
+    (false){
+	
     }
 
     (true){
+
     }
 }
 

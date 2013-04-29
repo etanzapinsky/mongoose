@@ -62,6 +62,15 @@ def p_action(p):
 ## TERMINATE BLOCK ##
 #####################
 
+def p_opt_frequency(p):
+    ''' opt_frequency : VINTEGER ':'
+                      | epsilon
+    '''
+    if len(p) == 3:
+        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1]) 
+    else:
+        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value='1') #default frequency == 1
+
 def p_terminate_block(p):
     ''' terminate_block : TERMINATE '{' invariant_list_wrapper '}'
     '''
@@ -115,14 +124,6 @@ def p_invariant(p):
     '''
     p[0] = Node(vtype=v.INVARIANT_CLAUSE, syn_value=p[1].syn_value, children=[p[3],p[6]])   
 
-def p_opt_frequency(p):
-    ''' opt_frequency : VINTEGER ':'
-                      | epsilon
-    '''
-    if len(p) == 3:
-        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1]) 
-    else:
-        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value='1') #default frequency == 1
 
 #######################
 ## ANALYSIS BLOCK ##
@@ -200,11 +201,11 @@ def p_function_def(p):
     p[0] = Function(symbol=symbol, statements=p[7],
                               return_type=re.sub('\d+','',p[1].inh_value),
                               parameter_pairs=parameter_pairs)
-    if not backend.scopes[-1].has_key(symbol):
-        backend.scopes[-1][symbol] = p[0]
-    else:
-        print "Error: function "+symbol+" already defined"
-        raise SyntaxError
+    #if not backend.scopes[-1].has_key(symbol):
+    backend.scopes[-1][symbol] = p[0]
+    #else:
+    #    print "Error: function "+symbol+" already defined"
+    #    raise SyntaxError
 
 def p_stat_function_call(p):
     ''' stat : function_call 
@@ -331,14 +332,20 @@ def p_stat_assign(p):
     p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]]), p[4]]) 
 
 def p_stat_decl_assign(p):
-    '''stat : decl '=' expr                                                                                                  '''
+    '''stat : decl '=' expr                                                                                                  
+    '''
     p[0] = Node(vtype=v.DECLARATION_ASSIGNMENT, children=[p[1], p[3]] )#, symbol=p[1].children[1].symbol)
 
 def p_stat_decl(p):
     '''stat : decl
     '''
     p[0] = p[1] 
-    #backend.scopes[-1][p[2]] = p[0]
+    symbol = p[1].symbol
+    #if not backend.scopes[-1].has_key(symbol):
+    backend.scopes[-1][symbol] = None
+    #else:
+    #    print "Error: variable "+symbol+" already defined"
+    #    raise SyntaxError
 
 ############################
 ## ARITHMETIC EXPRESSIONS ##
