@@ -11,3 +11,8 @@ environment{
 	z =5
 }
 int q = 43
+
+terminate{
+}
+analysis{
+}

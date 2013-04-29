@@ -9,3 +9,8 @@ environment{
 	action{
 	}
 }
+terminate{
+}
+
+analysis{
+}
