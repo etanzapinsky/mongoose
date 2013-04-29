@@ -28,6 +28,9 @@ class Lexer:
         'action' : 'ACTION',
         'terminate' : 'TERMINATE',
         'analysis' : 'ANALYSIS',
+        'create' : 'CREATE',
+        'destroy' : 'DESTROY',
+        'agent' : 'AGENT',
     }
 
     #add 'none' later

@@ -21,18 +21,117 @@ precedence = (
     ('right', 'NOT', 'UMINUS'),           
 )
 
-start =  'program'#'program'
+start =  'program'
 
 
 def p_program(p):
-    ''' program : stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper analysis stat_list_wrapper
+    ''' program : stat_list_wrapper agent_list_wrapper stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper analysis stat_list_wrapper
     '''
-    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[4],p[6],p[1],p[3],p[5],p[7]])#order: environment, terminate, analysis then all other statements in order
+    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[4],p[6],p[8],p[1],p[3],p[5],p[7],p[9]])#order: agent, environment, terminate, analysis then all other statements in order
 
 #def p_program_error(p):
 #    ''' program : stat_list_wrapper error stat_list_wrapper 
 #    '''
 #    print "Missing environment block!"
+
+#######################
+## AGENT DEFINITIONS ##
+#######################
+
+def p_agent_list_wrapper(p):
+    ''' agent_list_wrapper : NEWLINE agent_list NEWLINE
+                         | NEWLINE agent_list
+                         | agent_list NEWLINE
+                         | agent_list 
+    '''
+    if len(p) == 3:
+        p[0] = p[2]
+    elif len(p) == 2:
+        if type(p[1]) is str:  
+            p[0] = p[2]
+        else:
+            p[0] = p[1]
+    else: #len(p) == 4
+        p[0] = p[2]
+
+#TODO: agentements require newline at end !!!!
+
+def p_agent_opt(p):
+    ''' agent_opt : agent                                                                                              
+    '''
+    p[0] = p[1]
+
+def p_agent_opt_epsilon(p):
+    ''' agent_opt : epsilon  
+    '''
+    p[0] = None
+
+def p_agent_listn(p):
+    ''' agent_list : agent_n agent_opt
+    '''
+    p[0] = Node(vtype=v.AGENT_LIST, children=[p[1], p[2]])
+
+# TODO: dont require last newline                                                                               
+def p_agentn(p):
+    ''' agent_n : agent NEWLINE agent_n                                                                                      
+              | epsilon                                                                                             
+    '''
+    if len(p) == 4:
+        p[0] = Node(vtype=v.AGENT_WRAPPER, children=[p[1],p[3]])
+    else:
+        p[0] = None
+
+def p_agent_1_cda(p):
+    ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[7],p[9],p[4],p[6],p[8],p[10]])#create, destroy, action, then all statements in order
+
+def p_agent_2_cad(p):
+    ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[9],p[7],p[4],p[6],p[8],p[10]])
+
+def p_agent_3_dca(p):
+    ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper action stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[5],p[9],p[4],p[6],p[8],p[10]])
+
+def p_agent_4_dac(p):
+    ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper create stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[9],p[5],p[4],p[6],p[8],p[10]])
+
+def p_agent_5_adc(p):
+    ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[7],p[5],p[4],p[6],p[8],p[10]])
+
+def p_agent_6_acd(p):
+    ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[5],p[7],p[4],p[6],p[8],p[10]])
+
+def p_create(p):
+    ''' create : CREATE '(' formal_param_list ')' '{' stat_list_wrapper '}'
+    '''
+    symbol = p[1]
+    if p[3] is not None:
+        parameter_pairs = p[3].inh_value
+        parameter_pairs = parameter_pairs[:-1]
+        parameter_pairs = parameter_pairs.split(",")
+        parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
+    else:
+        parameter_pairs = []
+    p[0] = Function(symbol=symbol, statements=p[6],
+                              return_type='agent', #use agent as placeholder for agent's name, which can't be known here
+                              parameter_pairs=parameter_pairs)
+    backend.scopes[-1][symbol] = p[0]
+
+def p_destroy(p):
+    ''' destroy : DESTROY '{' stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.DESTROY, children=[p[3]])
+
 
 #######################
 ## ENVIRONMENT BLOCK ##
