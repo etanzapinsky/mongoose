@@ -27,6 +27,7 @@ class Lexer:
         'populate' : 'POPULATE',
         'action' : 'ACTION',
         'terminate' : 'TERMINATE',
+        'analysis' : 'ANALYSIS',
     }
 
     #add 'none' later

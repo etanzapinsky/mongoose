@@ -24,9 +24,9 @@ start =  'program'#'program'
 
 
 def p_program(p):
-    ''' program : stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper
+    ''' program : stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper analysis stat_list_wrapper
     '''
-    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[4],p[1],p[3],p[5]])#order: environment, terminate, then all other statements in order
+    p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[4],p[6],p[1],p[3],p[5],p[7]])#order: environment, terminate, analysis then all other statements in order
 
 #def p_program_error(p):
 #    ''' program : stat_list_wrapper error stat_list_wrapper 
@@ -97,7 +97,7 @@ def p_invariant_opt_epsilon(p):
 def p_invariant_listn(p):
     '''invariant_list : invariant_n invariant_opt
     '''
-    p[0] = Node(vtype=v.INVARIANT_LIST, children=[p[1], p[2]])
+    p[0] = Node(vtype=v.TERMINATE, children=[p[1], p[2]])
 
 # TODO: dont require last newline                                                                               
 def p_invariantn(p):
@@ -105,7 +105,7 @@ def p_invariantn(p):
               | epsilon                                                                                             
     '''
     if len(p) == 4:
-        p[0] = Node(vtype=v.INVARIANT, children=[p[1],p[3]])
+        p[0] = Node(vtype=v.INVARIANTS, children=[p[1],p[3]])
     else:
         p[0] = None
 
@@ -122,6 +122,15 @@ def p_opt_frequency(p):
         p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1]) 
     else:
         p[0] = Node(vtype=v.INTEGER_VALUE, syn_value='1') #default frequency == 1
+
+#######################
+## ANALYSIS BLOCK ##
+#######################
+
+def p_analysis_block(p):
+    ''' analysis : ANALYSIS '{' stat_list_wrapper '}'
+    '''
+    p[0] = Node(vtype=v.ANALYSIS, children=[p[3]])
 
 ################
 ## STATEMENTS ##
