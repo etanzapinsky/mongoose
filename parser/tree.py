@@ -66,8 +66,12 @@ class FunctionDefinition(Node):
         self.parameter_pairs = parameter_pairs
 
     def execute(self, *args):
+        for arg in args:
+            backend.walk_ast()
+        # first walk_ast on the params --> the syn_type and syn_value will then be ready
+        # then bind the syn_values
         backend.scopes.append(self._bind_params(*args))
-        r = backend.walk_ast(self.statements)
+        backend.walk_ast(self.statements) # needs to work through syn_value
         backend.scopes.pop()
 
     def _bind_params(self, *args):

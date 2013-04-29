@@ -1,4 +1,5 @@
 from stdlib import assign, boolean_ops, equality_ops, first_order_ops
+from functions import find_function
 import vtypes as v
 
 class Backend():
@@ -31,9 +32,11 @@ class Backend():
         # so we'll probably pass them in.
 
         if root != None:
-            if root.vtype == v.FUNCTION_DEFINITION:
-                root.syn_value = evaluate_function(f=root, scope=scope,
-                                                   args=[child.syn_value for child in root.children])
+            # if root.vtype == v.FUNCTION_DEFINITION:
+            #     root.syn_value = evaluate_function(f=root, scope=scope,
+            #                                        args=[child.syn_value for child in root.children])
+            if root.vtype == v.FUNCTION_CALL:
+                find_function(root.symbol).execute(root.children) # look up the function in the scope stack and execute it
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
