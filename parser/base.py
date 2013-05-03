@@ -379,6 +379,11 @@ def p_while(p):
     '''
     p[0] = Node(vtype=v.WHILE, children=[p[3], p[6]])
 
+def p_repeat(p):
+    ''' stat : REPEAT '(' expr ')' '{' stat_list_wrapper '}' 
+    '''
+    p[0] = Node(vtype=v.REPEAT, children=[p[3],p[6]])
+
 #TODO: no newline allowed before elif/else, maybe fix this
 def p_if(p):
     ''' stat : IF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs opt_else  
@@ -641,12 +646,12 @@ def p_list_type(p):
 
 #VINTEGER is non-negative
 def p_bracket(p):
-    ''' brack : '[' VINTEGER ']' brack
+    ''' brack : '[' expr ']' brack
               | '[' ']' brack
               | epsilon
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4]], inh_value=p[1]+p[2]+p[3]+p[4].inh_value)
+        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
     elif len(p) == 4:
         p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
     else:  
@@ -654,11 +659,11 @@ def p_bracket(p):
 
 #VINTEGER is non-negative
 def p_non_empty_bracket(p):
-    ''' non_empty_brack :  '[' VINTEGER ']' non_empty_brack
+    ''' non_empty_brack :  '[' expr ']' non_empty_brack
                         | epsilon
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.BRACKET_ACCESS, children=[p[4]], inh_value=p[1]+p[2]+p[3]+p[4].inh_value)
+        p[0] = Node(vtype=v.BRACKET_ACCESS, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
     else:  
         p[0] = Node(vtype=v.BRACKET_ACCESS, inh_value='')
 

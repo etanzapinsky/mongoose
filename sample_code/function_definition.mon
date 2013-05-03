@@ -1,4 +1,4 @@
-int[]  foo(string[][] s, boolean x){
+int[]  foo(string[foo()][] s, boolean x){
    int y = 5 
 }
 
