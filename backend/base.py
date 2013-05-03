@@ -1,5 +1,4 @@
 from stdlib import assign, boolean_ops, equality_ops, first_order_ops
-from functions import find_function
 import vtypes as v
 
 class Backend():
@@ -72,7 +71,14 @@ class Backend():
                 root.syn_value = backend.walk_ast(root.children)
 
 
-        # return root.syn_value
-        # How does this deal with return values? @todo
+def find_function(function_name):
+    for scope in sorted(backend.scopes, reverse=True):
+        try:
+            return scope[function_name]
+        except KeyError:
+            pass # try the next stack level
+    # If we've gotten this far, then function_name isn't in the scope stack
+    raise Exception, u'Function "{}" was not found in the scope stack.'.format(function_name)
+
 
 backend = Backend()  # backend is a global singleton variable
