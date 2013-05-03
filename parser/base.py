@@ -308,11 +308,6 @@ def p_function_def(p):
     #    print "Error: function "+symbol+" already defined"
     #    raise SyntaxError
 
-#def p_return(p):
-#    ''' stat : RETURN expr
-#    '''
-#    p[0] = Node(vtype=v.RETURN_STATEMENT, children=[p[2]])
-
 def p_stat_function_call(p):
     ''' stat : function_call 
     '''
@@ -691,11 +686,6 @@ def p_type_boolean(p):
     '''type : BOOLEAN
     '''
     p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_value=p[1])
-
-def p_type_agent(p):
-    ''' type : NAME 
-    '''
-    p[0] = Node(vtype=v.AGENT_TYPE, syn_value=p[1])
 
 #def p_function(p):
     #'expr : NAME LPAREN expr RPAREN'
