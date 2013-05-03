@@ -2,7 +2,7 @@ import vtypes as v
 from backend import backend
 
 class Node:
-    def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[]):
+    def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, syn_vtype=None, children=[]):
         """
         @param vtype: str
         @param symbol: str
@@ -66,8 +66,7 @@ class Function(Node):
         self.parameter_pairs = parameter_pairs
 
     def execute(self, *args):
-        for arg in args:
-            backend.walk_ast()
+        [backend.walk(arg) for arg in args]
         # first walk_ast on the params --> the syn_type and syn_value will then be ready
         # then bind the syn_values
         backend.scopes.append(self._bind_params(*args))
