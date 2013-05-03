@@ -32,6 +32,7 @@ class Lexer:
         'destroy' : 'DESTROY',
         'agent' : 'AGENT',
         'repeat' : 'REPEAT',
+        'return' : 'RETURN',
     }
 
     #add 'none' later

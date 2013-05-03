@@ -1,31 +1,18 @@
 
-agent Cell {
-      
-      destroy{
+cell c
 
-      }
-      action{
-
-      }
-
-      create(){
-
-      }
-      
-}
-
-environment{ 
+environment{
+	 
 	populate{ 
 	}	
 	action{
 	}
 }
 
-#terminate{
-#
-#}
-
-analysis{
-
+terminate{
+	
 }
 
+analysis{ 
+ 
+}

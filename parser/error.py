@@ -87,3 +87,36 @@ def p_agent_acd_right_brace_error(p):
     '''
     print syntax_error_in_input+"missing right brace in agent definition at line "+str(p.lineno(11))
 
+def p_weighted_val_stat_error(p):
+    ''' weighted_val_stat : error
+    '''
+    print syntax_error_in_input+"at line "+str(p.lineno(1))+". Weighted value statement must be of the form: \( (integer:expression|)* integer\:expression \)" 
+
+def p_invariant_error(p):
+	''' invariant : error
+	'''
+	print syntax_error_in_input+"at line "+str(p.lineno(1))+". Invariants must be of the form: [integer:] ( expression ) { [statements] }"
+
+def p_terminate_error(p):
+	''' terminate_block : error
+	'''
+	print syntax_error_in_input+"at line "+str(p.lineno(1))+". Terminate block must be of the form: terminate { [invariants] }"
+
+def p_analysis_error(p):
+	''' analysis : error
+	'''
+	print syntax_error_in_input+"at line "+str(p.lineno(1))+". Analysis block must be of the form: analysis { [statements] }"
+
+def p_environment_error(p):
+	''' environment : error
+	'''
+	print syntax_error_in_input+"at line "+str(p.lineno(1))+". Environment block must contain populate and action blocks, and be of the form: environment { statements }"
+
+
+
+
+
+
+
+
+
