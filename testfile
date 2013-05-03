@@ -1,15 +1,31 @@
-repeat(foo()){
 
-int x	
+agent Cell {
+      
+      destroy{
+
+      }
+      action{
+
+      }
+
+      create(){
+
+      }
+      
 }
 
 environment{ 
-	populate{
-	}
+	populate{ 
+	}	
 	action{
 	}
 }
-terminate{
-}
+
+#terminate{
+#
+#}
+
 analysis{
+
 }
+

@@ -4,6 +4,7 @@ from tree import Node, Function
 import vtypes as v
 import re
 from backend import backend
+from error import *
 # hack to get the tokens since they are a global variable in the lexer object
 tokens = lexer.tokens
 
@@ -28,11 +29,6 @@ def p_program(p):
     ''' program : stat_list_wrapper agent_list_wrapper stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper analysis stat_list_wrapper
     '''
     p[0] = Node(vtype=v.PROGRAM, children=[p[2],p[4],p[6],p[8],p[1],p[3],p[5],p[7],p[9]])#order: agent, environment, terminate, analysis then all other statements in order
-
-#def p_program_error(p):
-#    ''' program : stat_list_wrapper error stat_list_wrapper 
-#    '''
-#    print "Missing environment block!"
 
 #######################
 ## AGENT DEFINITIONS ##
