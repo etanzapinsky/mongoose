@@ -168,9 +168,9 @@ def p_opt_frequency(p):
                       | epsilon
     '''
     if len(p) == 3:
-        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1]) 
+        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=int(p[1])) 
     else:
-        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value='1') #default frequency == 1
+        p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=1) #default frequency == 1
 
 def p_terminate_block(p):
     ''' terminate_block : TERMINATE '{' invariant_list_wrapper '}'
@@ -529,7 +529,7 @@ def p_clause_pipe(p):
 def p_weighted_val_clause(p):
     ''' weighted_val_clause : VINTEGER ':' pow
     '''
-    p[0] = Node(vtype=v.WEIGHTED_VALUE_CLAUSE, children=[Node(vtype=v.INTEGER_VALUE, syn_value=p[1]),p[3]])
+    p[0] = Node(vtype=v.WEIGHTED_VALUE_CLAUSE, children=[Node(vtype=v.INTEGER_VALUE, syn_value=int(p[1])),p[3]])
 
 ################################
 ## PRIMITIVES AND IDENTIFIERS ##
@@ -542,19 +542,19 @@ def p_pow_function_call(p):
 
 def p_integer(p):
     ''' pow : VINTEGER '''
-    p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=p[1])#p[1], Depends on responsibility to decide value (backend) 
+    p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=int(p[1]))#p[1], Depends on responsibility to decide value (backend) 
 
 def p_float(p):
     ''' pow : VFLOAT '''
-    p[0] = Node(vtype=v.FLOAT_VALUE, syn_value=p[1])#p[1], see p_integer
+    p[0] = Node(vtype=v.FLOAT_VALUE, syn_value=float(p[1]))#p[1], see p_integer
 
 def p_bool(p):
     ''' pow : VBOOLEAN '''
-    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_value=p[1])#p[1], see p_integer    
+    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_value=bool(p[1]))#p[1], see p_integer    
 
 def p_string(p):
     ''' pow : VSTRING '''
-    p[0] = Node(vtype=v.STRING_VALUE, syn_value=p[1])#p[1], see p_integer    
+    p[0] = Node(vtype=v.STRING_VALUE, syn_value=str(p[1]))#p[1], see p_integer    
 
 def p_id(p):
     ''' pow : NAME non_empty_brack '''
