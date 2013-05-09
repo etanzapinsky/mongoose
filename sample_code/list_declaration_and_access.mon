@@ -2,10 +2,7 @@ environment{
 	int[2][3] x
 	x[1][1] = 1
 	print(x[1][1])
-	x[1][2] = 2
-	print(x[1][2])
-	int y = x[1][1]
-	print(y)
+
 	action{
 	}
 	populate{		
