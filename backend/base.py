@@ -65,7 +65,6 @@ class Backend():
             elif root.vtype == v.IDENTIFIER:
                 root.syn_value = find(root.symbol)
             elif root.vtype == v.DECLARATION:
-                ipdb.set_trace()
                 symbols = backend.scopes[-1]
                 root.inh_value = root.children[0].inh_value
                 root.symbol = root.children[1].symbol
@@ -87,7 +86,7 @@ class Backend():
             elif root.vtype in v.RETURN_STATEMENT:
                 root.syn_value = backend.walk_ast(root.children)
             elif root.vtype == v.BRACKET_ACCESS:
-                ipdb.set_trace()
+                pass  # @todo
             elif root.vtype == v.AGENT_LIST:
                 pass  # @todo
             elif root.vtype == v.ENVIRONMENT:
@@ -97,7 +96,7 @@ class Backend():
             elif root.vtype == v.ANALYSIS:
                 pass  # @todo
             else:
-                ipdb.set_trace()
+                pass  # @todo
 
 
         # return root.syn_value
