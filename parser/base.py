@@ -649,7 +649,8 @@ def p_decl(p):
 def p_list_type(p):
     ''' list_type : type brack
     '''
-    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[1].syn_value+p[2].inh_value) #TODO: change these (and below) to syn_value
+    # p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[1].syn_value+p[2].inh_value) #TODO: change these (and below) to syn_value
+    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], syn_vtype=p[1].syn_value, depths=p[2].depths)
 
 #VINTEGER is non-negative
 def p_bracket(p):
@@ -658,11 +659,19 @@ def p_bracket(p):
               | epsilon
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
+        # p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
+        kids=[p[2],]
+        if p[4]:
+            kids.extend(p[4].children)
+        p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[x.syn_value for x in kids] )
     elif len(p) == 4:
-        p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
+        if p[3]:
+            kids = [p[3].children]
+        # p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
+        p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[p[3].syn_value])
     else:  
-        p[0] = Node(vtype=v.BRACKET_DECL, inh_value='')
+        # p[0] = Node(vtype=v.BRACKET_DECL, inh_value='')
+        p[0] = Node(vtype=v.BRACKET_DECL, syn_value=0)
 
 #VINTEGER is non-negative
 def p_non_empty_bracket(p):
@@ -670,9 +679,13 @@ def p_non_empty_bracket(p):
                         | epsilon
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.BRACKET_ACCESS, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
+        kids = [p[2]]
+        if p[4]:
+            kids.extend(p[4].children)
+        # p[0] = Node(vtype=v.BRACKET_ACCESS, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
+        p[0] = Node(vtype=v.BRACKET_ACCESS, children=kids, syn_value=[x.syn_value for x in kids])
     else:  
-        p[0] = Node(vtype=v.BRACKET_ACCESS, inh_value='')
+        p[0] = Node(vtype=v.BRACKET_ACCESS, syn_value = -1)
 
 ########################
 ## PRIMITIVE KEYWORDS ##
