@@ -2,7 +2,8 @@ import vtypes as v
 from backend import backend
 
 class Node:
-    def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[]):
+    def __init__(self, vtype, symbol=None, inh_value=None, syn_value=None, children=[], 
+                 syn_vtype=None, depths=None):
         """
         @param vtype: str
         @param symbol: str
@@ -15,6 +16,8 @@ class Node:
         self.inh_value = inh_value
         self.syn_value = syn_value
         self.children = children
+        self.depths = depths
+        self.syn_vtype = syn_vtype
     
     # Useful for testing 
     def __eq__(self, other):
@@ -61,7 +64,15 @@ class Node:
             sv = 'syn_val={}'.format(self.syn_value)
         else:
             sv = ''
-        return '{}: {} {} {}'.format(self.vtype, sym, iv, sv)
+        if self.syn_vtype:
+            svt = 'syn_vtype={}'.format(self.syn_vtype)
+        else:
+            svt = ''
+        if self.depths:
+            dep = 'depths={}'.format(self.depths)
+        else:
+            dep = ''
+        return '{}: {} {} {} {} {}'.format(self.vtype, sym, iv, sv, svt, dep)
 
 # **IMPORTANT** the interface specified by function just has to have the
 # function execute, this allows us to be able to have print functions or other
@@ -123,20 +134,7 @@ class Function(Node):
             return self_comp and all([self_c == other_c for self_c, other_c in
                                   zip(self.statements, other.statements)])
 
-
     def __str__(self):
-        if self.symbol:
-            sym = 'sym={}'.format(self.symbol)
-        else:
-            sym = ''
-        if self.inh_value:
-            iv = 'inh_val={}'.format(self.inh_value)
-        else:
-            iv = ''
-        if self.syn_value:
-            sv = 'syn_val={}'.format(self.syn_value)
-        else:
-            sv = ''
         if self.return_type:
             rt = 'ret_type={}'.format(self.return_type)
         else:
@@ -145,4 +143,10 @@ class Function(Node):
             pp = 'param_pairs={}'.format(self.parameter_pairs)
         else:
             pp = ''
-        return '{}: {} {} {} {} {}'.format(self.vtype, sym, iv, sv, rt, pp)
+        return '{} {} {}'.format(super.__str__(), rt, pp)
+
+
+class List(Node):
+    def __init__(self, return_type, symbol, parameter_pairs, statements):
+        '''Called when a list is defined.'''
+        Node.__init__(self, vtype=v.LIST_TYPE)
