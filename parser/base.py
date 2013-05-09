@@ -293,24 +293,6 @@ def p_statn(p):
 ## FUNCTIONS ##
 ###############
 
-# this doesn't handle lists and agents, @todo
-def convert_params(param_list):
-    """
-    @param_list: list(tuple())
-    """
-    param_types = {
-        'int': v.INTEGER_VALUE,
-        'boolean': v.BOOLEAN_VALUE,
-        'float': v.FLOAT_VALUE,
-        'none': v.NONE_VALUE,
-        'string': v.STRING_VALUE,
-        }
-    ret = list()
-    for param_pair in param_list:
-        t = param_types.get(param_pair[0])
-        ret.append((t, param_pair[1])) if t else ret.append(param_pair) # NOTE: this is hack @todo fix
-    return ret
-
 #TODO stat_list_wrapper causes problems , does not exlcude function def within function def or loops, etc.
 #list_type changed from return_type
 def p_function_def(p):
@@ -320,7 +302,6 @@ def p_function_def(p):
     if p[4] is not None:
         for decl in p[4].syn_value:
             parameter_pairs.append((decl.children[0].syn_vtype, decl.children[1].symbol))
-        import bpdb; bpdb.set_trace()
     p[0] = Function(symbol=p[2], statements=p[7],
                               return_type=p[1].syn_vtype,
                               parameter_pairs=parameter_pairs)
