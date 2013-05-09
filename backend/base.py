@@ -1,5 +1,6 @@
 from stdlib import assign, boolean_ops, equality_ops, first_order_ops, builtins
 import vtypes as v
+import ipdb  # for debugging
 
 class Backend():
 
@@ -64,6 +65,7 @@ class Backend():
             elif root.vtype == v.IDENTIFIER:
                 root.syn_value = find(root.symbol)
             elif root.vtype == v.DECLARATION:
+                ipdb.set_trace()
                 symbols = backend.scopes[-1]
                 root.inh_value = root.children[0].inh_value
                 root.symbol = root.children[1].symbol
@@ -84,6 +86,18 @@ class Backend():
                 # print root.children, backend.scopes
             elif root.vtype in v.RETURN_STATEMENT:
                 root.syn_value = backend.walk_ast(root.children)
+            elif root.vtype == v.BRACKET_ACCESS:
+                ipdb.set_trace()
+            elif root.vtype == v.AGENT_LIST:
+                pass  # @todo
+            elif root.vtype == v.ENVIRONMENT:
+                pass  # @todo
+            elif root.vtype == v.TERMINATE:
+                pass  # @todo
+            elif root.vtype == v.ANALYSIS:
+                pass  # @todo
+            else:
+                ipdb.set_trace()
 
 
         # return root.syn_value
