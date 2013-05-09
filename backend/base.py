@@ -66,12 +66,7 @@ class Backend():
                 root.syn_value = find(root.symbol)
             elif root.vtype == v.DECLARATION:
                 symbols = backend.scopes[-1]
-
-                if root.children[0].vtype == v.LIST_TYPE:
-                    pass
-
-                root.inh_value = root.children[0].inh_value
-                root.symbol = root.children[1].symbol
+                root.symbol = root.children[0].symbol
                 symbols[root.symbol] = None # can we do this, or do we have a none type?
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 backend.walk_ast(root.children[0]) # the declaration
