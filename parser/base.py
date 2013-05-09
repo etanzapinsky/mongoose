@@ -642,36 +642,43 @@ def p_conditionb(p):
 def p_decl(p):
     '''decl : list_type NAME
     '''
-    p[0] = Node(vtype=v.DECLARATION, children=[p[1], Node(vtype=v.IDENTIFIER, symbol=p[2])]) #name is syn_value or symbol?
     symbol = p[2]
+    id_node = Node(vtype=v.IDENTIFIER, symbol=symbol)
+    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].syn_vtype, children=[p[1], id_node])
     backend.scopes[-1][symbol] = None
 
 def p_list_type(p):
     ''' list_type : type brack
     '''
-    # p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[1].syn_value+p[2].inh_value) #TODO: change these (and below) to syn_value
-    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], syn_vtype=p[1].syn_vtype, depths=p[2].depths)
+    if p[2].depths:  # for lists
+        p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], syn_vtype=p[1].syn_vtype, depths=p[2].depths)
+    else:  # for simple types
+        p[0] = Node(vtype=p[1].syn_vtype)
 
-#VINTEGER is non-negative
-def p_bracket(p):
+###################
+## list brackets ##
+###################
+
+def p_expr_bracket(p):
     ''' brack : '[' expr ']' brack
-              | '[' ']' brack
-              | epsilon
     '''
-    if len(p) == 5:
-        # p[0] = Node(vtype=v.BRACKET_DECL, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
-        kids=[p[2],]
-        if p[4]:
-            kids.extend(p[4].children)
-        p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[x.syn_value for x in kids] )
-    elif len(p) == 4:
-        if p[3]:
-            kids = [p[3].children]
-        # p[0] = Node(vtype=v.BRACKET_DECL, children=[p[3]], inh_value=p[1]+p[2]+p[3].inh_value)
-        p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[p[3].syn_value])
-    else:  
-        # p[0] = Node(vtype=v.BRACKET_DECL, inh_value='')
-        p[0] = Node(vtype=v.BRACKET_DECL, syn_value=0)
+    kids=[p[2],]
+    if p[4]:
+        kids.extend(p[4].children)
+    p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[x.syn_value for x in kids] )
+        
+def p_no_expr_bracket(p):
+    ''' brack : '[' ']' brack
+    '''
+    kids = [p[3].children]
+    p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[p[3].syn_value])
+              
+def p_empty_bracket(p):
+    ''' brack : epsilon
+    '''
+    p[0] = Node(vtype=v.BRACKET_DECL, syn_value=0)
+
+
 
 #VINTEGER is non-negative
 def p_non_empty_bracket(p):
@@ -682,7 +689,6 @@ def p_non_empty_bracket(p):
         kids = [p[2]]
         if p[4]:
             kids.extend(p[4].children)
-        # p[0] = Node(vtype=v.BRACKET_ACCESS, children=[p[4],p[2]], inh_value=p[1]+p[3]+p[4].inh_value)
         p[0] = Node(vtype=v.BRACKET_ACCESS, children=kids, syn_value=[x.syn_value for x in kids])
     else:  
         p[0] = Node(vtype=v.BRACKET_ACCESS, syn_value = -1)
@@ -694,22 +700,22 @@ def p_non_empty_bracket(p):
 def p_type_int(p):
     '''type : INTEGER 
     '''        
-    p[0] = Node(vtype=v.INT_KEYWORD, syn_value=p[1], syn_vtype=v.INTEGER_VALUE) ####using syn_value #<BASIC_TYPE>_KEYWORD
+    p[0] = Node(vtype=v.INT_KEYWORD, syn_vtype=v.INTEGER_VALUE) ####using syn_value #<BASIC_TYPE>_KEYWORD
 
 def p_type_float(p):
     '''type : FLOAT                                                                                                    
     '''  
-    p[0] = Node(vtype=v.FLOAT_KEYWORD, syn_value=p[1], syn_vtype=v.FLOAT_VALUE)
+    p[0] = Node(vtype=v.FLOAT_KEYWORD, syn_vtype=v.FLOAT_VALUE)
 
 def p_type_string(p):
     '''type : STRING 
     '''
-    p[0] = Node(vtype=v.STRING_KEYWORD, syn_value=p[1], syn_vtype=v.STRING_VALUE)
+    p[0] = Node(vtype=v.STRING_KEYWORD, syn_vtype=v.STRING_VALUE)
 
 def p_type_boolean(p):
     '''type : BOOLEAN
     '''
-    p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_value=p[1], syn_vtype=v.BOOLEAN_VALUE)
+    p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_vtype=v.BOOLEAN_VALUE)
 
 #def p_function(p):
     #'expr : NAME LPAREN expr RPAREN'

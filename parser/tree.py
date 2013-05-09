@@ -144,9 +144,3 @@ class Function(Node):
         else:
             pp = ''
         return '{} {} {}'.format(super.__str__(), rt, pp)
-
-
-class List(Node):
-    def __init__(self, return_type, symbol, parameter_pairs, statements):
-        '''Called when a list is defined.'''
-        Node.__init__(self, vtype=v.LIST_TYPE)
