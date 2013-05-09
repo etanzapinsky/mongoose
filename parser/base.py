@@ -81,37 +81,37 @@ def p_agent_1_cda(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[7],p[9],p[4],p[6],p[8],p[10]])#create, destroy, action, then all statements in order
-    backend.scopes[-1][p[2]] = p[0]
+    # backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_2_cad(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[9],p[7],p[4],p[6],p[8],p[10]])
-    backend.scopes[-1][p[2]] = p[0]
+    # backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_3_dca(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper action stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[5],p[9],p[4],p[6],p[8],p[10]])
-    backend.scopes[-1][p[2]] = p[0]
+    # backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_4_dac(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper create stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[9],p[5],p[4],p[6],p[8],p[10]])
-    backend.scopes[-1][p[2]] = p[0]
+    # backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_5_adc(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[7],p[5],p[4],p[6],p[8],p[10]])
-    backend.scopes[-1][p[2]] = p[0]
+    # backend.scopes[-1][p[2]] = p[0]
 
 def p_agent_6_acd(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper '}'
     '''
     p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[5],p[7],p[4],p[6],p[8],p[10]])
-    backend.scopes[-1][p[2]] = p[0]
+    # backend.scopes[-1][p[2]] = p[0]
 
 def p_create(p):
     ''' create : CREATE '(' formal_param_list ')' '{' stat_list_wrapper '}'
@@ -127,7 +127,6 @@ def p_create(p):
     p[0] = Function(symbol=symbol, statements=p[6],
                               return_type='agent', #use agent as placeholder for agent's name, which can't be known here
                               parameter_pairs=parameter_pairs)
-    backend.scopes[-1][symbol] = p[0]
 
 def p_destroy(p):
     ''' destroy : DESTROY '{' stat_list_wrapper '}'
@@ -294,45 +293,52 @@ def p_statn(p):
 ## FUNCTIONS ##
 ###############
 
+# this doesn't handle lists and agents, @todo
+def convert_params(param_list):
+    """
+    @param_list: list(tuple())
+    """
+    param_types = {
+        'int': v.INTEGER_VALUE,
+        'boolean': v.BOOLEAN_VALUE,
+        'float': v.FLOAT_VALUE,
+        'none': v.NONE_VALUE,
+        'string': v.STRING_VALUE,
+        }
+    ret = list()
+    for param_pair in param_list:
+        t = param_types.get(param_pair[0])
+        ret.append((t, param_pair[1])) if t else ret.append(param_pair) # NOTE: this is hack @todo fix
+    return ret
+
 #TODO stat_list_wrapper causes problems , does not exlcude function def within function def or loops, etc.
 #list_type changed from return_type
 def p_function_def(p):
     ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
     '''
-    symbol = p[2]
+    parameter_pairs = []
     if p[4] is not None:
-        parameter_pairs = p[4].inh_value
-        parameter_pairs = parameter_pairs[:-1]
-        parameter_pairs = parameter_pairs.split(",")
-        parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
-    else:
-        parameter_pairs = []
-    p[0] = Function(symbol=symbol, statements=p[7],
-                              return_type=re.sub('\d+','',p[1].inh_value),
+        for decl in p[4].syn_value:
+            parameter_pairs.append((decl.children[0].syn_vtype, decl.children[1].symbol))
+        import bpdb; bpdb.set_trace()
+    p[0] = Function(symbol=p[2], statements=p[7],
+                              return_type=p[1].syn_vtype,
                               parameter_pairs=parameter_pairs)
-    #if not backend.scopes[-1].has_key(symbol):
-    backend.scopes[-1][symbol] = p[0]
-    #else:
-    #    print "Error: function "+symbol+" already defined"
-    #    raise SyntaxError
 
 def p_stat_function_call(p):
     ''' stat : function_call 
     '''
     p[0] = p[1]
 
-#brack changed from empty_brack
-def p_formal_param(p):
-    ''' formal_param : type brack NAME
-    '''
-    p[0] = Node(vtype=v.FORMAL_PARAM, symbol=p[3], children=[p[1],p[2]], inh_value=p[1].syn_value+re.sub('\d+','',p[2].inh_value))
-
 def p_formal_param_list(p):
-    ''' formal_param_list : formal_param formal_param_comma
+    ''' formal_param_list : decl formal_param_comma
                           | epsilon
     '''  
     if len(p) == 3:
-        p[0] = Node(vtype=v.FORMAL_PARAM_LIST, children=[p[1],p[2]], inh_value=p[1].inh_value+' '+p[1].symbol+','+(p[2].inh_value if p[2] != None else ''))
+        params = [p[1]]
+        if p[2]:
+            params.extend(p[2].syn_value)
+        p[0] = Node(vtype=v.FORMAL_PARAM_LIST, syn_value=params)
     else:
         p[0] = None
 
@@ -645,7 +651,6 @@ def p_decl(p):
     symbol = p[2]
     id_node = Node(vtype=v.IDENTIFIER, symbol=symbol)
     p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].syn_vtype, children=[p[1], id_node])
-    backend.scopes[-1][symbol] = None
 
 def p_list_type(p):
     ''' list_type : type brack
