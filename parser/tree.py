@@ -55,6 +55,10 @@ class Node:
                                                                 syn_val=self.syn_value,
                                                                 )
 
+# **IMPORTANT** the interface specified by function just has to have the
+# function execute, this allows us to be able to have print functions or other
+# builtin functions that we want to act as functions, but break the nice
+# structure of walking the AST of all the children statements
 class Function(Node):
     def __init__(self, return_type, symbol, parameter_pairs, statements):
         '''Called when a function is defined.
@@ -69,6 +73,7 @@ class Function(Node):
         backend.scopes.append(self._bind_params(*args))
         r = backend.walk_ast(self.statements)
         backend.scopes.pop()
+        return r
 
     def _bind_params(self, *args):
         bindings = {}

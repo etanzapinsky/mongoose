@@ -2,7 +2,12 @@
 from __future__ import print_function
 import vtypes as v
 
-builtins = {'_print': lambda x: print(x)}
+class PrintFunction():
+    @classmethod
+    def execute(self, *args):
+        print(*[a.syn_value for a in args])
+
+builtins = {'print': PrintFunction}
 
 first_order_ops = {v.ADD: lambda x, y: x + y,
                    v.SUBTRACT: lambda x, y: x - y,

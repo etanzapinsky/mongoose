@@ -1,10 +1,11 @@
-from stdlib import assign, boolean_ops, equality_ops, first_order_ops
+from stdlib import assign, boolean_ops, equality_ops, first_order_ops, builtins
 import vtypes as v
 
 class Backend():
 
     def __init__(self):
         symbols = dict()
+        symbols.update(builtins)
         self.scopes = [symbols]
 
     def walk_ast(self, root, siblings=None, parent=None):
@@ -34,6 +35,14 @@ class Backend():
             if root.vtype == v.FUNCTION_DEFINITION:
                 root.syn_value = evaluate_function(f=root, scope=scope,
                                                    args=[child.syn_value for child in root.children])
+            # currently a naive implementation of function call
+            elif root.vtype == v.FUNCTION_CALL:
+                func = None
+                for scp in reversed(backend.scopes):
+                    func = scp.get(root.symbol)
+                    if func:
+                        break
+                root.syn_value = func.execute(*root.children)
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
