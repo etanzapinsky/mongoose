@@ -10,6 +10,12 @@ class Backend():
 
     def walk_ast(self, root, siblings=None, parent=None):
 
+        def find(symbol):
+            for scp in reversed(backend.scopes):
+                val = scp.get(symbol)
+                if val:
+                    return val
+            return None
         # not popping b/c we only pop when *destroying* scope
         # (here we are just modifying)
         scope = backend.scopes[-1]
@@ -37,12 +43,12 @@ class Backend():
                                                    args=[child.syn_value for child in root.children])
             # currently a naive implementation of function call
             elif root.vtype == v.FUNCTION_CALL:
-                func = None
-                for scp in reversed(backend.scopes):
-                    func = scp.get(root.symbol)
-                    if func:
-                        break
-                root.syn_value = func.execute(*root.children)
+                func = find(root.symbol)
+                # evaluating expressions passed into function before calling function
+                for child in root.children:
+                    backend.walk_ast(child)
+                if(func):
+                    root.syn_value = func.execute(*root.children)
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
@@ -52,9 +58,11 @@ class Backend():
             elif root.vtype in equality_ops:
                 root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
             elif root.vtype == v.ASSIGNMENT:
+                for child in root.children:
+                    backend.walk_ast(child)
                 assign(backend.scopes[-1], root.children)  # scopes modified via side effect
             elif root.vtype == v.IDENTIFIER:
-                root.syn_value = root.symbol
+                root.syn_value = find(root.symbol)
             elif root.vtype == v.DECLARATION:
                 symbols = backend.scopes[-1]
                 root.inh_value = root.children[0].inh_value
