@@ -650,7 +650,7 @@ def p_list_type(p):
     ''' list_type : type brack
     '''
     # p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], inh_value=p[1].syn_value+p[2].inh_value) #TODO: change these (and below) to syn_value
-    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], syn_vtype=p[1].syn_value, depths=p[2].depths)
+    p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], syn_vtype=p[1].syn_vtype, depths=p[2].depths)
 
 #VINTEGER is non-negative
 def p_bracket(p):
@@ -694,22 +694,22 @@ def p_non_empty_bracket(p):
 def p_type_int(p):
     '''type : INTEGER 
     '''        
-    p[0] = Node(vtype=v.INT_KEYWORD, syn_value=p[1]) ####using syn_value #<BASIC_TYPE>_KEYWORD
+    p[0] = Node(vtype=v.INT_KEYWORD, syn_value=p[1], syn_vtype=v.INTEGER_VALUE) ####using syn_value #<BASIC_TYPE>_KEYWORD
 
 def p_type_float(p):
     '''type : FLOAT                                                                                                    
     '''  
-    p[0] = Node(vtype=v.FLOAT_KEYWORD, syn_value=p[1])
+    p[0] = Node(vtype=v.FLOAT_KEYWORD, syn_value=p[1], syn_vtype=v.FLOAT_VALUE)
 
 def p_type_string(p):
     '''type : STRING 
     '''
-    p[0] = Node(vtype=v.STRING_KEYWORD, syn_value=p[1])
+    p[0] = Node(vtype=v.STRING_KEYWORD, syn_value=p[1], syn_vtype=v.STRING_VALUE)
 
 def p_type_boolean(p):
     '''type : BOOLEAN
     '''
-    p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_value=p[1])
+    p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_value=p[1], syn_vtype=v.BOOLEAN_VALUE)
 
 #def p_function(p):
     #'expr : NAME LPAREN expr RPAREN'
