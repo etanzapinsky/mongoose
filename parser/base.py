@@ -245,9 +245,9 @@ def p_stat_list_wrapper(p):
                          | stat_list NEWLINE
                          | stat_list 
     '''
-    if len(p) == 3:
-        p[0] = p[2]
-    elif len(p) == 2:
+    if len(p) == 2:
+        p[0] = p[1]
+    elif len(p) == 3:
         if type(p[1]) is str:  
             p[0] = p[2]
         else:
