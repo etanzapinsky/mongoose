@@ -340,7 +340,7 @@ def p_formal_param_comma(p):
 def p_function_call(p):
     ''' function_call : NAME '(' actual_param_list ')'
     '''
-    p[0] = Node(vtype=v.FUNCTION_CALL, symbol=p[1], children=[p[3]])
+    p[0] = Node(vtype=v.FUNCTION_CALL, symbol=p[1], children=p[3].children)
 
 def p_actual_param(p):
     ''' actual_param : expr
@@ -352,7 +352,10 @@ def p_actual_param_list(p):
                           | epsilon
     '''  
     if len(p) == 3:
-        p[0] = Node(vtype=v.ACTUAL_PARAM_LIST, children=[p[1],p[2]])
+        params = [p[1]]
+        if (p[2]):
+            params.extend(p[2].children)
+        p[0] = Node(vtype=v.ACTUAL_PARAM_LIST, children=params)
     else:
         p[0] = None
 
