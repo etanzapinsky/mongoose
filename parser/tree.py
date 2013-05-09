@@ -49,11 +49,19 @@ class Node:
 
     # Useful for debugging
     def __str__(self):
-        return '{vtype} {sym}, {inh_val}, {syn_val}'.format(sym=self.symbol,
-                                                                vtype=self.vtype,
-                                                                inh_val=self.inh_value,
-                                                                syn_val=self.syn_value,
-                                                                )
+        if self.symbol:
+            sym = 'sym={}'.format(self.symbol)
+        else:
+            sym = ''
+        if self.inh_value:
+            iv = 'inh_val={}'.format(self.inh_value)
+        else:
+            iv = ''
+        if self.syn_value:
+            sv = 'syn_val={}'.format(self.syn_value)
+        else:
+            sv = ''
+        return '{}: {} {} {}'.format(self.vtype, sym, iv, sv)
 
 # **IMPORTANT** the interface specified by function just has to have the
 # function execute, this allows us to be able to have print functions or other
@@ -117,8 +125,24 @@ class Function(Node):
 
 
     def __str__(self):
-        return '{vtype} {return_type}, {sym}, {parameter_pairs}'.format(sym=self.symbol,
-                                                                            return_type=self.return_type,
-                                                                            vtype=self.vtype,
-                                                                            parameter_pairs=self.parameter_pairs,
-                                                                            )
+        if self.symbol:
+            sym = 'sym={}'.format(self.symbol)
+        else:
+            sym = ''
+        if self.inh_value:
+            iv = 'inh_val={}'.format(self.inh_value)
+        else:
+            iv = ''
+        if self.syn_value:
+            sv = 'syn_val={}'.format(self.syn_value)
+        else:
+            sv = ''
+        if self.return_type:
+            rt = 'ret_type={}'.format(self.return_type)
+        else:
+            rt = ''
+        if self.parameter_pairs:
+            pp = 'param_pairs={}'.format(self.parameter_pairs)
+        else:
+            pp = ''
+        return '{}: {} {} {} {} {}'.format(self.vtype, sym, iv, sv, rt, pp)
