@@ -433,12 +433,20 @@ def p_opt_pelse(p):
 def p_stat_assign(p):
     '''stat : NAME non_empty_brack '=' expr    
     '''
-    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]]), p[4]]) 
+    kids = []
+    if p[2].depths:  # do something else with lists?
+        kids = [p[2]]
+    id_node = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)
+    p[0] = Node(vtype=v.ASSIGNMENT, children=[id_node, p[4]]) 
 
 def p_stat_decl_assign(p):
     '''stat : decl '=' expr                                                                                                  
     '''
-    p[0] = Node(vtype=v.DECLARATION_ASSIGNMENT, children=[p[1], p[3]] )#, symbol=p[1].children[1].symbol)
+    id_node = Node(vtype=v.IDENTIFIER, symbol=p[1].symbol)
+    declaration_node = Node(vtype=v.DECLARATION, symbol=p[1].symbol, syn_vtype=p[1].syn_vtype)
+    expression_node = p[3]
+    assignment_node = Node(vtype=v.ASSIGNMENT, children=[id_node, expression_node])
+    p[0] = Node(vtype=v.DECLARATION_ASSIGNMENT, children=[declaration_node,assignment_node] )
 
 def p_stat_decl(p):
     '''stat : decl
@@ -553,8 +561,15 @@ def p_string(p):
 
 def p_id(p):
     ''' pow : NAME non_empty_brack '''
+<<<<<<< HEAD
     # have to deal with the syn_vtype here @todo
     p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]])
+=======
+    kids = []
+    if p[2].depths:
+        kids = p[2]
+    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)
+>>>>>>> declaration working (lists NOT working)
 
 def p_expr_paren(p):
     ''' pow : '(' expr ')'
@@ -627,12 +642,14 @@ def p_conditionb(p):
 ## LIST TYPES ##
 ################
 
-def p_decl(p):
+def p_list_declaration(p):
     '''decl : list_type NAME
     '''
+    # merge resolution may be incorrect @chris
     symbol = p[2]
     id_node = Node(vtype=v.IDENTIFIER, symbol=symbol)
-    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].syn_vtype, children=[p[1], id_node])
+    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].vtype, symbol=symbol, children=[p[1], id_node])
+    backend.scopes[-1][symbol] = None
 
 def p_list_type(p):
     ''' list_type : type brack
