@@ -561,15 +561,10 @@ def p_string(p):
 
 def p_id(p):
     ''' pow : NAME non_empty_brack '''
-<<<<<<< HEAD
-    # have to deal with the syn_vtype here @todo
-    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]])
-=======
     kids = []
     if p[2].depths:
         kids = p[2]
     p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)
->>>>>>> declaration working (lists NOT working)
 
 def p_expr_paren(p):
     ''' pow : '(' expr ')'
@@ -655,7 +650,7 @@ def p_list_type(p):
     ''' list_type : type brack
     '''
     if p[2].depths:  # for lists
-        p[0] = Node(vtype=v.LIST_TYPE, children=[p[1],p[2]], syn_vtype=p[1].syn_vtype, depths=p[2].depths)
+        p[0] = Node(vtype=v.LIST_TYPE, syn_vtype=p[1].syn_vtype, depths=p[2].depths)
     else:  # for simple types
         p[0] = Node(vtype=p[1].syn_vtype)
 
