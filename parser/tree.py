@@ -79,7 +79,7 @@ class Node:
 # builtin functions that we want to act as functions, but break the nice
 # structure of walking the AST of all the children statements
 class Function(Node):
-    def __init__(self, return_type, symbol, parameter_pairs, statements):
+    def __init__(self, return_type, symbol, parameter_pairs, statements, return_value):
         '''Called when a function is defined.
         vtype checking is done in the frontend (parser)'''
         Node.__init__(self, vtype=v.FUNCTION_DEFINITION)
@@ -87,6 +87,7 @@ class Function(Node):
         self.symbol = symbol
         self.statements = statements
         self.parameter_pairs = parameter_pairs
+        self.return_value = return_value
 
     def execute(self, *args):
         backend.scopes.append(self._bind_params(*args))
@@ -124,12 +125,14 @@ class Function(Node):
             return bool(self.return_type == other.return_type
                         and self.parameter_pairs == other.parameter_pairs
                         and self.symbol == other.symbol
+                        and self.return_value == return_value
                         ) 
 
         else:
             self_comp = bool(self.return_type == other.return_type
                         and self.parameter_pairs == other.parameter_pairs
                         and self.symbol == other.symbol
+                        and self.return_value == return_value
                         ) 
             return self_comp and all([self_c == other_c for self_c, other_c in
                                   zip(self.statements, other.statements)])

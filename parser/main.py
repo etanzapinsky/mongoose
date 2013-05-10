@@ -14,6 +14,7 @@ def traversePost(root, indent): #preorder
             #print root.__class__.__name__
             print '     '*indent + root.__str__()#vtype,':',root.return_type,':',root.symbol,':',root.parameter_pairs
             traversePost(root.statements, indent+1)
+            traversePost(root.return_value, indent+1)
         else: #regular Node
             print '     '*indent + root.__str__()#vtype,':',root.syn_value,':',root.symbol,':',root.inh_value,':',root.params
             for n in root.children:

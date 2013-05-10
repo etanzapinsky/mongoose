@@ -296,7 +296,7 @@ def p_statn(p):
 #TODO stat_list_wrapper causes problems , does not exlcude function def within function def or loops, etc.
 #list_type changed from return_type
 def p_function_def(p):
-    ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper '}'
+    ''' stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper return_stat '}'
     '''
     parameter_pairs = []
     if p[4] is not None:
@@ -304,7 +304,18 @@ def p_function_def(p):
             parameter_pairs.append((decl.syn_vtype, decl.symbol))
     p[0] = Function(symbol=p[2], statements=p[7],
                               return_type=p[1].syn_vtype,
-                              parameter_pairs=parameter_pairs)
+                              parameter_pairs=parameter_pairs,
+                              return_value=p[8])
+
+def p_return_stat(p):
+    ''' return_stat : RETURN expr NEWLINE 
+                    | RETURN NEWLINE
+    '''
+    if len(p) == 4:
+        p[0] = Node(vtype=v.RETURN_STATEMENT, children=[p[2]])
+    else:
+        p[0] = Node(vtype=v.RETURN_STATEMENT)     
+
 
 def p_stat_function_call(p):
     ''' stat : function_call 
