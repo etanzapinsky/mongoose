@@ -650,7 +650,6 @@ def p_list_declaration(p):
     if p[1].vtype == v.LIST_TYPE:
         kids.append(p[1])
     p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].vtype, symbol=symbol, children=kids)
-    backend.scopes[-1][symbol] = None
 
 def p_list_type(p):
     ''' list_type : type brack

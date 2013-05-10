@@ -77,8 +77,8 @@ class Backend():
                 else:
                     symbols[root.symbol] = None
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
-                backend.walk_ast(root.children[0]) # the declaration
-                assign(backend.scopes[-1], root.children)
+                for child in root.children:
+                    backend.walk_ast(child)
             elif root.vtype == v.PROGRAM:
                 for kid in root.children:
                     backend.walk_ast(kid)
