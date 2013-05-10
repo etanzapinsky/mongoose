@@ -611,6 +611,10 @@ def p_string(p):
     ''' pow : VSTRING '''
     p[0] = Node(vtype=v.STRING_VALUE, syn_vtype=v.STRING_VALUE, syn_value=str(p[1]))#p[1], see p_integer    
 
+def p_none(p):
+    ''' pow : NONE '''
+    p[0] = Node(vtype=v.NONE_VALUE)
+
 def p_id(p):
     ''' pow : NAME non_empty_brack '''
     kids = []

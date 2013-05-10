@@ -34,6 +34,7 @@ class Lexer:
         'repeat' : 'REPEAT',
         'return' : 'RETURN',
         'void' : 'VOID',
+        'none' : 'NONE',
     }
 
     #add 'none' later
