@@ -1,3 +1,4 @@
+import random
 import vtypes as v
 from backend import backend
 
@@ -183,15 +184,36 @@ class Conditional(Node):
         self.next_conditional = next_conditional
         Node.__init__(self, vtype=vtype)
 
-    def execute(self):
+    def execute_if(self):
         if not self.expression:
+            backend.scopes.append({})
             backend.walk_ast(self.statements)
+            backend.scopes.pop()
             return
         backend.walk_ast(self.expression)
         if self.expression.syn_value:
+            backend.scopes.append({})
             backend.walk_ast(self.statements)
+            backend.scopes.pop()
         elif self.next_conditional:
-            self.next_conditional.execute()
+            self.next_conditional.execute_if()
+
+    def execute_pif(self, prob=-1):
+        if prob == -1:
+            prob = random.uniform(0, 1)
+
+        if not self.expression:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            return
+
+        if self.expression.syn_value > prob:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+        elif self.next_conditional:
+            self.next_conditional.execute_pif(prob - self.expression.syn_value)
 
     def __str__(self):
         return '{}:'.format(self.vtype)
