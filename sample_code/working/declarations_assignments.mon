@@ -4,8 +4,6 @@ x  = 3
 print(x)
 int y = x
 print(y)
-
-string y
 environment{
 	action{
 
