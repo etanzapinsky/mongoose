@@ -1,0 +1,23 @@
+pif(.2){
+    int x = 3
+    print("x:", x)
+} pelif (.5) {
+    int y = 7
+    print("y:", y)
+} pelse {
+    boolean b = false
+    print("b:", b)
+}
+
+
+environment {
+    action{
+    }
+    populate{
+    }
+}
+
+terminate{
+}
+analysis{
+}

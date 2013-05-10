@@ -80,7 +80,9 @@ class Backend():
                 for child in root.children:
                     backend.walk_ast(child)
             elif root.vtype == v.IF:
-                root.execute()
+                root.execute_if()
+            elif root.vtype == v.PIF:
+                root.execute_pif()
             elif root.vtype == v.PROGRAM:
                 for kid in root.children:
                     backend.walk_ast(kid)
