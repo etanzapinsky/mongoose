@@ -475,13 +475,27 @@ def p_stat_decl(p):
     '''
     p[0] = p[1] 
 
+#################
+## EXPRESSIONS ##
+#################
+
+def p_expr_b(p):
+    '''expr : b_expr
+            | cast expr
+    ''' 
+    if len(p) == 2:
+        p[0] = p[1]
+    else: 
+        p[0] = Node(vtype=v.CAST_EXPRESSION, children=[p[1],p[2]])
+
+def p_cast(p):
+    ''' cast : '(' type ')'
+    '''
+    p[0] = Node(vtype=v.EXPLICIT_CAST, children=[p[2]])
+
 ############################
 ## ARITHMETIC EXPRESSIONS ##
 ############################
-
-def p_expr_b(p):
-    '''expr : b_expr'''
-    p[0] = p[1]
 
 #uminus and NOT may be incorrect precedence
 def p_arith_expr(p):
