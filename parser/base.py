@@ -308,14 +308,14 @@ def p_function_def(p):
                               return_value=Node(vtype=v.RETURN_STATEMENT, children=[p[9]]))
 
 def p_void_function_def(p):
-    ''' stat : VOID NAME '(' formal_param_list ')' '{' stat_list_wrapper RETURN NEWLINE '}'
+    ''' stat : NONE NAME '(' formal_param_list ')' '{' stat_list_wrapper RETURN NEWLINE '}'
     '''
     parameter_pairs = []
     if p[4] is not None:
         for decl in p[4].syn_value:
             parameter_pairs.append((decl.syn_vtype, decl.symbol))
     p[0] = Function(symbol=p[2], statements=p[7],
-                              return_type="void",
+                              return_type=v.NONE_VALUE,
                               parameter_pairs=parameter_pairs,
                               return_value=Node(vtype=v.RETURN_STATEMENT))
 
@@ -613,7 +613,7 @@ def p_string(p):
 
 def p_none(p):
     ''' pow : NONE '''
-    p[0] = Node(vtype=v.NONE_VALUE)
+    p[0] = Node(vtype=v.NONE_VALUE, syn_vtype=v.NONE_VALUE)
 
 def p_id(p):
     ''' pow : NAME non_empty_brack '''

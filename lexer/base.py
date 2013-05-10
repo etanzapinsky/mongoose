@@ -33,7 +33,6 @@ class Lexer:
         'agent' : 'AGENT',
         'repeat' : 'REPEAT',
         'return' : 'RETURN',
-        'void' : 'VOID',
         'none' : 'NONE',
     }
 
@@ -81,8 +80,9 @@ class Lexer:
         return t
 
     def t_COMMENT(self, t):
-        r'\#.*'
-        pass
+       r'\#.*'
+       pass
+    #t_ignore_COMMENT = r'\#.*'
 
     def t_VBOOLEAN(self, t):
         r'true|false'
