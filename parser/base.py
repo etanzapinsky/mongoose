@@ -301,7 +301,7 @@ def p_function_def(p):
     parameter_pairs = []
     if p[4] is not None:
         for decl in p[4].syn_value:
-            parameter_pairs.append((decl.children[0].syn_vtype, decl.children[1].symbol))
+            parameter_pairs.append((decl.syn_vtype, decl.symbol))
     p[0] = Function(symbol=p[2], statements=p[7],
                               return_type=p[1].syn_vtype,
                               parameter_pairs=parameter_pairs)
