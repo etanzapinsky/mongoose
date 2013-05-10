@@ -145,8 +145,27 @@ class Function(Node):
             pp = ''
         return '{} {} {}'.format(super.__str__(self.vtype), rt, pp)
 
-
+from operator import mul
 class List(Node):
-    def __init__(self, return_type, symbol, parameter_pairs, statements):
+    def __init__(self, symbol, depths, syn_vtype):
         '''Called when a list is defined.'''
-        Node.__init__(self, vtype=v.LIST_TYPE)
+        Node.__init__(self, vtype=v.LIST_TYPE, symbol=symbol, syn_vtype=syn_vtype )
+        self.depths = depths
+
+        # Generate the internal list of the correct size
+        length = reduce(mul, depths, 1)
+        self.data = [None for i in range(length)]
+
+    def _calc_index(self, indexes):
+        r = len(self.data)
+        i = 0
+        for (d, n) in zip(indexes, self.depths):
+            r = r / n
+            i += r * d
+        return i
+
+    def store(self, value, indexes):
+        self.data[self._calc_index(indexes)] = value
+        
+    def get(self, indexes):
+        return self.data[self._calc_index(indexes)]
