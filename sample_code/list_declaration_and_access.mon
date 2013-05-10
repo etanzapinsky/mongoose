@@ -1,7 +1,9 @@
 environment{
 	int[2][3] x
 	x[1][1] = 1
-	print(x[1][1])
+    int y
+    y = x[1][1]
+	print(y)
 
 	action{
 	}

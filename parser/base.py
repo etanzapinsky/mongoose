@@ -434,10 +434,13 @@ def p_stat_assign(p):
     '''stat : NAME non_empty_brack '=' expr    
     '''
     kids = []
-    if p[2].depths:  # do something else with lists?
+    if p[2].vtype == v.BRACKET_ACCESS:
         kids = [p[2]]
+        if p[2].syn_value == -1:
+            kids = [Node(vtype='?2')]
     id_node = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)
-    p[0] = Node(vtype=v.ASSIGNMENT, children=[id_node, p[4]]) 
+    expression_node = p[4]
+    p[0] = Node(vtype=v.ASSIGNMENT, children=[id_node, expression_node]) 
 
 def p_stat_decl_assign(p):
     '''stat : decl '=' expr                                                                                                  
@@ -562,8 +565,8 @@ def p_string(p):
 def p_id(p):
     ''' pow : NAME non_empty_brack '''
     kids = []
-    if p[2].depths:
-        kids = p[2]
+    if p[2].vtype == v.BRACKET_ACCESS:
+        kids = [p[2]]
     p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)
 
 def p_expr_paren(p):
@@ -643,7 +646,10 @@ def p_list_declaration(p):
     # merge resolution may be incorrect @chris
     symbol = p[2]
     id_node = Node(vtype=v.IDENTIFIER, symbol=symbol)
-    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].vtype, symbol=symbol, children=[p[1], id_node])
+    kids = [id_node]
+    if p[1].vtype == v.LIST_TYPE:
+        kids.append(p[1])
+    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].vtype, symbol=symbol, children=kids)
     backend.scopes[-1][symbol] = None
 
 def p_list_type(p):
@@ -690,7 +696,8 @@ def p_non_empty_bracket(p):
             kids.extend(p[4].children)
         p[0] = Node(vtype=v.BRACKET_ACCESS, children=kids, syn_value=[x.syn_value for x in kids])
     else:  
-        p[0] = Node(vtype=v.BRACKET_ACCESS, syn_value = -1)
+        # non_empty_bracket isn't always non-empty :/
+        p[0] = Node(vtype=v.EMPTY_BRACKET, syn_value = -1)
 
 ########################
 ## PRIMITIVE KEYWORDS ##
