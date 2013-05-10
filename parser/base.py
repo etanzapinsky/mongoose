@@ -398,12 +398,12 @@ def p_actual_param_comma(p):
 def p_while(p):
     ''' stat : WHILE '(' expr ')' '{' stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.WHILE, children=[p[3], p[6]])
+    p[0] = Conditional(vtype=v.WHILE, expression=p[3], statements=p[6])
 
 def p_repeat(p):
     ''' stat : REPEAT '(' expr ')' '{' stat_list_wrapper '}' 
     '''
-    p[0] = Node(vtype=v.REPEAT, children=[p[3],p[6]])
+    p[0] = Conditional(vtype=v.REPEAT, expression=p[3], statements=p[6])
 
 #TODO: no newline allowed before elif/else, maybe fix this
 def p_if(p):

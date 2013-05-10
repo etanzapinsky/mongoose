@@ -190,6 +190,7 @@ class Conditional(Node):
             backend.walk_ast(self.statements)
             backend.scopes.pop()
             return
+
         backend.walk_ast(self.expression)
         if self.expression.syn_value:
             backend.scopes.append({})
@@ -214,6 +215,37 @@ class Conditional(Node):
             backend.scopes.pop()
         elif self.next_conditional:
             self.next_conditional.execute_pif(prob - self.expression.syn_value)
+
+    def execute_while(self):
+        if not self.expression:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            return
+
+        backend.walk_ast(self.expression)
+        expr = self.expression.syn_value
+        while expr:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            backend.walk_ast(self.expression)
+            expr = self.expression.syn_value
+
+    def execute_repeat(self):
+        if not self.expression:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            return
+
+        backend.walk_ast(self.expression)
+        if self.expression.syn_vtype != v.INTEGER_VALUE:
+            raise TypeError, "Expression in repeat statement has to be of type int"
+        for i in xrange(self.expression.syn_value):
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
 
     def __str__(self):
         return '{}:'.format(self.vtype)

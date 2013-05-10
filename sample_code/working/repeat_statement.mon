@@ -1,6 +1,7 @@
-repeat(foo()){
-
-int x	
+int i = 0
+repeat(2+3) {
+    print(i)
+    i = i + 1
 }
 
 environment{ 

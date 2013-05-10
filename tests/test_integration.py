@@ -71,4 +71,23 @@ def test_pif_pelif_pelse():
         if diff > 0.5*v:
             assert False
     assert True
-        
+
+def test_while_loop():
+    expected = '''0
+1
+2
+3
+4
+'''
+    output = run('sample_code/working/while_loops.mon')
+    assert output == expected
+
+def test_while_loop():
+    expected = '''0
+1
+2
+3
+4
+'''
+    output = run('sample_code/working/repeat_statement.mon')
+    assert output == expected
