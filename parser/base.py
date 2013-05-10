@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import lexer
-from tree import Node, Function
+from tree import Node, Function, Conditional
 import vtypes as v
 import re
 from backend import backend
@@ -382,14 +382,22 @@ def p_repeat(p):
 def p_if(p):
     ''' stat : IF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs opt_else  
     '''
-    p[0] = Node(vtype=v.IF, children=[p[3],p[6],p[8],p[9]])
+    next_conditional = p[8] if p[8] else p[9]
+    if next_conditional != p[9]:
+        nc = p[8].next_conditional
+        if nc:
+            while nc.next_conditional:
+                nc = nc.next_conditional
+            # we've got nc pointing at the last elif let's attach the else
+            nc.next_conditional = p[9]
+    p[0] = Conditional(vtype=v.IF, statements=p[6], expression=p[3], next_conditional=next_conditional)
 
 def p_opt_elifs(p):
     ''' opt_elifs : epsilon
-                  | opt_elifs ELIF '(' expr ')' '{' stat_list_wrapper '}' 
+                  | ELIF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs
     ''' 
     if len(p) == 9:
-        p[0] = Node(vtype=v.ELIF, children=[p[1],p[4],p[7]])
+        p[0] = Conditional(vtype=v.ELIF, statements=p[6], expression=p[3], next_conditional=p[8])
     else: #len(p)==2
         p[0] = None
 
@@ -398,7 +406,7 @@ def p_opt_else(p):
                  | ELSE '{' stat_list_wrapper '}'
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.ELSE, children=[p[3]]) 
+        p[0] = Conditional(vtype=v.ELSE, statements=p[3])
     else:
         p[0] = None
 
@@ -556,7 +564,8 @@ def p_float(p):
 
 def p_bool(p):
     ''' pow : VBOOLEAN '''
-    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_vtype=v.BOOLEAN_VALUE, syn_value=bool(p[1]))#p[1], see p_integer    
+    boolean = True if p[1] == 'true' else False
+    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_vtype=v.BOOLEAN_VALUE, syn_value=boolean)#p[1], see p_integer
 
 def p_string(p):
     ''' pow : VSTRING '''
@@ -669,6 +678,7 @@ def p_expr_bracket(p):
     kids=[p[2],]
     if p[4]:
         kids.extend(p[4].children)
+    import bpdb; bpdb.set_trace()
     p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[x.syn_value for x in kids] )
         
 def p_no_expr_bracket(p):

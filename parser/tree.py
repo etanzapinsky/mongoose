@@ -169,3 +169,26 @@ class List(Node):
         
     def get(self, indexes):
         return self.data[self._calc_index(indexes)]
+
+class Conditional(Node):
+    def __init__(self, vtype, statements, expression=None, next_conditional=None):
+        '''
+        Used when creating any type of conditional
+        '''
+        self.statements = statements
+        self.expression = expression
+        self.next_conditional = next_conditional
+        Node.__init__(self, vtype=vtype)
+
+    def execute(self):
+        if not self.expression:
+            backend.walk_ast(self.statements)
+            return
+        backend.walk_ast(self.expression)
+        if self.expression.syn_value:
+            backend.walk_ast(self.statements)
+        elif self.next_conditional:
+            self.next_conditional.execute()
+
+    def __str__(self):
+        return '{}:'.format(self.vtype)
