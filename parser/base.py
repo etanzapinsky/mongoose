@@ -346,7 +346,10 @@ def p_formal_param_comma(p):
 def p_function_call(p):
     ''' function_call : NAME '(' actual_param_list ')'
     '''
-    p[0] = Node(vtype=v.FUNCTION_CALL, symbol=p[1], children=p[3].children)
+    if p[3] is not None:
+        p[0] = Node(vtype=v.FUNCTION_CALL, symbol=p[1], children=p[3].children)
+    else:
+        p[0] = Node(vtype=v.FUNCTION_CALL, symbol=p[1])
 
 def p_actual_param(p):
     ''' actual_param : expr
@@ -740,7 +743,7 @@ def p_non_empty_bracket(p):
 def p_type_int(p):
     '''type : INTEGER 
     '''        
-    p[0] = Node(vtype=v.INT_KEYWORD, syn_vtype=v.INTEGER_VALUE) ####using syn_value #<BASIC_TYPE>_KEYWORD
+    p[0] = Node(vtype=v.INT_KEYWORD, syn_vtype=v.INTEGER_VALUE)
 
 def p_type_float(p):
     '''type : FLOAT                                                                                                    
@@ -756,6 +759,11 @@ def p_type_boolean(p):
     '''type : BOOLEAN
     '''
     p[0] = Node(vtype=v.BOOLEAN_KEYWORD, syn_vtype=v.BOOLEAN_VALUE)
+
+def p_type_agent(p):
+    ''' type : NAME 
+    '''
+    p[0] = Node(vtype=v.AGENT_TYPE_KEYWORD, syn_vtype=v.AGENT_VALUE)
 
 #def p_function(p):
     #'expr : NAME LPAREN expr RPAREN'
