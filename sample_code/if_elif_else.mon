@@ -1,18 +1,14 @@
-if(7>=5){
-  int x = 4
-  if(false and false){
-     int[] r  	   
-  } else {
-    string h = "abc"
-    boolean[8][] pp
-  }
-} elif(2!=5){
-  boolean t = true
+string success = "I should print"
+string failure = "I should not print"
+
+if (true) {
+    print(success)
+} elif (true) {
+    print(failure)
+} elif (true) {
+    print(failure)
 } else {
-  float w = 4.8
-  if(9-3>=2){
-     boolean w = false	
-  }
+    print(failure)
 }
 environment{
 	action{
