@@ -9,7 +9,9 @@ def run(path):
 
 def test_declarations_assignment():
     expected = '''7
-    3'''
+3
+3
+'''
     output = run('sample_code/working/declarations_assignments.mon')
     assert output == expected
 
