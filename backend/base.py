@@ -72,8 +72,10 @@ class Backend():
                     root.syn_vtype = val.syn_vtype
             elif root.vtype == v.DECLARATION:
                 symbols = backend.scopes[-1]
-                root.symbol = root.children[0].symbol
-                symbols[root.symbol] = None # can we do this, or do we have a none type?
+                if root.symbol in symbols.keys():
+                    raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
+                else:
+                    symbols[root.symbol] = None
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 backend.walk_ast(root.children[0]) # the declaration
                 assign(backend.scopes[-1], root.children)
