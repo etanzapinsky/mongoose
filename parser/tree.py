@@ -148,8 +148,50 @@ class Function(Node):
             pp = ''
         return '{} {} {}'.format(super.__str__(self.vtype), rt, pp)
 
-
+from operator import mul
 class List(Node):
-    def __init__(self, return_type, symbol, parameter_pairs, statements):
+    def __init__(self, symbol, depths, syn_vtype):
         '''Called when a list is defined.'''
-        Node.__init__(self, vtype=v.LIST_TYPE)
+        Node.__init__(self, vtype=v.LIST_TYPE, symbol=symbol, syn_vtype=syn_vtype )
+        self.depths = depths
+
+        # Generate the internal list of the correct size
+        length = reduce(mul, depths, 1)
+        self.data = [None for i in range(length)]
+
+    def _calc_index(self, indexes):
+        r = len(self.data)
+        i = 0
+        for (d, n) in zip(indexes, self.depths):
+            r = r / n
+            i += r * d
+        return i
+
+    def store(self, value, indexes):
+        self.data[self._calc_index(indexes)] = value
+        
+    def get(self, indexes):
+        return self.data[self._calc_index(indexes)]
+
+class Conditional(Node):
+    def __init__(self, vtype, statements, expression=None, next_conditional=None):
+        '''
+        Used when creating any type of conditional
+        '''
+        self.statements = statements
+        self.expression = expression
+        self.next_conditional = next_conditional
+        Node.__init__(self, vtype=vtype)
+
+    def execute(self):
+        if not self.expression:
+            backend.walk_ast(self.statements)
+            return
+        backend.walk_ast(self.expression)
+        if self.expression.syn_value:
+            backend.walk_ast(self.statements)
+        elif self.next_conditional:
+            self.next_conditional.execute()
+
+    def __str__(self):
+        return '{}:'.format(self.vtype)

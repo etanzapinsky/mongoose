@@ -1,6 +1,7 @@
 from parser import parser
 import sys
 import vtypes as v
+from parser import Conditional
 
 def traverse(root):
     traversePost(root, 0)
@@ -9,11 +10,20 @@ def traversePost(root, indent): #preorder
     if type(root) is str:
         print root, "is a str. oops"
 
-    if(root is not None ):
-        if(root.vtype==v.FUNCTION_DEFINITION):
+    if root is not None:
+        if root.vtype == v.FUNCTION_DEFINITION:
             #print root.__class__.__name__
             print '     '*indent + root.__str__()#vtype,':',root.return_type,':',root.symbol,':',root.parameter_pairs
             traversePost(root.statements, indent+1)
+            traversePost(root.return_value, indent+1)
+        elif isinstance(root, Conditional):
+            #print root.__class__.__name__
+            # print '     '*indent + root.__str__()#vtype,':',root.return_type,':',root.symbol,':',root.parameter_pairs
+            # traversePost(root.statements, indent+1)
+            print '     '*indent + root.__str__()
+            traversePost(root.expression, indent+1)
+            traversePost(root.statements, indent+1)
+            traversePost(root.next_conditional, indent+1)
             traversePost(root.return_value, indent+1)
         else: #regular Node
             print '     '*indent + root.__str__()#vtype,':',root.syn_value,':',root.symbol,':',root.inh_value,':',root.params

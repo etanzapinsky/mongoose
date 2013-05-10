@@ -79,6 +79,8 @@ class Backend():
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 for child in root.children:
                     backend.walk_ast(child)
+            elif root.vtype == v.IF:
+                root.execute()
             elif root.vtype == v.PROGRAM:
                 for kid in root.children:
                     backend.walk_ast(kid)
@@ -106,7 +108,7 @@ class Backend():
                 pass  # @todo
 
 
-        # return root.syn_value
+        return root.syn_value
         # How does this deal with return values? @todo
 
 backend = Backend()  # backend is a global singleton variable
