@@ -33,6 +33,7 @@ class Lexer:
         'agent' : 'AGENT',
         'repeat' : 'REPEAT',
         'return' : 'RETURN',
+        'void' : 'VOID',
     }
 
     #add 'none' later
