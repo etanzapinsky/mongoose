@@ -1,0 +1,28 @@
+int add(int x, int y) {
+    int sum
+    sum = x + y
+    print(sum)
+}
+
+add(10, 10)
+add(20, 20)
+
+int x = 5
+int y = 100
+add(x, y)
+add(y+y, y)
+
+# add(add(10, 10), x)
+
+environment{
+	populate{
+
+	}
+	action{
+	}
+}
+terminate{
+}
+
+analysis{
+}

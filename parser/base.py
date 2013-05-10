@@ -537,22 +537,23 @@ def p_pow_function_call(p):
 
 def p_integer(p):
     ''' pow : VINTEGER '''
-    p[0] = Node(vtype=v.INTEGER_VALUE, syn_value=int(p[1]))#p[1], Depends on responsibility to decide value (backend) 
+    p[0] = Node(vtype=v.INTEGER_VALUE, syn_vtype=v.INTEGER_VALUE, syn_value=int(p[1]))#p[1], Depends on responsibility to decide value (backend) 
 
 def p_float(p):
     ''' pow : VFLOAT '''
-    p[0] = Node(vtype=v.FLOAT_VALUE, syn_value=float(p[1]))#p[1], see p_integer
+    p[0] = Node(vtype=v.FLOAT_VALUE, syn_vtype=v.FLOAT_VALUE, syn_value=float(p[1]))#p[1], see p_integer
 
 def p_bool(p):
     ''' pow : VBOOLEAN '''
-    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_value=bool(p[1]))#p[1], see p_integer    
+    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_vtype=v.BOOLEAN_VALUE, syn_value=bool(p[1]))#p[1], see p_integer    
 
 def p_string(p):
     ''' pow : VSTRING '''
-    p[0] = Node(vtype=v.STRING_VALUE, syn_value=str(p[1]))#p[1], see p_integer    
+    p[0] = Node(vtype=v.STRING_VALUE, syn_vtype=v.STRING_VALUE, syn_value=str(p[1]))#p[1], see p_integer    
 
 def p_id(p):
     ''' pow : NAME non_empty_brack '''
+    # have to deal with the syn_vtype here @todo
     p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=[p[2]])
 
 def p_expr_paren(p):
@@ -569,7 +570,7 @@ def p_exprb(p):
                | b_term 
     '''         
     if len(p) == 4:
-        p[0] = Node(vtype=v.OR, children=[p[1], p[3]])
+        p[0] = Node(vtype=v.OR, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
     else:
         p[0] = p[1]
 
@@ -578,7 +579,7 @@ def p_termb(p):
                | b_factor
     '''
     if len(p) == 4:
-        p[0] = Node(vtype=v.AND, children=[p[1], p[3]])
+        p[0] = Node(vtype=v.AND, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
     else:
         p[0] = p[1]
 
@@ -587,14 +588,14 @@ def p_factorb(p):
                  | b_primary
     '''
     if len(p) == 3:
-        p[0] = Node(vtype=v.NOT, children=[p[2]])
+        p[0] = Node(vtype=v.NOT, syn_vtype=v.BOOLEAN_VALUE, children=[p[2]])
     else:
         p[0] = p[1]        
           
 def p_primaryb(p):
     ''' b_primary : b_condition   
     ''' 
-    p[0] = p[1] 
+    p[0] = p[1]
 
 def p_primaryb_aexpr(p):
     ''' b_primary : arith_expr
@@ -610,17 +611,17 @@ def p_conditionb(p):
                | arith_expr NEQ arith_expr
     '''
     if p[2] == '<':
-            p[0] = Node(vtype=v.LESS_THAN, children=[p[1], p[3]]) 
+            p[0] = Node(vtype=v.LESS_THAN, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]]) 
     elif p[2] == '>':
-            p[0] = Node(vtype=v.GREATER_THAN, children=[p[1], p[3]])
+            p[0] = Node(vtype=v.GREATER_THAN, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
     elif p[2] == '>=':
-            p[0] = Node(vtype=v.GREATER_THAN_EQUAL, children=[p[1], p[3]])
+            p[0] = Node(vtype=v.GREATER_THAN_EQUAL, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
     elif p[2] == '<=':
-            p[0] = Node(vtype=v.LESS_THAN_EQUAL, children=[p[1], p[3]])
+            p[0] = Node(vtype=v.LESS_THAN_EQUAL, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
     elif p[2] == '==':
-            p[0] = Node(vtype=v.EQUAL, children=[p[1], p[3]])
+            p[0] = Node(vtype=v.EQUAL, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
     elif p[2] == '!=':
-            p[0] = Node(vtype=v.NOT_EQUAL, children=[p[1], p[3]])
+            p[0] = Node(vtype=v.NOT_EQUAL, syn_vtype=v.BOOLEAN_VALUE, children=[p[1], p[3]])
 
 ################
 ## LIST TYPES ##
@@ -721,4 +722,4 @@ def p_error(p):
 parser = yacc.yacc()
 
 if __name__ == '__main__':
-    pass    
+    pass

@@ -90,7 +90,6 @@ class Function(Node):
 
     def execute(self, *args):
         backend.scopes.append(self._bind_params(*args))
-        import bpdb; bpdb.set_trace()
         r = backend.walk_ast(self.statements)
         backend.scopes.pop()
         return r
@@ -101,10 +100,10 @@ class Function(Node):
             raise Exception, "InvalidParameters (incorrect number of parameters)"
 
         # typechecking
-        for arg, (vtype, symbol) in zip(args, self.parameter_pairs):
-            if arg.vtype != vtype:
-                raise TypeError, "Invalid parameter type"
-            bindings[symbol] = arg.syn_value
+        for arg, (syn_vtype, symbol) in zip(args, self.parameter_pairs):
+            if arg.syn_vtype != syn_vtype:
+                raise TypeError, "Invalid parameter of type '{}'".format(arg.syn_vtype)
+            bindings[symbol] = arg
         return bindings
 
     def __eq__(self, other):

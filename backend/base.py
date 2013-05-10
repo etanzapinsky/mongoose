@@ -1,6 +1,5 @@
 from stdlib import assign, boolean_ops, equality_ops, first_order_ops, builtins
 import vtypes as v
-import ipdb  # for debugging
 
 class Backend():
 
@@ -40,30 +39,37 @@ class Backend():
 
         if root != None:
             if root.vtype == v.FUNCTION_DEFINITION:
-                root.syn_value = evaluate_function(f=root, scope=scope,
-                                                   args=[child.syn_value for child in root.children])
-            # currently a naive implementation of function call
+                scope[root.symbol] = root
+                # root.syn_value = evaluate_function(f=root, scope=scope,
+                #                                    args=[child.syn_value for child in root.children])
             elif root.vtype == v.FUNCTION_CALL:
                 func = find(root.symbol)
+                if not func:
+                    raise NameError, "Function '{}' does not exist".format(root.symbol)
                 # evaluating expressions passed into function before calling function
                 for child in root.children:
                     backend.walk_ast(child)
-                if(func):
-                    root.syn_value = func.execute(*root.children)
+                root.syn_value = func.execute(*root.children)
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
                 root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
+                root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype in boolean_ops:
                 root.syn_value = boolean_ops[root.vtype](*[child.syn_value for child in root.children])
+                root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype in equality_ops:
                 root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
+                root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype == v.ASSIGNMENT:
                 for child in root.children:
                     backend.walk_ast(child)
                 assign(backend.scopes[-1], root.children)  # scopes modified via side effect
             elif root.vtype == v.IDENTIFIER:
-                root.syn_value = find(root.symbol)
+                val = find(root.symbol)
+                if val:
+                    root.syn_value = val.syn_value
+                    root.syn_vtype = val.syn_vtype
             elif root.vtype == v.DECLARATION:
                 symbols = backend.scopes[-1]
                 root.symbol = root.children[0].symbol

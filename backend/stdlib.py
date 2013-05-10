@@ -35,6 +35,6 @@ def assign(scope, nodes):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
     try:
-        scope[nodes[0].symbol] = nodes[1].syn_value
+        scope[nodes[0].symbol] = nodes[1]
     except KeyError:
         raise 'Varible does not exist'
