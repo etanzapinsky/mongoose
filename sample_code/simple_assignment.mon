@@ -1,0 +1,16 @@
+environment{
+	int x
+	x = 3
+	print(x)
+	int x = 4
+	print(x)
+	action{
+	}
+	populate{		
+	}
+}
+
+terminate{
+}
+analysis{
+}
