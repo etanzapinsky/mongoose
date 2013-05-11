@@ -6,11 +6,8 @@ y = x[1][1]
 print(y)
 
 # x[1][1] = 'true'  # this SHOULD raise a TypeError
-print(x[1][1])  # should print 1
-
-# this DOES NOT WORK --> update the spec
-# int[2][3] q = x
-# print(x[1][1])
+# should print 1
+print(x[1][1])
 
 environment{
 	action{
