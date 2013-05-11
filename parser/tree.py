@@ -1,5 +1,6 @@
 import random
 import vtypes as v
+from default_values import default_values
 from backend import backend
 
 class Node:
@@ -158,7 +159,8 @@ class List(Node):
 
         # Generate the internal list of the correct size
         length = reduce(mul, depths, 1)
-        self.data = [None for i in range(length)]
+        default_value = default_values[syn_vtype]
+        self.data = [default_value for i in range(length)]
 
     def _calc_index(self, indexes):
         r = len(self.data)
@@ -169,10 +171,17 @@ class List(Node):
         return i
 
     def store(self, value, indexes):
-        self.data[self._calc_index(indexes)] = value
+        '''The list stores only the syn_value, but relies upon the syn_vthpe for type checking.'''
+        if value.vtype == self.syn_vtype:
+            self.data[self._calc_index(indexes)] = value.syn_value
+        else:
+            raise TypeError, "Cannot store '{}'-typed value in '{}'-typed list.".format(value.vtype, self.syn_vtype)
         
     def get(self, indexes):
         return self.data[self._calc_index(indexes)]
+
+    def __str__(self):
+        return "<<{}> list: dimensions={} values={}>".format(self.syn_vtype, self.depths.__str__(), self.data.__str__())
 
 class Conditional(Node):
     def __init__(self, vtype, statements, expression=None, next_conditional=None):
