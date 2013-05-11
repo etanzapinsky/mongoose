@@ -80,7 +80,9 @@ class Backend():
                 scp = find(root.symbol)
                 if scp:
                     raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
-                scope[root.symbol] = None
+                from parser import Node
+                none_obj = Node(vtype=root.vtype, syn_vtype=root.syn_vtype, syn_value=None)
+                scope[root.symbol] = none_obj
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 for child in root.children:
                     backend.walk_ast(child)
