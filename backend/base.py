@@ -10,11 +10,14 @@ class Backend():
 
     def walk_ast(self, root, siblings=None, parent=None):
 
+        # this function returns the scope of the symbol requested, practically
+        # this means that we cant redefine variables that exist already in the
+        # scope. e.g. if we defined `int x` at the global scope, at no more local
+        # scope can we redefine `int x`
         def find(symbol):
             for scp in reversed(backend.scopes):
-                val = scp.get(symbol)
-                if val:
-                    return val
+                if symbol in scp.keys():
+                    return scp
             return None
         # not popping b/c we only pop when *destroying* scope
         # (here we are just modifying)
@@ -43,13 +46,13 @@ class Backend():
                 # root.syn_value = evaluate_function(f=root, scope=scope,
                 #                                    args=[child.syn_value for child in root.children])
             elif root.vtype == v.FUNCTION_CALL:
-                func = find(root.symbol)
-                if not func:
+                scp = find(root.symbol)
+                if not scp:
                     raise NameError, "Function '{}' does not exist".format(root.symbol)
                 # evaluating expressions passed into function before calling function
                 for child in root.children:
                     backend.walk_ast(child)
-                root.syn_value = func.execute(*root.children)
+                root.syn_value = scp[root.symbol].execute(*root.children)
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
@@ -62,25 +65,33 @@ class Backend():
                 root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
                 root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype == v.ASSIGNMENT:
+                scp = find(root.children[0].symbol)
+                if not scp:
+                    raise NameError, "Variable '{}' does not exist".format(root.symbol)
                 for child in root.children:
                     backend.walk_ast(child)
-                assign(backend.scopes[-1], root.children)  # scopes modified via side effect
+                assign(scp, root.children)  # scopes modified via side effect
             elif root.vtype == v.IDENTIFIER:
-                val = find(root.symbol)
-                if val:
-                    root.syn_value = val.syn_value
-                    root.syn_vtype = val.syn_vtype
+                scp = find(root.symbol)
+                if scp[root.symbol]:
+                    root.syn_value = scp[root.symbol].syn_value
+                    root.syn_vtype = scp[root.symbol].syn_vtype
             elif root.vtype == v.DECLARATION:
-                symbols = backend.scopes[-1]
-                if root.symbol in symbols.keys():
+                scp = find(root.symbol)
+                if scp:
                     raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
-                else:
-                    symbols[root.symbol] = None
+                scope[root.symbol] = None
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 for child in root.children:
                     backend.walk_ast(child)
             elif root.vtype == v.IF:
-                root.execute()
+                root.execute_if()
+            elif root.vtype == v.PIF:
+                root.execute_pif()
+            elif root.vtype == v.WHILE:
+                root.execute_while()
+            elif root.vtype == v.REPEAT:
+                root.execute_repeat()
             elif root.vtype == v.PROGRAM:
                 for kid in root.children:
                     backend.walk_ast(kid)

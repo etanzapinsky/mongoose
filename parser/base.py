@@ -3,6 +3,7 @@ from lexer import lexer
 from tree import Node, Function, Conditional
 import vtypes as v
 import re
+import traceback
 from backend import backend
 from error import *
 # hack to get the tokens since they are a global variable in the lexer object
@@ -397,12 +398,12 @@ def p_actual_param_comma(p):
 def p_while(p):
     ''' stat : WHILE '(' expr ')' '{' stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.WHILE, children=[p[3], p[6]])
+    p[0] = Conditional(vtype=v.WHILE, expression=p[3], statements=p[6])
 
 def p_repeat(p):
     ''' stat : REPEAT '(' expr ')' '{' stat_list_wrapper '}' 
     '''
-    p[0] = Node(vtype=v.REPEAT, children=[p[3],p[6]])
+    p[0] = Conditional(vtype=v.REPEAT, expression=p[3], statements=p[6])
 
 #TODO: no newline allowed before elif/else, maybe fix this
 def p_if(p):
@@ -410,7 +411,7 @@ def p_if(p):
     '''
     next_conditional = p[8] if p[8] else p[9]
     if next_conditional != p[9]:
-        nc = p[8].next_conditional
+        nc = p[8]
         if nc:
             while nc.next_conditional:
                 nc = nc.next_conditional
@@ -438,25 +439,38 @@ def p_opt_else(p):
 
 #VFLOAT is non-negative
 def p_pif(p):
-    ''' stat : PIF '(' VFLOAT ')' '{' stat_list_wrapper '}' opt_pelifs opt_pelse                                               
+    ''' stat : PIF '(' pow ')' '{' stat_list_wrapper '}' opt_pelifs opt_pelse
     '''
-    p[0] = Node(vtype=v.PIF, children=[Node(vtype=v.FLOAT_VALUE, syn_value=p[3]),p[6],p[8],p[9]])
+    total_prob = p[8][1] + p[3].syn_value if p[8] else p[3].syn_value
+    if total_prob > 1:
+        raise_error(SyntaxError, "Probability of pif-pelif-pelse cannot sum to greater than 1")
+
+    next_conditional = p[8][0] if p[8] else p[9]
+    if next_conditional != p[9]:
+        nc = p[8][0]
+        if nc:
+            while nc.next_conditional:
+                nc = nc.next_conditional
+            # we've got nc pointing at the last elif let's attach the else
+            nc.next_conditional = p[9]
+    p[0] = Conditional(vtype=v.PIF, statements=p[6], expression=p[3], next_conditional=next_conditional)
 
 def p_opt_pelifs(p):
-    ''' opt_pelifs : epsilon                                                                                               
-                  | opt_pelifs PELIF '(' VFLOAT ')' '{' stat_list_wrapper '}'                                                 
+    ''' opt_pelifs : epsilon
+                   | PELIF '(' pow ')' '{' stat_list_wrapper '}' opt_pelifs
     '''
     if len(p) == 9:
-        p[0] = Node(vtype=v.PELIF, children=[p[1],Node(vtype=v.FLOAT_VALUE, syn_value=p[4]),p[7]])
-    else: #len(p)==2                                                                                                      
+        cond = p[8] if p[8] else (None, 0)
+        p[0] = (Conditional(vtype=v.PELIF, statements=p[6], expression=p[3], next_conditional=cond[0]), p[3].syn_value+cond[1])
+    else: #len(p)==2
         p[0] = None
 
 def p_opt_pelse(p):
     ''' opt_pelse : epsilon   
-                 | PELSE '{' stat_list_wrapper '}'                                                                     
+                 | PELSE '{' stat_list_wrapper '}'
     '''
     if len(p) == 5:
-        p[0] = Node(vtype=v.PELSE, children=[p[3]])
+        p[0] = Conditional(vtype=v.PELSE, statements=p[3])
     else:
         p[0] = None
 
@@ -722,7 +736,6 @@ def p_expr_bracket(p):
     kids=[p[2],]
     if p[4]:
         kids.extend(p[4].children)
-    import bpdb; bpdb.set_trace()
     p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[x.syn_value for x in kids] )
         
 def p_no_expr_bracket(p):
@@ -797,6 +810,16 @@ def p_error(p):
 
 # Build the parser
 parser = yacc.yacc()
+
+# very dirty hack to get the program to terminate on an error condition;
+# before, it was continuing to run and failing somewhere later on in ply
+# because the node wasnt constructed here properly
+def raise_error(err, err_msg):
+    try:
+        raise err, err_msg
+    except err:
+        traceback.print_exc()
+        exit(1)
 
 if __name__ == '__main__':
     pass

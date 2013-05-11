@@ -1,6 +1,6 @@
 
 Cell foo(Cell c) {
-     return
+     return x
 }
 
 environment{

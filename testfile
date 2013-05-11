@@ -1,24 +1,17 @@
-
-
-
-
-
-#cell x
-
-int x
-
-#serg
-#
-
+int[]  foo(string[foo()][] s, boolean x){
+   int y = 5 
+   return x
+}
 
 environment{
-    action{
-    }
-    populate{       
-    }
-}
+	populate{
 
+	}
+	action{
+	}
+}
 terminate{
 }
+
 analysis{
 }

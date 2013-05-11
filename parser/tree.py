@@ -1,4 +1,6 @@
+import random
 import vtypes as v
+from default_values import default_values
 from backend import backend
 
 class Node:
@@ -157,7 +159,8 @@ class List(Node):
 
         # Generate the internal list of the correct size
         length = reduce(mul, depths, 1)
-        self.data = [None for i in range(length)]
+        default_value = default_values[syn_vtype]
+        self.data = [default_value for i in range(length)]
 
     def _calc_index(self, indexes):
         r = len(self.data)
@@ -168,10 +171,17 @@ class List(Node):
         return i
 
     def store(self, value, indexes):
-        self.data[self._calc_index(indexes)] = value
+        '''The list stores only the syn_value, but relies upon the syn_vthpe for type checking.'''
+        if value.vtype == self.syn_vtype:
+            self.data[self._calc_index(indexes)] = value.syn_value
+        else:
+            raise TypeError, "Cannot store '{}'-typed value in '{}'-typed list.".format(value.vtype, self.syn_vtype)
         
     def get(self, indexes):
         return self.data[self._calc_index(indexes)]
+
+    def __str__(self):
+        return "<<{}> list: dimensions={} values={}>".format(self.syn_vtype, self.depths.__str__(), self.data.__str__())
 
 class Conditional(Node):
     def __init__(self, vtype, statements, expression=None, next_conditional=None):
@@ -183,15 +193,68 @@ class Conditional(Node):
         self.next_conditional = next_conditional
         Node.__init__(self, vtype=vtype)
 
-    def execute(self):
+    def execute_if(self):
         if not self.expression:
+            backend.scopes.append({})
             backend.walk_ast(self.statements)
+            backend.scopes.pop()
             return
+
         backend.walk_ast(self.expression)
         if self.expression.syn_value:
+            backend.scopes.append({})
             backend.walk_ast(self.statements)
+            backend.scopes.pop()
         elif self.next_conditional:
-            self.next_conditional.execute()
+            self.next_conditional.execute_if()
+
+    def execute_pif(self, prob=-1):
+        if prob == -1:
+            prob = random.uniform(0, 1)
+
+        if not self.expression:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            return
+
+        if self.expression.syn_value > prob:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+        elif self.next_conditional:
+            self.next_conditional.execute_pif(prob - self.expression.syn_value)
+
+    def execute_while(self):
+        if not self.expression:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            return
+
+        backend.walk_ast(self.expression)
+        expr = self.expression.syn_value
+        while expr:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            backend.walk_ast(self.expression)
+            expr = self.expression.syn_value
+
+    def execute_repeat(self):
+        if not self.expression:
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
+            return
+
+        backend.walk_ast(self.expression)
+        if self.expression.syn_vtype != v.INTEGER_VALUE:
+            raise TypeError, "Expression in repeat statement has to be of type int"
+        for i in xrange(self.expression.syn_value):
+            backend.scopes.append({})
+            backend.walk_ast(self.statements)
+            backend.scopes.pop()
 
     def __str__(self):
         return '{}:'.format(self.vtype)
