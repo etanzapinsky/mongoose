@@ -31,6 +31,22 @@ boolean_ops = {
       v.OR: lambda x, y: bool(x or y),
 }
 
+def _print_scope(scope, when):
+  print('Scope {}:'.format(when))
+  for k,v in scope.items():
+        try:
+            print('\t{}: {}'.format(k, v.__str__()))
+        except AttributeError, e:
+            print('\t{}: {}'.format(k, v))
+
+def list_assign(scope, nodes):
+    sym = nodes[0].symbol
+    val = nodes[1]
+    # _print_scope(scope, "beforelist")
+    indexes = nodes[0].children[0].syn_value
+    scope[sym].store(val,indexes)  # store() does typechecking
+    # _print_scope(scope, "afterlist")
+
 def assign(scope, nodes):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
