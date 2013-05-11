@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import lexer
-from tree import Node, Function, Conditional
+from tree import Node, Function, Conditional, List
 import vtypes as v
 import re
 import traceback
