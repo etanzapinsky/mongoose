@@ -10,6 +10,10 @@ class Backend():
 
     def walk_ast(self, root, siblings=None, parent=None):
 
+        # this function returns the scope of the symbol requested, practically
+        # this means that we cant redefine variables that exist already in the
+        # scope. e.g. if we defined `int x` at the global scope, at no more local
+        # scope can we redefine `int x`
         def find(symbol):
             for scp in reversed(backend.scopes):
                 if symbol in scp.keys():
