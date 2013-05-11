@@ -443,14 +443,8 @@ def p_pif(p):
     '''
     total_prob = p[8][1] + p[3].syn_value if p[8] else p[3].syn_value
     if total_prob > 1:
-        # very dirty hack to get the program to terminate if this tota_prob > 1,
-        # before, it was continuing to run and failing somewhere later on in ply
-        # because the node wasnt constructed here properly
-        try:
-            raise SyntaxError, "Probability of pif-pelif-pelse cannot sum to greater than 1"
-        except SyntaxError:
-            traceback.print_exc()
-            exit(1)
+        raise_error(SyntaxError, "Probability of pif-pelif-pelse cannot sum to greater than 1")
+
     next_conditional = p[8][0] if p[8] else p[9]
     if next_conditional != p[9]:
         nc = p[8][0]
@@ -816,6 +810,16 @@ def p_error(p):
 
 # Build the parser
 parser = yacc.yacc()
+
+# very dirty hack to get the program to terminate on an error condition;
+# before, it was continuing to run and failing somewhere later on in ply
+# because the node wasnt constructed here properly
+def raise_error(err, err_msg):
+    try:
+        raise err, err_msg
+    except err:
+        traceback.print_exc()
+        exit(1)
 
 if __name__ == '__main__':
     pass
