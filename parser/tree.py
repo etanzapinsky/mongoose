@@ -175,7 +175,7 @@ class List(Node):
         if value.vtype == self.syn_vtype:
             self.data[self._calc_index(indexes)] = value.syn_value
         else:
-            raise TypeError, "Cannot store '{}'-typed value in '{}'-typed list.".format(value.vtype, self.syn_vtype)
+            raise TypeError, "Cannot store value of type '{}' in list of type '{}'.".format(value.vtype, self.syn_vtype)
         
     def get(self, indexes):
         return self.data[self._calc_index(indexes)]
