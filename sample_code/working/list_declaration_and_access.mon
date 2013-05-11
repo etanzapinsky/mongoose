@@ -5,6 +5,9 @@ y = x[1][1]
 print(y)
 print(x[1][1])
 
+# this should raise a TypeError
+x[1][1] = 'true'
+
 environment{
 	action{
 	}

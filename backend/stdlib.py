@@ -34,7 +34,9 @@ boolean_ops = {
 def assign(scope, nodes):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
+    # print('pre: ', scope)
     try:
         scope[nodes[0].symbol] = nodes[1]
     except KeyError:
-        raise 'Varible does not exist'
+        raise 'Variable does not exist'
+    # print('post: ', scope)
