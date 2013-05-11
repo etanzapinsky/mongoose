@@ -42,7 +42,3 @@ def assign(scope, root):
         val = root.syn_value
 
     scope[sym] = val
-
-def declare(scope, root):
-  print('declaring')
-  
