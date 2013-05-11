@@ -31,10 +31,18 @@ boolean_ops = {
       v.OR: lambda x, y: bool(x or y),
 }
 
-def assign(scope, nodes):
+def assign(scope, root):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
-    try:
-        scope[nodes[0].symbol] = nodes[1]
-    except KeyError:
-        raise 'Varible does not exist'
+    if len(root.children) > 0:
+        sym = root.children[0].symbol
+        val = root.children[1].syn_value
+    else:
+        sym = root.symbol
+        val = root.syn_value
+
+    scope[sym] = val
+
+def declare(scope, root):
+  print('declaring')
+  
