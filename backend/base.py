@@ -1,4 +1,4 @@
-from stdlib import assign, boolean_ops, equality_ops, first_order_ops, builtins
+from stdlib import assign, list_assign, boolean_ops, equality_ops, first_order_ops, builtins
 import vtypes as v
 
 class Backend():
@@ -64,25 +64,58 @@ class Backend():
             elif root.vtype in equality_ops:
                 root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
                 root.syn_vtype = root.children[0].syn_vtype
+            
+            # Assignment
             elif root.vtype == v.ASSIGNMENT:
                 scp = find(root.children[0].symbol)
                 if not scp:
                     raise NameError, "Variable '{}' does not exist".format(root.symbol)
                 for child in root.children:
                     backend.walk_ast(child)
-                assign(scp, root.children)  # scopes modified via side effect
+                # this should have been disambiguated in the frontend
+                try:  # list assignment
+                    grandchild = root.children[0].children[0]
+                    assert grandchild.vtype == v.BRACKET_ACCESS
+                    depths = grandchild.syn_value
+                    list_assign(scp, root.children)
+                except IndexError:  # not a list assignment
+                    assign(scp, root.children)  # scopes modified via side effect
+
             elif root.vtype == v.IDENTIFIER:
                 scp = find(root.symbol)
-                if scp[root.symbol]:
+                for kid in root.children:
+                    backend.walk_ast(kid)
+
+                # list access
+                try:
+                    root.children[0].vtype == v.BRACKET_ACCESS
+                    root.syn_value = scp[root.symbol].get(indexes=root.children[0].syn_value)
+                    root.syn_vtype = root.children[0].syn_vtype
+                # simple element access
+                except IndexError: # scp[root.symbol]:
                     root.syn_value = scp[root.symbol].syn_value
                     root.syn_vtype = scp[root.symbol].syn_vtype
+
+            # Declaration
             elif root.vtype == v.DECLARATION:
                 scp = find(root.symbol)
                 if scp:
                     raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
-                from parser import Node
-                none_obj = Node(vtype=root.vtype, syn_vtype=root.syn_vtype, syn_value=None)
+                from parser import Node, List
+                # We store different Node types acc. to the root syn_vtype
+                if root.syn_vtype == v.LIST_TYPE:
+                    depths = root.children[1].depths
+                    syn_vtype = root.children[1].syn_vtype
+                    none_obj = List(symbol=root.symbol, depths=depths, syn_vtype=syn_vtype)
+                elif len(root.children) == 0:  # inside declaration assignment
+                    # sorry, this is necessary b/c of wonkiness in the AST:
+                    none_obj = Node(symbol=root.symbol, vtype=v.IDENTIFIER, syn_vtype=root.syn_vtype, syn_value=None)
+                else:
+                    assert len(root.children) > 0
+                    identifier = root.children[0]
+                    none_obj = Node(symbol=identifier.symbol, vtype=identifier.vtype, syn_vtype=root.syn_vtype, syn_value=None)
                 scope[root.symbol] = none_obj
+
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 for child in root.children:
                     backend.walk_ast(child)
@@ -108,7 +141,7 @@ class Backend():
             elif root.vtype in v.RETURN_STATEMENT:
                 root.syn_value = backend.walk_ast(root.children)
             elif root.vtype == v.BRACKET_ACCESS:
-                pass  # @todo
+                pass
             elif root.vtype == v.AGENT_LIST:
                 pass  # @todo
             elif root.vtype == v.ENVIRONMENT:
