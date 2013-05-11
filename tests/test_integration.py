@@ -59,16 +59,19 @@ I should print
     assert output == expected
 
 def test_pif_pelif_pelse():
-    expected = {'x: 3\n': 20,
-                'y: 7\n': 50,
-                'b: False\n': 30}
+    num_tests = 100
+    expected = {'x: 3\n': 0.2 * num_tests,
+                'y: 7\n': 0.5 * num_tests,
+                'b: False\n': 0.3 * num_tests}
     actual = defaultdict(int)
-    for i in range(100):
+    for i in range(num_tests):
         output = run('sample_code/working/pif_pelif_pelse.mon')
         actual[output] += 1
     for k,v in expected.iteritems():
-        diff = abs(v - actual[k])
-        if diff > 0.5*v:
+        epsilon = abs(v - actual[k]) / v
+        if epsilon > 0.5:
+            print k.strip(), ' epsilon: ', epsilon
+            print actual
             assert False
     assert True
 
