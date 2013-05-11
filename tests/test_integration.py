@@ -27,9 +27,9 @@ x + y: 20
     output = run('sample_code/working/print.mon')
     assert output == expected
 
-@raises(TypeError)
 def test_list_declaration_and_access_mon():
     expected = '''1
+1
 1
 '''
     output = run('sample_code/working/list_declaration_and_access.mon')

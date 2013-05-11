@@ -1,13 +1,12 @@
 int[2][3] x
 x[1][1] = 1
+print(x[1][1])
 int y
 y = x[1][1]
 print(y)
-print(x[1][1])
 
-# this should raise a TypeError
-# x[1][1] = 'true'
-# print(x[1][1])
+# x[1][1] = 'true'  # this SHOULD raise a TypeError
+print(x[1][1])  # should print 1
 
 environment{
 	action{
