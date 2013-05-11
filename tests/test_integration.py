@@ -31,6 +31,7 @@ def test_list_declaration_and_access_mon():
     expected = '''1
 1
 1
+1
 '''
     output = run('sample_code/working/list_declaration_and_access.mon')
     assert output == expected
