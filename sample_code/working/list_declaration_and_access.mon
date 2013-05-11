@@ -3,6 +3,7 @@ x[1][1] = 1
 int y
 y = x[1][1]
 print(y)
+print(x[1][1])
 
 environment{
 	action{
