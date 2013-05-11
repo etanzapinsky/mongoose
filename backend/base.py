@@ -77,11 +77,10 @@ class Backend():
                     root.syn_value = scp[root.symbol].syn_value
                     root.syn_vtype = scp[root.symbol].syn_vtype
             elif root.vtype == v.DECLARATION:
-                symbols = backend.scopes[-1]
-                if root.symbol in symbols.keys():
+                scp = find(root.symbol)
+                if scp:
                     raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
-                else:
-                    symbols[root.symbol] = None
+                scope[root.symbol] = None
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
                 for child in root.children:
                     backend.walk_ast(child)
