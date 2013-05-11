@@ -50,11 +50,8 @@ def list_assign(scope, nodes):
 def assign(scope, nodes):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
-    # print('pre: ', scope)
     sym = nodes[0].symbol
     val = nodes[1]
-    try:
-        scope[sym] = val
-    except KeyError:
-        raise 'Variable does not exist'
-    # print('post: ', scope)
+    # _print_scope(scope, "before")
+    scope[sym] = val
+    # _print_scope(scope, "after")
