@@ -84,7 +84,7 @@ class Function(Node):
     def __init__(self, return_type, symbol, parameter_pairs, statements, return_value):
         '''Called when a function is defined.
         vtype checking is done in the frontend (parser)'''
-        Node.__init__(self, vtype=v.FUNCTION_DEFINITION)
+        Node.__init__(self, vtype=v.FUNCTION_DEFINITION, syn_vtype=return_type)
         self.return_type = return_type
         self.symbol = symbol
         self.statements = statements
@@ -182,7 +182,7 @@ class List(Node):
             raise TypeError, "Cannot store value of type '{}' in list of type '{}'.".format(value.vtype, self.syn_vtype)
         
     def get(self, indexes):
-        return self.data[self._calc_index(indexes)]
+        return Node(vtype=self.syn_vtype, syn_vtype=self.syn_vtype, syn_value=self.data[self._calc_index(indexes)])
 
     def __str__(self):
         return "<<{}> list: dimensions={} values={}>".format(self.syn_vtype, self.depths.__str__(), self.data.__str__())
@@ -268,7 +268,7 @@ class Agent(Node):
         '''
         Called when an agent is defined
         '''
-        Node.__init__(self, vtype=v.AGENT)
+        Node.__init__(self, vtype=v.AGENT, syn_vtype=v.AGENT_VALUE)
         self.symbol = symbol
         self.statements = statements
         self.create = create

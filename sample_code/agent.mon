@@ -31,10 +31,12 @@ environment {
         A a = A()
         B b = B(5)
         A c = A()
-        int x = 1
+        int y = 1
     }
 
     action {
+        print("a.x:", a.x)
+        print("b.n:", b.n )
     }
 }
 

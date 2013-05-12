@@ -119,8 +119,9 @@ class Backend():
                     if (iden.vtype == v.IDENTIFIER):
                         backend.walk_ast(iden)
                         root.children[0].syn_value = [iden.syn_value]
-                    root.syn_value = scp[root.symbol].get(indexes=root.children[0].syn_value)
-                    root.syn_vtype = root.children[0].syn_vtype
+                    item = scp[root.symbol].get(indexes=root.children[0].syn_value)
+                    root.syn_value = item.syn_value
+                    root.syn_vtype = item.syn_vtype
                 # simple element access
                 except IndexError: # scp[root.symbol]:
                     root.syn_value = scp[root.symbol].syn_value
@@ -173,8 +174,9 @@ class Backend():
             elif root.vtype == v.BRACKET_ACCESS:
                 pass
             elif root.vtype == v.AGENT_LIST:
-                for child in root.children:
-                    backend.walk_ast(child)
+                if root.children:
+                    for child in root.children:
+                        backend.walk_ast(child)
             elif root.vtype == v.AGENT:
                 backend.scopes[-1][root.symbol] = root
             elif root.vtype == v.ENVIRONMENT:
@@ -196,6 +198,16 @@ class Backend():
             elif root.vtype == v.WEIGHTED_VALUE_STAT:
                 root.syn_value = weighted_value([k.children[0].syn_value for k in root.children ],
                                                 [k.children[1] for k in root.children])
+            elif root.vtype == v.IMPLICIT_PARAM:
+                obj = root.children[0]
+                inner = root.children[1]
+                scp = backend.find(obj.symbol)
+                val_scp = scp[obj.symbol].scope
+                val = val_scp[inner.symbol]
+                backend.scopes.append(val_scp)
+                # backend.walk_ast(val)
+                root.syn_value = val.syn_value
+                backend.scopes.pop()
             else:
                 pass  # @todo
 
