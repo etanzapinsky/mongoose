@@ -74,9 +74,9 @@ In Mongoose, strings can be denoted by either ‘single quotes’ or “double q
 The basic types that Mongoose supports are signed ints and floating point numbers, booleans and strings. Note that ints and floats are only signed and not unsigned. The size of these primitive types is platform-specific.
 
 ### Collection Types
-Mongoose has one primary collection type: list. Mongoose lists are static — in other words, their type (e.g. boolean, int, float, list and object) and size are fixed at the time of their declaration (and do not change). Lists are declared with square brackets after the list type. For example, int[2] is a list of two integers, and float[3][2] is a 3x2 multi-dimensional list of floating point numbers.
+Mongoose has one primary collection type: list. Mongoose lists are static — in other words, their type (e.g. `boolean`, `int`, `float`, `list` and `object`) and size are fixed at the time of their declaration (and do not change). Lists are declared with square brackets after the list type. For example, `int[2]` is a list of two integers, and `float[3][2]` is a 3x2 multi-dimensional list of floating point numbers.
 
-One important note is that there can be multi-dimensional lists, i.e. a list of lists, etc, but a list can only contain either another list or the base type of the list. For example, int[][] or float[][][].
+Lists can be uni-dimensional (e.g. `int[n]`) or multi-dimensional (e.g. `float[3][5][7]`). Both uni-dimensional and multi-dimensional lists may contain values or objects of only one type.
 
 ### Functions
 

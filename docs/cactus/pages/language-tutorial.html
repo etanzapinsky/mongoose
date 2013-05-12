@@ -37,7 +37,7 @@ program for learning any programming language.
 
 This program prints “hello, world”:
 
-environment^[[a]](#cmnt1)^{
+<pre><code>environment^[[a]](#cmnt1)^{
 
 none populate(){
 
@@ -53,7 +53,7 @@ none action(){
 
 terminate{}^[[b]](#cmnt2)^
 
-analysis{}
+analysis{}</code></pre>
 
 The code for this program is placed in a file whose name ends with .mon.
 To then run this program you must have the python interpreter 2.7, PLY
@@ -97,7 +97,7 @@ characters that are included in the passed string.
 
 Here is a modified program with comments (not to be included in actual
 program):
-
+<pre><code>
 environment{ \#start of environment block
 
 populate(){ \#start of populate function definition
@@ -121,6 +121,7 @@ none action(){
 terminate^[[c]](#cmnt3)^{} \#to be discussed later
 
 analysis{}
+</code></pre>
 
 2. Declarations, Variables and Statements
 =========================================
@@ -139,7 +140,7 @@ Our program will build off the work done in the previous section. The
 populate function will contain that initialization code for the game’s
 initial configuration. We will be introducing comments, variables,
 declaration, assignment and objects.
-
+<pre><code>
 \# This program is phase 1 of 3 of building Game of Life simulation
 
 agent Cell{
@@ -185,28 +186,20 @@ none action() {
 terminate{}
 
 analysis{}
-
+</code></pre>
 The first line of this program that starts with a hash symbol is a comment. Any string of characters that is prepended by an un-escaped hash symbol is ignored by Mongoose’s translator. Its sole purpose is for human readability - not machine interpretation.
-================================================================================================================================================================================================================================================================
-
 Like C and Java, variables in Mongoose must be declared. A variable is sequence of strings that represents a location in memory. Mongoose enforces that variables be declared to be of a certain type. The programmer must define what type a variable is. In this example, the variables i and j are declared to be of type int. Types of variables also include float, bool and string. Further down, my\_Cells is declared to be of type Cell[1]. In addition to this being a type declaration it is also a list creation. Cell[1] sets aside space for a list, where each element in the list is of type Cell and the length of the list is currently 1.
-============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
-
 Before we get to objects, let us understand what assignment is. An assignment statement is a special kind of statement that either initializes a variable or modifies a variable to hold a different value. The word self is used when an agent is accessing or mutating its own instance variables. Here the agent is setting its i and j values. self is effectively a reference to oneself. The statements:
-==============================================================================================================================================================================================================================================================================================================================================================================================================
-
+<pre><code>
 self.i = r
 
 self.j = c
-
+</code></pre>
 are assignment statements. Since the variables i and j have not previously been explicitly set by the programmer, these assignment statements are, more specifically, initialization statements. Note that individual statements are terminated by newlines.
-============================================================================================================================================================================================================================================================
-
 The line:
-=========
-
+<pre><code>
 my\_Cells[0] = Cell(4,4)
-
+</code></pre>
 is an assignment statement. my\_Cells is being assigned to an agent
 instance of type Cell. By instantiation we mean that the function call
 Cell() is not a regular function. Like a regular function it can include
@@ -216,17 +209,14 @@ reference. This reference contains the state of the object as well as
 its methods. Thus after this assignment my\_Cells will hold an object
 reference to an agent. This agent’s values are i and j and its methods
 are its constructor and destroy() and action().
-
 You may have noticed that the function definitions for destroy and action are left empty. Although they are empty, they are required by Mongoose and end up being useful for fully functional simulations.
-==========================================================================================================================================================================================================
 
 3. Expressions, For Statement
 =============================
-
 We will now continue to build up our Game of Life simulation by adding
 critical helper functions. These functions will be defined here but not
 called until the final program in the next phase.
-
+<pre><code>
 \#This program is Phase 2 of 3 of building Game of Life Simulation
 
 int avg(int[] elements) {
@@ -362,14 +352,14 @@ if(env.board[i][j].alive){
 num\_alive = num\_alive + 1
 
 }
-
+</code></pre>
 An if statement is a conditional statement. Only if the expression
 within the parentheses evaluates to true the code between the curly
 braces that immediately succeeds these parentheses is executed. In this
 example, if the alive field of the Cell object located at board[i][j]
 equals true, then the statement
 
-num\_alive = num\_alive + 1
+<code>num\_alive = num\_alive + 1</code>
 
 is executed. This bring us to the arithmetic expression on the right
 hand side of this assignment assignment. In our previous assignment
@@ -393,13 +383,13 @@ are still unclear based on our current understanding due to their use of
 the for statement.
 
 To discuss the for statement, we start inside the avg() function:
-
+<pre><code>
 for (int i in elements) {
 
 sum = sum + i
 
 }
-
+</code></pre>
 The goal of the avg function is to go find the average of all integer
 values that are passed in as the elements list. This requires looking at
 each element in this list. Mongoose provides a for statement that allows
@@ -411,7 +401,7 @@ to the next element in the list. Thereby, setting sum to be the total
 value of all integers in this list after the loop.
 
 The segment:
-
+<pre><code>
 for(int i in range(0, env.board.length)){
 
 for(int j in range(0, env.board[0].length)){
@@ -425,7 +415,7 @@ num\_alive = num\_alive + 1
 }
 
 }
-
+</code></pre>
 adds two new concepts to our for loop basic understanding. Firstly, we
 see the use of the range() function. As we saw in our previous example,
 the structure of a for loop is:
@@ -463,7 +453,7 @@ values. Additionally, each agent has an alive value; when this is false
 the cell is dead, and alive when true. At each transition, the cell
 becomes dead or alive or doesn’t change based on how many of its
 neighbors are alive.
-
+<pre><code>
 \#This program is Phase 3 of 3 of building Game of Life Simulation
 
 int avg(int[] elements) {
@@ -575,7 +565,7 @@ analysis {
 print(avg(env.alive))
 
 }
-
+</code></pre>
 There are four blocks in a Mongoose program: agent, environment,
 terminate and analysis.
 
@@ -671,7 +661,7 @@ people with opposite gender. Our analysis includes checking how many
 people are surrounded by 75% of their same gender, thus illustrating a
 clustering level. Our environment creates the people and randomly puts
 them in different slots.
-
+<pre><code>
 bool neighborsOpposite(float prob, Person p){
 
 int row = p.row
@@ -907,17 +897,17 @@ analysis{
 print(getSurroundCount(.75))
 
 }
-
+</code></pre>
 In the terminate block we see the use of a function without a declared
 name. This is called an anonymous function. It is used most often for
 quick and concise code segmentation and more specifically, when the code
 within that function is not useful anywhere else.
 
 In the environment block, we see a construct of the form
-
+<pre><code>
 pif( probability ) { stmt\* } pelif( probability ) { stmt\* } pelse {
 stmt\* }
-
+</code></pre>
 Due to Mongoose’s focus on coding simulations, its creators included
 this construct to make probability baked into control flow. This
 construct is a probability inspired modification on Python’s if, elif,
