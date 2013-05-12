@@ -724,7 +724,13 @@ def p_expr_bracket(p):
     kids=[p[2],]
     if p[4]:
         kids.extend(p[4].children)
-    p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=[x.syn_value for x in kids] )
+    depths = []
+    for x in kids:
+        if x.symbol:
+            depths.append(x.symbol)
+        else:
+            depths.append(x.syn_value)
+    p[0] = Node(vtype=v.BRACKET_DECL, children=kids, depths=depths)
         
 def p_no_expr_bracket(p):
     ''' brack : '[' ']' brack

@@ -145,7 +145,13 @@ class Backend():
                 from parser import Node, List
                 # We store different Node types acc. to the root syn_vtype
                 if root.syn_vtype == v.LIST_TYPE:
-                    depths = root.children[1].depths
+                    depths = []
+                    for d in root.children[1].depths:
+                        if isinstance(d, int):
+                            depths.append(d)
+                        else:
+                            scp = backend.find(d)
+                            depths.append(scp[d].syn_value)
                     syn_vtype = root.children[1].syn_vtype
                     none_obj = List(symbol=root.symbol, depths=depths, syn_vtype=syn_vtype)
                 elif len(root.children) == 0:  # inside declaration assignment
