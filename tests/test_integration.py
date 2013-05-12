@@ -130,6 +130,6 @@ def test_weighted_value():
 
     avg_value = num_total / num_tests
     epsilon = abs(expectation - avg_value) / expectation
-    assert epsilon < 0.1
+    assert epsilon < 0.5
     epsilon = abs(bin_total - 50) / bin_total
-    assert epsilon < 0.1
+    assert epsilon < 0.5
