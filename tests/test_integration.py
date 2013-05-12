@@ -144,3 +144,8 @@ I should print on turn 4
 '''
     output = run('sample_code/working/environment_terminate.mon')
     assert output == expected
+
+def test_analysis():
+    expected = 'I am being analyzed!\n'
+    output = run('sample_code/working/analysis.mon')
+    assert output == expected

@@ -18,6 +18,7 @@ environment{
 }
 
 terminate{
+    (true) {}
 }
 analysis{
 }

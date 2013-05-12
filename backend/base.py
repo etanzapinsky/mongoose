@@ -172,7 +172,7 @@ class Backend():
                 freq = root.syn_value
                 backend.invariants[freq].append(root)
             elif root.vtype == v.ANALYSIS:
-                pass  # @todo
+                self.analysis = root
             elif root.vtype == v.WEIGHTED_VALUE_STAT:
                 root.syn_value = weighted_value([k.children[0].syn_value for k in root.children ],
                                                 [k.children[1] for k in root.children])
@@ -199,7 +199,7 @@ class Backend():
                         stop = True
                         backend.walk_ast(statements)
                 if stop:
-                    # analysis
+                    backend.walk_ast(backend.analysis.children[0])
                     break
             self.turn += 1
 

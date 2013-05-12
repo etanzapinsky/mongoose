@@ -1,0 +1,18 @@
+environment{
+
+	populate{
+
+	}
+	action{
+
+	}
+
+}
+
+terminate{
+    (true){}
+}
+
+analysis{
+    print("I am being analyzed!")
+}
