@@ -2,6 +2,8 @@
 *~
 parser.out
 parsetab.py
-
 .DS_STORE
 .sublime-workspace
+docs/cactus/.build/*
+*.disabled.py
+.gitignore
