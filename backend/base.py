@@ -14,7 +14,8 @@ class Backend():
         self.populate = None
         self.action = None
         self.analysis = None
-        self.turn = 1
+        self.tick = 1
+        self.agent_list = list()
 
     # this function returns the scope of the symbol requested, practically
     # this means that we cant redefine variables that exist already in the
@@ -64,6 +65,7 @@ class Backend():
                 func = scp[root.symbol]
                 if func.vtype == v.AGENT:
                     agent = copy.deepcopy(func)
+                    self.agent_list.append(agent)
                     backend.scopes.append(agent.scope)
                     for st in agent.statements:
                         backend.walk_ast(st)
@@ -101,7 +103,7 @@ class Backend():
                 else:
                     scp = backend.find(root.children[0].symbol)
                     if not scp:
-                        raise NameError, "Variable '{}' does not exist".format(root.symbol)
+                        raise NameError, "Variable '{}' does not exist".format(root.children[0].symbol)
                     for child in root.children:
                         backend.walk_ast(child)
                     # this should have been disambiguated in the frontend
@@ -229,8 +231,13 @@ class Backend():
         backend.walk_ast(backend.populate.children[0])
         while True:
             backend.walk_ast(backend.action.children[0])
+            for agent in self.agent_list:
+                backend.scopes.append(agent.scope)
+                for child in agent.action.children:
+                    backend.walk_ast(child)
+                backend.scopes.pop()
             invariants = [i for k,v in backend.invariants.iteritems()
-                          if not self.turn % k for i in v]
+                          if not self.tick % k for i in v]
             if invariants:
                 stop = False
                 for invariant in invariants:
@@ -243,6 +250,6 @@ class Backend():
                 if stop:
                     backend.walk_ast(backend.analysis.children[0])
                     break
-            self.turn += 1
+            self.tick += 1
 
 backend = Backend()  # backend is a global singleton variable

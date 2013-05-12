@@ -1,0 +1,33 @@
+agent A {
+      int x
+      create(){
+          print("On create A")
+          x = 0
+      }
+      action {
+          x = x + 1
+      }
+      destroy {
+
+      }
+}
+
+environment {
+
+    populate {
+        A a = A()
+    }
+
+    action {
+        print("a.x:", a.x)
+    }
+}
+
+terminate {
+    (a.x >= 4) {
+        print("done")
+    }
+}
+
+analysis {
+}

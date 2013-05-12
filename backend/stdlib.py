@@ -56,7 +56,6 @@ def assign(scope, nodes):
     val = nodes[1]
     if nodes[0].syn_vtype == v.AGENT_VALUE:
         val = val.syn_value
-    # import bpdb; bpdb.set_trace()
     # _print_scope(scope, "before")
     scope[sym] = val
     # _print_scope(scope, "after")
