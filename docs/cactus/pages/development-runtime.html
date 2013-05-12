@@ -10,6 +10,9 @@ We used [pip](http://www.pip-installer.org/en/latest/) to manage the dependencie
 
 [Virtualenvwrapper](virtualenvwrapper.readthedocs.org) is a convenient collection of command-line programs and standards (e.g. one canonical .virtualenv folder) that make using Virtualenv more painless.
 
+## Management Script (manage.sh)
+When developing our project we separated our code into a logical hierarchy with there being a separate directory for the frontend, backend and tests. This was nice for code structure, but led to a dependency hell. At first we were using relative imports in the directories, but that led to the code working when running it from one directory, but not working when running from another directory. To fix all these issues we created a management script called `manage.sh`. This script added the proper directories to the python path, leading to a runtime environment that worked everytime without issues. We were then able to run the python shell, the tests, and the main mongoose program without worrying.
+
 ## Git and Github
 The distributed version control system Git (and Github, our hosted repository) were instrumental in this project. Git allows developers to work independently on one or more branches within a given repository, and makes merging commits and branches as painless as possible.
 
