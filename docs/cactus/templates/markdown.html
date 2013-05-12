@@ -1,0 +1,7 @@
+{% extends "mongoose.html" %}
+{% block content %}
+{% load markup %}
+{% filter markdown %}
+    {% block markdown %}{% endblock %}
+{% endfilter %}
+{% endblock %}
