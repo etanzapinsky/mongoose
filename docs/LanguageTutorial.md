@@ -47,7 +47,7 @@ for the “hello, world” program in Mongoose. This is a standard first
 program for learning any programming language.
 
 This program prints “hello, world”:
-<code class="codeblock"></code>
+<code class="codeblock">
 environment^[[a]](#cmnt1)^{
 
 none populate(){
