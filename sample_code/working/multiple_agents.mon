@@ -1,0 +1,50 @@
+agent A {
+      int x
+      create(){
+          print("On create A")
+          x = 0
+      }
+      action {
+          x = x + 1
+      }
+      destroy {
+
+      }
+}
+
+agent B {
+      int x
+      create(){
+          print("On create B")
+          x = 0
+      }
+      action {
+          x = one.x + 1
+      }
+      destroy {
+
+      }
+}
+
+
+environment {
+
+    populate {
+        A one = A()
+        B two = B()
+    }
+
+    action {
+        print("one.x:", one.x)
+        print("two.x:", two.x)
+    }
+}
+
+terminate {
+    (two.x >= 4) {
+        print("done")
+    }
+}
+
+analysis {
+}

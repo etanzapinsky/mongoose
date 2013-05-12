@@ -180,3 +180,17 @@ done
 '''
     output = run('sample_code/working/agent_turn.mon')
     assert output == expected
+
+def test_multiple_agents():
+    expected = '''On create A
+On create B
+one.x: 0
+two.x: 0
+one.x: 1
+two.x: 2
+one.x: 2
+two.x: 3
+done
+'''
+    output = run('sample_code/working/multiple_agents.mon')
+    assert output == expected
