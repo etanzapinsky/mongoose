@@ -11,7 +11,7 @@ Unit testing was useful for "driving out" the development of new features. These
 A future improvement would be to increase our unit test "coverage", i.e. the amount of our source code being tested.
 
 ## Integration testing
-Integration testing is the *end-to-end* testing that runs a complete source code program through the entire compiler stack. 
+Integration testing is the *end-to-end* testing that runs a complete source code program through the entire compiler stack. As we finished the implementation of more language features, we added complete Mongoose source files, reflecting the new features, to a "working" sample code directory. We also added integration tests to ensure that those files continued to work correctly when we made changes to the codebase.
 
-
+The combination of unit testing and integration testing gives us the confidence to say that if a Mongoose program is in our working directory, it actually works as intended.
 {% endblock %}
