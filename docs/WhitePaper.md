@@ -158,7 +158,7 @@ Existing Solutions
 
 Mongoose focuses on discrete event simulations, i.e. the modeling of a
 simulation as a discrete sequence of events in time. Specifically, our
-language deals with Agent-Based Modelling (ABM), where the simulation
+language deals with Agent-Based Modeling (ABM), where the simulation
 can be modeled as decentralized agents with behaviors in a common
 environment. While there are many libraries and pieces of software built
 for discrete event simulations, there are not a whole lot of languages.

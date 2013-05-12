@@ -190,7 +190,7 @@ Invariants are expressions that are checked at the end of time periods, at a fre
 ## Declarations
 
 ### Type Specifiers
-Since Mongoose is a statically typed language, objects and primitives are declared with their type preceding them, as in Java or C. Types can be either user-defined agent types, lists, or one of the primitive types available in Mongoose: int, float, bool, string or none.
+Since Mongoose is a statically typed language, objects and primitives are declared with their type preceding them, as in Java or C. Types can be either user-defined agent types, lists, or one of the primitive types available in Mongoose: int, float, boolean, string or none.
 
 ### Default Values
 The default values for various types are as follows: none for objects, the empty string for strings, 0 for ints, 0.0 for floats, and false for booleans.
