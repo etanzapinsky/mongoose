@@ -1,7 +1,8 @@
 
-
-boolean x = not true
-print(x)
+int[3] y
+y[1] = 2
+int[] x = y
+print(x[1])
 
 environment{
 	populate{
