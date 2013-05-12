@@ -2,7 +2,8 @@
 {% block markdown %}
 # Test Plan
 
-We did two levels of testing, unit testing and integration testing.
+## Testing tools
+We used the [nose test framework](https://nose.readthedocs.org/en/latest/), which provides nice test auto-discovery, to make testing as painless as possible. Another useful tool was [sniffer](https://github.com/jeffh/sniffer), which automatically re-runs the entire test each time a file is changed in the source code directory.
 
 ## Unit testing
 Unit testing was useful for "driving out" the development of new features. These are low-level, granular tests used to ensure that a feature (e.g. list access) works correctly. Individual approaches to testing differ, but one effective approach is to write a failing unit test (that reflects the desired functionality) and then implement the feature until the test passes (this is done incrementally, building upon the small improvements tested in the last unit test).
