@@ -99,6 +99,7 @@ class Backend():
                     inner = root.children[0].children[1]
                     scp = backend.find(obj.symbol)
                     val_scp = scp[obj.symbol].scope
+                    backend.walk_ast(root.children[1])
                     assign(val_scp, (inner, root.children[1]))
                 else:
                     scp = backend.find(root.children[0].symbol)
