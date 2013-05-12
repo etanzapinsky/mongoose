@@ -109,3 +109,20 @@ bar
 '''
     output = run('sample_code/working/return_statements.mon')
     assert output == expected
+
+def test_weighted_value():
+    weights = (1, 3, 7)
+    values = (5, 4, 8)
+    total = sum(weights)
+    likelihoods = ( float(weight) / total for weight in weights )
+    expectation = sum(( like * val for like, val in zip(likelihoods, values)))
+
+    num_tests = 50
+    actual_total = 0
+    for i in range(num_tests):
+        output = run('sample_code/weighted_value.mon')
+        actual_total += int(output.strip())
+    avg_value = actual_total / num_tests
+    epsilon = abs(expectation - avg_value) / expectation
+    print(epsilon)
+    assert epsilon < 0.1

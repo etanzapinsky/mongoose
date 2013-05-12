@@ -1,4 +1,5 @@
 from stdlib import assign, list_assign, boolean_ops, equality_ops, first_order_ops, builtins
+from stdlib import weighted_value
 import vtypes as v
 
 class Backend():
@@ -156,6 +157,9 @@ class Backend():
                 pass  # @todo
             elif root.vtype == v.ANALYSIS:
                 pass  # @todo
+            elif root.vtype == v.WEIGHTED_VALUE_STAT:
+                root.syn_value = weighted_value([k.children[0].syn_value for k in root.children ],
+                                                [k.children[1] for k in root.children])
             else:
                 pass  # @todo
 
