@@ -9,6 +9,14 @@ agent A {
       destroy {
 
       }
+      none print_hi() {
+          print('hi')
+          return
+      }
+      none print_num(int x) {
+          print(x)
+          return
+      }
 }
 
 agent B {
@@ -39,6 +47,8 @@ environment {
         print("a.x:", a.x)
         print("b.n:", b.n )
         print("c.n:", c.n )
+        a.print_hi()
+        a.print_num(5)
     }
 }
 

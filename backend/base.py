@@ -212,7 +212,11 @@ class Backend():
                 val_scp = scp[obj.symbol].scope
                 val = val_scp[inner.symbol]
                 backend.scopes.append(val_scp)
-                root.syn_value = val.syn_value
+                if inner.vtype == v.FUNCTION_CALL:
+                    backend.walk_ast(inner)
+                    root.syn_value = inner.syn_value
+                else:
+                    root.syn_value = val.syn_value
                 backend.scopes.pop()
             else:
                 pass  # @todo
