@@ -133,3 +133,14 @@ def test_weighted_value():
     assert epsilon < 0.5
     epsilon = abs(bin_total - 50) / bin_total
     assert epsilon < 0.5
+
+def test_environment_terminate():
+    expected = '''I print on populate
+I print on action
+I print on action
+I print on action
+I print on action
+I should print on turn 4
+'''
+    output = run('sample_code/working/environment_terminate.mon')
+    assert output == expected

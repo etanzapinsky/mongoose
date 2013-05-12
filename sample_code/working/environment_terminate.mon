@@ -1,0 +1,24 @@
+environment {
+    int x = 0
+    string on_populate = "I print on populate"
+    string on_action = "I print on action"
+    populate {
+        print(on_populate)
+    }
+
+    action {
+        print(on_action)
+        x = x + 1
+    }
+}
+
+terminate{
+    2:(x > 3) {
+        print("I should print on turn 4")
+    }
+    (false) {
+        print("I should never print")
+    }
+}
+analysis{
+}

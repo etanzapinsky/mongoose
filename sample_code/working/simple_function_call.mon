@@ -23,6 +23,7 @@ environment{
 	}
 }
 terminate{
+    (true) {}
 }
 
 analysis{

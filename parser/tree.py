@@ -62,7 +62,7 @@ class Node:
             iv = 'inh_val={}'.format(self.inh_value)
         else:
             iv = ''
-        if self.syn_value:
+        if self.syn_value != None:
             sv = 'syn_val={}'.format(self.syn_value)
         else:
             sv = ''
@@ -149,7 +149,7 @@ class Function(Node):
             pp = 'param_pairs={}'.format(self.parameter_pairs)
         else:
             pp = ''
-        return '{} {} {}'.format(super.__str__(self.vtype), rt, pp)
+        return '{} sym={} {} {}'.format('FUNCTION DEFINITION:', self.symbol, rt, pp)
 
 from operator import mul
 class List(Node):

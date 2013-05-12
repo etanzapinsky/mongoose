@@ -10,14 +10,7 @@ def main():
         exit(1)
     src = open(sys.argv[1])
     backend.walk_ast(parser.parse(src.read()))
-
-def interpret(source=None, source_path=None):
-    if source:
-        src = source
-    elif source_path:
-        # Less space-efficient, but only one return path
-        src = open(source, 'r').read()
-    return backend.walk_ast(parser.parse(src))
+    backend.run()
 
 if __name__ == '__main__':
     main()

@@ -15,7 +15,7 @@ environment{ ###yy
 }
 
 terminate{
-
+    (true) {}
 }
 
 analysis{

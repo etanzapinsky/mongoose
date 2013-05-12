@@ -1,6 +1,7 @@
 from stdlib import assign, list_assign, boolean_ops, equality_ops, first_order_ops, builtins
 from stdlib import weighted_value
 import vtypes as v
+from collections import defaultdict
 
 class Backend():
 
@@ -8,6 +9,11 @@ class Backend():
         symbols = dict()
         symbols.update(builtins)
         self.scopes = [symbols]
+        self.invariants = defaultdict(list)
+        self.populate = None
+        self.action = None
+        self.analysis = None
+        self.turn = 1
 
     def walk_ast(self, root, siblings=None, parent=None):
 
@@ -152,9 +158,19 @@ class Backend():
             elif root.vtype == v.AGENT_LIST:
                 pass  # @todo
             elif root.vtype == v.ENVIRONMENT:
-                pass  # @todo
+                for child in root.children:
+                    backend.walk_ast(child)
+            elif root.vtype == v.POPULATE:
+                backend.populate = root
+            elif root.vtype == v.ACTION:
+                backend.action = root
             elif root.vtype == v.TERMINATE:
-                pass  # @todo
+                if root.children:
+                    for child in root.children:
+                        backend.walk_ast(child)
+            elif root.vtype == v.INVARIANT_CLAUSE:
+                freq = root.syn_value
+                backend.invariants[freq].append(root)
             elif root.vtype == v.ANALYSIS:
                 pass  # @todo
             elif root.vtype == v.WEIGHTED_VALUE_STAT:
@@ -166,5 +182,25 @@ class Backend():
 
         return root.syn_value
         # How does this deal with return values? @todo
+
+    def run(self):
+        backend.walk_ast(backend.populate.children[0])
+        while True:
+            backend.walk_ast(backend.action.children[0])
+            invariants = [i for k,v in backend.invariants.iteritems()
+                          if not self.turn % k for i in v]
+            if invariants:
+                stop = False
+                for invariant in invariants:
+                    condition = invariant.children[0]
+                    statements = invariant.children[1]
+                    backend.walk_ast(condition)
+                    if condition.syn_value:
+                        stop = True
+                        backend.walk_ast(statements)
+                if stop:
+                    # analysis
+                    break
+            self.turn += 1
 
 backend = Backend()  # backend is a global singleton variable

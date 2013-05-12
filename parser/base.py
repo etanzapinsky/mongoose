@@ -208,7 +208,10 @@ def p_invariant_opt_epsilon(p):
 def p_invariant_listn(p):
     '''invariant_list : invariant_n invariant_opt
     '''
-    p[0] = Node(vtype=v.TERMINATE, children=[p[1], p[2]])
+    children = p[1]
+    if p[2]:
+        children.extend(p[2])
+    p[0] = Node(vtype=v.TERMINATE, children=children)
 
 # TODO: dont require last newline                                                                               
 def p_invariantn(p):
@@ -216,7 +219,10 @@ def p_invariantn(p):
               | epsilon                                                                                             
     '''
     if len(p) == 4:
-        p[0] = Node(vtype=v.INVARIANTS, children=[p[1],p[3]])
+        kids = [p[1]]
+        if p[3]:
+            kids.extend(p[3])
+        p[0] = kids
     else:
         p[0] = None
 
