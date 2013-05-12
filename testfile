@@ -1,6 +1,7 @@
 
 
-boolean x 
+boolean x = not true
+print(x)
 
 environment{
 	populate{

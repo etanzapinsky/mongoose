@@ -129,7 +129,7 @@ To reference an element of a list, the notation list_name[i] is used, where i is
 Function are of the form function(), or with parameters, function([type] a, [type] b, ...). 
 
 ### Unary Operators
-Mongoose uses unary operators to denote unary minus, and to denote logical negation. Unary operators associate right-to-left. The unary minus symbol is the - operator, and the logical negation symbol is the 'not' operator.
+Mongoose uses unary operators to denote unary minus, and to denote logical negation. Unary operators associate right-to-left. The unary minus symbol is the - operator, and the logical negation symbol is the `not` operator.
 
 ### Casting
 To convert between primitive types, explicit casting is allowed, and done in a way similar to how Java or C does so. To convert an expression of type A to one of type B, one would use the expression:
