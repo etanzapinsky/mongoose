@@ -14,4 +14,14 @@ We used [pip](http://www.pip-installer.org/en/latest/) to manage the dependencie
 The distributed version control system Git (and Github, our hosted repository) were instrumental in this project. Git allows developers to work independently on one or more branches within a given repository, and makes merging commits and branches as painless as possible.
 
 We strived to make our commits as granular as possible, and to write meaningful commit messages. This style of committing code facilitates *communication* about the code among the developers, and clearly communicates the *intention* of code updates.
+
+## Automated testing
+As mentioned in the [Test Plan](test-plan.html), the Nose tests framework was used to facilitate test discovery and run tests. Running tests in verbose mode with nose is as easy as:
+
+    $ ./manage.sh tests -v
+
+For those that desired, sniffer was available to rerun the test suite upon each change in the source code directory on the filesystem. Running sniffer is also easy:
+
+    $ sniffer
+
 {% endblock %}
