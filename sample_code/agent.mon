@@ -3,42 +3,44 @@ agent A {
       create(){
           print("On create A")
       }
-      action{
+      action {
 
       }
-      destroy{
+      destroy {
 
       }
 }
 
 agent B {
+      int n
       create(int num){
+          n = num
           print("On create B")
       }
-      action{
+      action {
 
       }
-      destroy{
+      destroy {
 
       }
 }
 
-environment{
+environment {
 
-	populate{
+    populate {
+        A a = A()
+        B b = B(5)
+    }
 
-	}
-
-	action{
-
-	}
+    action {
+    }
 }
 
-terminate{
+terminate {
     (true) {
         print("done")
     }
 }
 
-analysis{
+analysis {
 }

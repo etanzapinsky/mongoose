@@ -4,6 +4,7 @@ import vtypes as v
 from random import random
 
 class PrintFunction():
+    vtype = 'PRINT'
     @classmethod
     def execute(self, *args):
         print(*[a.syn_value for a in args])

@@ -60,7 +60,14 @@ class Backend():
                 # evaluating expressions passed into function before calling function
                 for child in root.children:
                     backend.walk_ast(child)
-                root.syn_value = scp[root.symbol].execute(*root.children)
+                func = scp[root.symbol]
+                if func.vtype == v.AGENT:
+                    backend.scopes.append(func.scope)
+                    func = func.create
+                    root.syn_value = func.execute(*root.children)
+                    backend.scopes.pop()
+                else:
+                    root.syn_value = func.execute(*root.children)
             elif root.vtype == v.RETURN_STATEMENT:
                 if root.children:
                     backend.walk_ast(root.children[0])
@@ -165,7 +172,7 @@ class Backend():
                 for child in root.children:
                     backend.walk_ast(child)
             elif root.vtype == v.AGENT:
-                root.scope['create'] = root.create
+                backend.scopes[-1][root.symbol] = root
                 backend.scopes.append(root.scope)
                 for st in root.statements:
                     backend.walk_ast(st)
