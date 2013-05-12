@@ -1,5 +1,6 @@
 {% extends "markdown.html" %}
-{% block markdown %}# Mongoose Reference Manual
+{% block markdown %}
+# Mongoose Reference Manual
 
 ## Introduction
 
@@ -150,21 +151,40 @@ To operate on booleans the operators `and`, `or` and `not` are used. The operato
 The conditional operators are `or` signifying logical OR, and `and` signifying logical AND. 
 
 ### Assignment Operator
-The assignment operator in Mongoose is represented by the `=` symbol. The left-hand-side variable is assigned the value on the right-hand-side, assuming the types are compatible. The assignment operator does not return a reference in Mongoose.
+The assignment operator in Mongoose is represented by the `=` symbol. The left-hand-side variable is assigned the value from the right-hand-side, assuming the types are compatible. A `TypeError` is raised if the types are incompatible. A variable must be declared before a value can be assigned to it.
+
+Thus, the following code snippet:
+
+    # int x
+    # the line above was commented out, so x is never declared
+    x = 3  # this line will now fail
+
+raises a `NameError`:
+
+    Traceback (most recent call last):
+    ...
+    NameError: Variable 'x' does not exist
+
+
+Also note that the assignment operator does not return a reference in Mongoose.
 
 ### Comma Operator
-Commas are the symbol `,` used to separate variables. This is used mainly in dealing with functions with parameters.
+Commas are the symbol `,` used to separate variables. This is used mainly in listing the parameters within a function call.
 
 ### Probabilistic Value
-A probabilistic value in Mongoose is an expression such as the following: 
-    `(3:true | 7:false)`
-This is a pipe-separated, parenthesized list of colon-separated weight-value pairs w<sub>i</sub>,v<sub>i</sub>, where each w<sub>i</sub> is a positive integer. The w<sub>i</sub> are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ w<sub>i</sub> (for all i) is the denominator of the probability).
+A probabilistic value in Mongoose is an expression such as:
 
-As another  example, one may assign the value of a die-roll as such:
+`(3:true | 7:false)`.
+
+This is a pipe-separated, parenthesized list of colon-separated weight-value pairs w<sub>i</sub>,v<sub>i</sub>, where each w<sub>i</sub> is a positive integer. The w<sub>i</sub> are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (w<sub>i</sub> is the numerator and Σ w<sub>i</sub> (for all i) is the denominator).
+
+As another example, one may assign the value of a die-roll as such:
+
 `int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)`
-If a chosen v<sub>i</sub> is not of the same type as the left-hand-side variable, it will be implicitly cast, if possible. If not, a runtime error will be thrown.
 
-A weight w<sub>i</sub> must be provided for each each value to use this construct; otherwise a syntax error will be thrown.
+If a chosen v<sub>i</sub> is not of the same type as the left-hand-side variable, a runtime `TypeError` will be thrown. The programmer is responsible for ensuring that the RHS values of the probabilistic assignment are of the correct type.
+
+A weight w<sub>i</sub> must be provided for each each value; otherwise a syntax error will be thrown.
 
 ### Terminating Expression
 Terminating expressions provide a convenient syntax for defining expressions that are run with some certain frequency, and which, if they evaluate to true, first execute some block, then end the simulation. They provide a nice syntax for testing termination conditions of the simulation, while allowing the programmer to limit the frequency of the tests, in order to avoid slowing the simulation through excessive condition testing.
@@ -218,7 +238,14 @@ An agent is initialized to an object by calling the agent class name as if you w
 When one wishes to destroy an agent, one simply calls the built-in kill() function on the agent’s reference, and its destroy() function is invoked.
 
 ### List
-Mongoose lists are dynamic, so they do not require initialization — they may be resized dynamically at runtime. Once declared, however, lists may optionally be initialized in two ways: either with defaults for the list type, or with a list literal. For example, after its declaration as int[] a, the identifier a may be initialized with the default for its type (zero, in the case of the int type): a = int[2][2] initializes a with [[0,0],[0,0]]. Alternatively, it may be initialized with a list literal: a = [[1,2],[3,4]]. Finally, the declaration may be combined into one expression with either initialization expression, such as int[][] a = int[1][1] or int[] a = [1,2,3]. These initializations are optional; in other words it is possible simply to declare a list and then begin appending to it and accessing its elements. A runtime error occurs if the program attempts to access a list element that does not exist (i.e. when the list is empty).
+Mongoose lists are static — they require declaration and may not be resized at runtime. When they are declared, lists are initialized with default values for the given list type. For example, after its declaration as `int[5] a`, the identifier `a` is initialized with 5 `int` members. A multi-dimensional list is initialized the same way: `a = int[2][2]` initializes `a` with integer values: `[[0,0],[0,0]]`. After a list is declared, it is possible to retrieve or set its member elements.
+
+An `IndexError` occurs if the program attempts to access a list element that does not exist, as in the following code snippet:
+
+    int x[2]  # the list is of length 2
+    x[0] = 3  # list indexing starts at 0
+    x[1] = 5
+    x[2] = 7  # raises an IndexError
 
 ## Statements
 
@@ -261,10 +288,10 @@ Repeat loops in Mongoose take the form `repeat (pos_int) {statement_list}`.
 The statement_list is executed pos_int times.
 
 ### Iteration: `while` Loops
-The Mongoose while loop is identical to the Python while loop (i.e. `while (expr) {statement_list}`). The expr is evaluated at the beginning of each iteration, and the `statement_list` is executed only if expr evaluates to true.
+The Mongoose while loop is identical to the Python while loop (i.e. `while (expr) {statement_list}`). The `expr` is evaluated at the beginning of each iteration, and the `statement_list` is executed only if `expr` evaluates to `true`.
 
 ### Return
-Returning from a function in Mongoose is similar to returning from a function in C or Java. The function evaluates to the returned value, and the program continues from where it left off before the function was called. Every function definition must end in a return statement. A function of return type none has a blank return value.
+Returning from a function in Mongoose is similar to returning from a function in C or Java. The function evaluates to the returned value, and the program continues from where it left off before the function was called. Every function definition must end in a return statement. Functions may be of return type `none` (equivalent to `void` in Java).
 
 ## Scope
 
@@ -274,225 +301,6 @@ The environment’s and agents’ variables and functions at the uppermost level
 
 Functions can be defined in any of the 4 main blocks of a Mongoose program, or outside of any of the 4 blocks. A function within a terminate or analysis block can only be called from within that block. The functions/blocks in the environment or agents, such as populate, create(), destroy or any user-defined functions there can be called from anywhere, via dot notation on the reference to an agent. Note that action blocks may only be called by the Mongoose interpreter. Functions defined outside any of the 4 types of blocks can be called from any of the 4 blocks as well.
 
-# Appendix A: Complete Grammar
-        action : ACTION '{' stat_list_wrapper '}'
-    
-        actual_param : expr
-    
-        actual_param_comma : ',' actual_param_list
-            | epsilon
-    
-        actual_param_list : actual_param actual_param_comma
-            | epsilon
-    
-        agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper '}'
-    
-        agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper '}'
-    
-        agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper action stat_list_wrapper '}'
-    
-        agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper create stat_list_wrapper '}'
-    
-        agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper '}'
-    
-        agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper '}'
-    
-        agent_list_wrapper : NEWLINE agent_list NEWLINE
-            | NEWLINE agent_list
-            | agent_list NEWLINE
-            | agent_list
-    
-        agent_list : agent_n agent_opt
-    
-        agent_opt : agent
-    
-        agent_opt : epsilon
-    
-        agent_n : agent NEWLINE agent_n
-            | epsilon
-    
-        analysis : ANALYSIS '{' stat_list_wrapper '}'
-    
-        arith_expr : arith_expr '+' term
-            | arith_expr '-' term
-            | term
-    
-        pow : VBOOLEAN
-    
-        cast : '(' type ')'
-    
-        weighted_val_clause_pipe : '|' weighted_val_stat 
-            | epsilon
-    
-        b_condition : arith_expr '<' arith_expr
-            | arith_expr '>' arith_expr
-            | arith_expr GEQ arith_expr
-            | arith_expr LEQ arith_expr
-            | arith_expr EQ arith_expr
-            | arith_expr NEQ arith_expr
-    
-        create : CREATE '(' formal_param_list ')' '{' stat_list_wrapper '}'
-    
-        destroy : DESTROY '{' stat_list_wrapper '}'
-    
-        brack : epsilon
-    
-        environment : ENVIRONMENT '{' stat_list_wrapper populate stat_list_wrapper action stat_list_wrapper  '}'
-    
-        environment : ENVIRONMENT '{' stat_list_wrapper action stat_list_wrapper populate stat_list_wrapper  '}'
-    
-        epsilon :
-    
-        expr : b_expr
-            | cast expr
-    
-        brack : '[' expr ']' brack
-    
-        pow : '(' expr ')'
-    
-        b_expr : b_expr OR b_term 
-            | b_term
-    
-        factor : factor '^' pow
-            | pow
-    
-        b_factor : NOT b_primary
-            | b_primary
-    
-        pow : VFLOAT
-    
-        formal_param_comma : ',' formal_param_list
-            | epsilon
-    
-        formal_param_list : decl formal_param_comma
-            | epsilon
-    
-        function_call : NAME '(' actual_param_list ')'
-    
-        stat : list_type NAME '(' formal_param_list ')' '{' stat_list_wrapper RETURN expr NEWLINE '}'
-    
-        pow : scope NAME non_empty_brack 
-            | NAME non_empty_brack
-    
-        stat : IF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs opt_else
-    
-        pow : VINTEGER
-    
-        invariant : opt_frequency '(' expr ')' '{' stat_list_wrapper '}'
-    
-        invariant_list_wrapper : NEWLINE invariant_list NEWLINE
-            | NEWLINE invariant_list
-            | invariant_list NEWLINE
-            | invariant_list
-    
-        invariant_list : invariant_n invariant_opt
-    
-        invariant_opt : invariant
-    
-        invariant_opt : epsilon
-    
-        invariant_n : invariant NEWLINE invariant_n                                     
-            | epsilon
-    
-        decl : list_type NAME
-    
-        list_type : type brack
-    
-        brack : '[' ']' brack
-    
-        non_empty_brack :  '[' expr ']' non_empty_brack
-            | epsilon
-    
-        pow : NONE
-    
-        opt_elifs : epsilon
-            | ELIF '(' expr ')' '{' stat_list_wrapper '}' opt_elifs
-    
-        opt_else : epsilon
-            | ELSE '{' stat_list_wrapper '}'
-    
-        opt_frequency : VINTEGER ':'
-            | epsilon
-    
-        opt_pelifs : epsilon
-            | PELIF '(' pow ')' '{' stat_list_wrapper '}' opt_pelifs
-    
-        opt_pelse : epsilon   
-            | PELSE '{' stat_list_wrapper '}'
-    
-        stat : PIF '(' pow ')' '{' stat_list_wrapper '}' opt_pelifs opt_pelse
-    
-        populate : POPULATE '{' stat_list_wrapper '}'
-    
-        pow : scope function_call
-            | function_call
-    
-        pow : '-' arith_expr %prec UMINUS
-    
-        b_primary : b_condition
-    
-        b_primary : arith_expr
-    
-        program : stat_list_wrapper agent_list_wrapper stat_list_wrapper environment stat_list_wrapper terminate_block stat_list_wrapper analysis stat_list_wrapper
-    
-        stat : REPEAT '(' expr ')' '{' stat_list_wrapper '}'
-    
-        scope : NAME '.'
-    
-        stat : NAME non_empty_brack '=' expr
-    
-        stat : scope NAME non_empty_brack '=' expr
-    
-        stat : decl
-    
-        stat : decl '=' expr
-    
-        stat : scope function_call 
-            | function_call
-    
-        stat_list_wrapper : NEWLINE stat_list NEWLINE
-            | NEWLINE stat_list
-            | stat_list NEWLINE
-            | stat_list
-    
-        stat_list : stat_n stat_opt
-    
-        stat_opt : stat
-    
-        stat_opt : epsilon
-    
-        stat_n : stat NEWLINE stat_n 
-            | epsilon
-    
-        pow : VSTRING
-    
-        term : term '*' factor
-            | term '/' factor
-            | term '%' factor
-            | factor
-    
-        b_term : b_term AND b_factor
-            | b_factor
-    
-        terminate_block : TERMINATE '{' invariant_list_wrapper '}'
-    
-        type : NAME
-    
-        type : BOOLEAN
-    
-        type : FLOAT
-    
-        type : INTEGER
-    
-        type : STRING
-    
-        stat : NONE NAME '(' formal_param_list ')' '{' stat_list_wrapper RETURN NEWLINE '}'
-    
-        weighted_val_clause : VINTEGER ':' pow
-    
-        weighted_val_stat : weighted_val_clause weighted_val_clause_pipe
-    
-        pow : '(' weighted_val_stat ')'
-    
-        stat : WHILE '(' expr ')' '{' stat_list_wrapper '}'
+[Appendix A: Complete Grammar](grammar.html)
+
 {% endblock %}
