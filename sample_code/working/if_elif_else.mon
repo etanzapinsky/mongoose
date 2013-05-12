@@ -1,5 +1,5 @@
-string success = "I should print"
-string failure = "I should not print"
+~string success = "I should print"
+~string failure = "I should not print"
 
 if (true) {
     print(success)

@@ -1,5 +1,5 @@
-int add(int x, int y) {
-    int sum
+int add(~int x, ~int y) {
+    ~int sum
     sum = x + y
     print(sum)
     return 0
@@ -8,8 +8,8 @@ int add(int x, int y) {
 add(10, 10)
 add(20, 20)
 
-int x = 5
-int y = 100
+~int x = 5
+~int y = 100
 add(x, y)
 add(y+y, y)
 

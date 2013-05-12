@@ -1,7 +1,7 @@
 environment {
-    int x = 0
-    string on_populate = "I print on populate"
-    string on_action = "I print on action"
+    ~int x = 0
+    ~string on_populate = "I print on populate"
+    ~string on_action = "I print on action"
     populate {
         print(on_populate)
     }

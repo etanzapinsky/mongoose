@@ -1,4 +1,4 @@
-int x = ( 1:5 | 3:4 | 7:8 )
+~int x = ( 1:5 | 3:4 | 7:8 )
 print(x)
 
 if( ( 1:true | 1:false ) ){

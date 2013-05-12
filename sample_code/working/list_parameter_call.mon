@@ -1,6 +1,6 @@
-int add(int[] l, int[] m) {
-    int sum = 0
-    int i = 0
+int add(~int[] l, ~int[] m) {
+    ~int sum = 0
+    ~int i = 0
     repeat(3) {
         sum = sum + l[i] + m[i]
         i = i + 1
@@ -8,12 +8,12 @@ int add(int[] l, int[] m) {
     return sum
 }
 
-int[3] list
+~int[3] list
 list[0] = 1
 list[1] = 2
 list[2] = 3
 
-int s = add(list, list)
+~int s = add(list, list)
 
 environment{
 	action{

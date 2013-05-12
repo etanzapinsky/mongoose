@@ -628,65 +628,6 @@ def p_weighted_val_clause(p):
     '''
     p[0] = Node(vtype=v.WEIGHTED_VALUE_CLAUSE, children=[Node(vtype=v.INTEGER_VALUE, syn_value=int(p[1])),p[3]])
 
-################################
-## PRIMITIVES AND IDENTIFIERS ##
-################################
-
-def p_pow_function_call(p):
-    ''' pow : scope function_call
-             | function_call
-    '''
-    if len(p) == 3:
-        p[0] = Node(vtype=v.IMPLICIT_PARAM, children=[p[1],p[2]])
-    else:
-        p[0] = p[1]
-
-def p_integer(p):
-    ''' pow : VINTEGER '''
-    p[0] = Node(vtype=v.INTEGER_VALUE, syn_vtype=v.INTEGER_VALUE, syn_value=int(p[1]))#p[1], Depends on responsibility to decide value (backend) 
-
-def p_float(p):
-    ''' pow : VFLOAT '''
-    p[0] = Node(vtype=v.FLOAT_VALUE, syn_vtype=v.FLOAT_VALUE, syn_value=float(p[1]))#p[1], see p_integer
-
-def p_bool(p):
-    ''' pow : VBOOLEAN '''
-    boolean = True if p[1] == 'true' else False
-    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_vtype=v.BOOLEAN_VALUE, syn_value=boolean)#p[1], see p_integer
-
-def p_string(p):
-    ''' pow : VSTRING '''
-    p[0] = Node(vtype=v.STRING_VALUE, syn_vtype=v.STRING_VALUE, syn_value=str(p[1]))#p[1], see p_integer    
-
-def p_none(p):
-    ''' pow : NONE '''
-    p[0] = Node(vtype=v.NONE_VALUE, syn_vtype=v.NONE_VALUE)
-
-def p_id(p):
-    ''' pow : scope NAME non_empty_brack 
-            | NAME non_empty_brack
-    '''
-    kids = []
-    if len(p) == 4:
-        if p[3].vtype == v.BRACKET_ACCESS:
-            kids = [p[3]]
-        p[0] = Node(vtype=v.IMPLICIT_PARAM,children=[p[1],Node(vtype=v.IDENTIFIER, symbol=p[2], children=kids)])
-    else:
-        if p[2].vtype == v.BRACKET_ACCESS:
-            kids = [p[2]]
-        p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)        
-
-def p_scope(p):
-    ''' scope : NAME '.'
-    '''
-    p[0] = Node(vtype=v.IMPLICIT_PARAM, symbol=p[1])
-    
-
-
-def p_expr_paren(p):
-    ''' pow : '(' expr ')'
-    '''
-    p[0] = p[2]
 
 #########################
 ## BOOLEAN EXPRESSIONS ##
@@ -755,18 +696,18 @@ def p_conditionb(p):
 ################
 
 def p_list_declaration(p):
-    '''decl : list_type NAME
+    ''' decl : '~' list_type NAME 
     '''
     # merge resolution may be incorrect @chris
-    symbol = p[2]
+    symbol = p[3]
     id_node = Node(vtype=v.IDENTIFIER, symbol=symbol)
     kids = [id_node]
-    if p[1].vtype == v.LIST_TYPE:
-        kids.append(p[1])
-    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[1].vtype, symbol=symbol, children=kids)
+    if p[2].vtype == v.LIST_TYPE:
+        kids.append(p[2])
+    p[0] = Node(vtype=v.DECLARATION, syn_vtype=p[2].vtype, symbol=symbol, children=kids)
 
 def p_list_type(p):
-    ''' list_type : type brack
+    ''' list_type : type  brack
     '''
     if p[2].depths:  # for lists
         p[0] = Node(vtype=v.LIST_TYPE, syn_vtype=p[1].syn_vtype, depths=p[2].depths)
@@ -843,6 +784,66 @@ def p_type_agent(p):
     #'expr : NAME LPAREN expr RPAREN'
     #func = lexer.symbol_table.get(p[1])
     #p[0] = Node(vtype='FUNCTION', syn_value=func, children=[p[3]])
+
+################################
+## PRIMITIVES AND IDENTIFIERS ##
+################################
+
+def p_pow_function_call(p):
+    ''' pow : scope function_call
+             | function_call
+    '''
+    if len(p) == 3:
+        p[0] = Node(vtype=v.IMPLICIT_PARAM, children=[p[1],p[2]])
+    else:
+        p[0] = p[1]
+
+def p_integer(p):
+    ''' pow : VINTEGER '''
+    p[0] = Node(vtype=v.INTEGER_VALUE, syn_vtype=v.INTEGER_VALUE, syn_value=int(p[1]))#p[1], Depends on responsibility to decide value (backend) 
+
+def p_float(p):
+    ''' pow : VFLOAT '''
+    p[0] = Node(vtype=v.FLOAT_VALUE, syn_vtype=v.FLOAT_VALUE, syn_value=float(p[1]))#p[1], see p_integer
+
+def p_bool(p):
+    ''' pow : VBOOLEAN '''
+    boolean = True if p[1] == 'true' else False
+    p[0] = Node(vtype=v.BOOLEAN_VALUE, syn_vtype=v.BOOLEAN_VALUE, syn_value=boolean)#p[1], see p_integer
+
+def p_string(p):
+    ''' pow : VSTRING '''
+    p[0] = Node(vtype=v.STRING_VALUE, syn_vtype=v.STRING_VALUE, syn_value=str(p[1]))#p[1], see p_integer    
+
+def p_none(p):
+    ''' pow : NONE '''
+    p[0] = Node(vtype=v.NONE_VALUE, syn_vtype=v.NONE_VALUE)
+
+def p_id(p):
+    ''' pow : scope NAME non_empty_brack 
+            | NAME non_empty_brack
+    '''
+    kids = []
+    if len(p) == 4:
+        if p[3].vtype == v.BRACKET_ACCESS:
+            kids = [p[3]]
+        p[0] = Node(vtype=v.IMPLICIT_PARAM,children=[p[1],Node(vtype=v.IDENTIFIER, symbol=p[2], children=kids)])
+    else:
+        if p[2].vtype == v.BRACKET_ACCESS:
+            kids = [p[2]]
+        p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)        
+
+def p_scope(p):
+    ''' scope : NAME '.'
+    '''
+    p[0] = Node(vtype=v.IMPLICIT_PARAM, symbol=p[1])
+    
+
+
+def p_expr_paren(p):
+    ''' pow : '(' expr ')'
+    '''
+    p[0] = p[2]
 
 def p_epsilon(p):
     '''epsilon :'''
