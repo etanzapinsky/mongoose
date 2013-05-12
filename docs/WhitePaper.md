@@ -33,15 +33,15 @@ An Agent-Based Modeling Simulation Language
 
 Group 17
 
-Mark Fischer (mlf2156)
+Mark Fischer (mlf2156) Language Guru
 
-Chris Haueter (cmh2122)
+Chris Haueter (cmh2122) System Integrator
 
-Michael Rubin (mnr2114)
+Michael Rubin (mnr2114) Project Manager
 
-Bo Xu (bx2104)
+Bo Xu (bx2104) Tester
 
-Etan Zapinsky (eez2107)
+Etan Zapinsky (eez2107) System Architect
 
 Introduction
 ------------

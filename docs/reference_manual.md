@@ -1,12 +1,5 @@
 # Mongoose Reference Manual
 
-Group 17  
-Mark Fischer (mlf2156)  
-Chris Haueter (cmh2122)  
-Michael Rubin (mnr2114)  
-Bo Xu (bx2104)  
-Etan Zapinsky (eez2107)  
-
 ## Introduction
 
 This manual describes in detail the Mongoose Programming Language, a language designed to easily facilitate creating independent-agent, discrete-event simulations. This manual serves as the standard for anyone who would like to program in Mongoose. The interpreter is built with the syntactic conventions described in this document.
