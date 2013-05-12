@@ -2,5 +2,15 @@
 {% block markdown %}
 # Test Plan
 
+We did two levels of testing, unit testing and integration testing.
+
+## Unit testing
+Unit testing was useful for "driving out" the development of new features. These are low-level, granular tests used to ensure that a feature (e.g. list access) works correctly. Individual approaches to testing differ, but one effective approach is to write a failing unit test (that reflects the desired functionality) and then implement the feature until the test passes (this is done incrementally, building upon the small improvements tested in the last unit test).
+
+A future improvement would be to increase our unit test "coverage", i.e. the amount of our source code being tested.
+
+## Integration testing
+Integration testing is the *end-to-end* testing that runs a complete source code program through the entire compiler stack. 
+
 
 {% endblock %}
