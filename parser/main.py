@@ -24,6 +24,13 @@ def traversePost(root, indent): #preorder
             traversePost(root.expression, indent+1)
             traversePost(root.statements, indent+1)
             traversePost(root.next_conditional, indent+1)
+        elif root.vtype == v.AGENT:
+            print '     '*indent + root.__str__()
+            traversePost(root.create, indent+1)
+            traversePost(root.action, indent+1)
+            traversePost(root.destroy, indent+1)
+            for st in root.statements:
+                traversePost(st, indent+1)
         else: #regular Node
             print '     '*indent + root.__str__()#vtype,':',root.syn_value,':',root.symbol,':',root.inh_value,':',root.params
             if root.children is not None:

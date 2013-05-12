@@ -1,8 +1,7 @@
-#doesn't work
-agent A{
-
-      create(int[] x, string[][] y){
-
+agent A {
+      int x = 1
+      create(){
+          print("On create A")
       }
       action{
 
@@ -12,64 +11,11 @@ agent A{
       }
 }
 
-agent B{
-
-      create(){
-
-      }
-      destroy{
-
+agent B {
+      create(int num){
+          print("On create B")
       }
       action{
-
-      }
-}
-
-agent C{
-
-      destroy{
-
-      }
-      create(){
-
-      }
-      action{
-
-      }
-}
-
-agent D{
-
-      destroy{
-
-      }
-      action{
-
-      }
-      create(){
-
-      }
-}
-
-agent E{
-
-      action{
-
-      }
-      destroy{
-
-      }
-      create(){
-
-      }
-}
-
-agent F{
-
-      action{
-
-      }
-      create(){
 
       }
       destroy{
@@ -89,7 +35,9 @@ environment{
 }
 
 terminate{
-
+    (true) {
+        print("done")
+    }
 }
 
 analysis{

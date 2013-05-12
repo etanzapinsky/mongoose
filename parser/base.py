@@ -1,6 +1,6 @@
 import ply.yacc as yacc
 from lexer import lexer
-from tree import Node, Function, Conditional, List
+from tree import Node, Function, Conditional, List, Agent
 import vtypes as v
 import re
 import traceback
@@ -67,68 +67,71 @@ def p_agent_opt_epsilon(p):
 def p_agent_listn(p):
     ''' agent_list : agent_n agent_opt
     '''
-    p[0] = Node(vtype=v.AGENT_LIST, children=[p[1], p[2]])
+    children = p[1]
+    if p[2]:
+        children.extend(p[2])
+    p[0] = Node(vtype=v.AGENT_LIST, children=children)
 
 # TODO: dont require last newline                                                                               
 def p_agentn(p):
-    ''' agent_n : agent NEWLINE agent_n                                                                                      
+    ''' agent_n : agent NEWLINE agent_n                                                                                    
               | epsilon                                                                                             
     '''
     if len(p) == 4:
-        p[0] = Node(vtype=v.AGENT_WRAPPER, children=[p[1],p[3]])
+        agents = [p[1]]
+        if p[3]:
+            agents.extend(p[3])
+        p[0] = agents
     else:
         p[0] = None
 
 def p_agent_1_cda(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[7],p[9],p[4],p[6],p[8],p[10]])#create, destroy, action, then all statements in order
-    # backend.scopes[-1][p[2]] = p[0]
+    p[0] = Agent(symbol=p[2], statements=[p[4],p[6],p[8],p[10]], create=p[5],
+                 action=p[9], destroy=p[7])
 
 def p_agent_2_cad(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper create stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[5],p[9],p[7],p[4],p[6],p[8],p[10]])
-    # backend.scopes[-1][p[2]] = p[0]
+    p[0] = Agent(symbol=p[2], statements=[p[4],p[6],p[8],p[10]], create=p[5],
+                 action=p[7], destroy=p[9])
 
 def p_agent_3_dca(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper action stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[5],p[9],p[4],p[6],p[8],p[10]])
-    # backend.scopes[-1][p[2]] = p[0]
+    p[0] = Agent(symbol=p[2], statements=[p[4],p[6],p[8],p[10]], create=p[7],
+                 action=p[9], destroy=p[5])
 
 def p_agent_4_dac(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper destroy stat_list_wrapper action stat_list_wrapper create stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[7],p[9],p[5],p[4],p[6],p[8],p[10]])
-    # backend.scopes[-1][p[2]] = p[0]
+    p[0] = Agent(symbol=p[2], statements=[p[4],p[6],p[8],p[10]], create=p[9],
+                 action=p[7], destroy=p[5])
 
 def p_agent_5_adc(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper destroy stat_list_wrapper create stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[7],p[5],p[4],p[6],p[8],p[10]])
-    # backend.scopes[-1][p[2]] = p[0]
+    p[0] = Agent(symbol=p[2], statements=[p[4],p[6],p[8],p[10]], create=p[9],
+                 action=p[5], destroy=p[7])
 
 def p_agent_6_acd(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper '}'
     '''
-    p[0] = Node(vtype=v.AGENT, symbol=p[2], children=[p[9],p[5],p[7],p[4],p[6],p[8],p[10]])
-    # backend.scopes[-1][p[2]] = p[0]
+    p[0] = Agent(symbol=p[2], statements=[p[4],p[6],p[8],p[10]], create=p[7],
+                 action=p[5], destroy=p[9])
 
 def p_create(p):
     ''' create : CREATE '(' formal_param_list ')' '{' stat_list_wrapper '}'
     '''
-    symbol = p[1]
+    parameter_pairs = []
     if p[3] is not None:
-        parameter_pairs = p[3].inh_value
-        parameter_pairs = parameter_pairs[:-1]
-        parameter_pairs = parameter_pairs.split(",")
-        parameter_pairs = [tuple(s.split(" ")) for s in parameter_pairs]
-    else:
-        parameter_pairs = []
-    p[0] = Function(symbol=symbol, statements=p[6],
-                              return_type='agent', #use agent as placeholder for agent's name, which can't be known here
-                              parameter_pairs=parameter_pairs)
+        for decl in p[3].syn_value:
+            parameter_pairs.append((decl.syn_vtype, decl.symbol))
+    p[0] = Function(symbol=p[1], statements=p[6],
+                    return_type=v.AGENT_VALUE, #use agent as placeholder for agent's name, which can't be known here
+                    parameter_pairs=parameter_pairs,
+                    return_value=Node(vtype=v.RETURN_STATEMENT, children=[]))
 
 def p_destroy(p):
     ''' destroy : DESTROY '{' stat_list_wrapper '}'

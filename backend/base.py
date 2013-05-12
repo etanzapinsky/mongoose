@@ -162,7 +162,14 @@ class Backend():
             elif root.vtype == v.BRACKET_ACCESS:
                 pass
             elif root.vtype == v.AGENT_LIST:
-                pass  # @todo
+                for child in root.children:
+                    backend.walk_ast(child)
+            elif root.vtype == v.AGENT:
+                root.scope['create'] = root.create
+                backend.scopes.append(root.scope)
+                for st in root.statements:
+                    backend.walk_ast(st)
+                backend.scopes.pop()
             elif root.vtype == v.ENVIRONMENT:
                 for child in root.children:
                     backend.walk_ast(child)

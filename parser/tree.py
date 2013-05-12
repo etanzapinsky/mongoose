@@ -262,3 +262,19 @@ class Conditional(Node):
 
     def __str__(self):
         return '{}:'.format(self.vtype)
+
+class Agent(Node):
+    def __init__(self, symbol, statements, create, action, destroy):
+        '''
+        Called when an agent is defined
+        '''
+        Node.__init__(self, vtype=v.AGENT)
+        self.symbol = symbol
+        self.statements = statements
+        self.create = create
+        self.action = action
+        self.destroy = destroy
+        self.scope = {}
+
+    def __str__(self):
+        return '{}: sym={}'.format(self.vtype, self.symbol)
