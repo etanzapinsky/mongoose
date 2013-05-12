@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="./static/favicon.ico"> 
+	<link rel="stylesheet" href="./static/css/style.css">
+
+	
+	<title>Mongoose</title>
+	
+
+</head>
+<body>
+	
+
+<p>Mongoose</p>
+<h1>An Agent-Based Modeling Simulation Language</h1>
+<ul>
+<li>------------------------------------- +</li>
+</ul>
+<p>| |</p>
+<p>| .--. |</p>
+<p>| ( _ \ |</p>
+<p>| / /: :\ |</p>
+<p>| ,=. \^ / . | |</p>
+<p>| ---'._.--._ \ : / |</p>
+<p>| \ '.__=-. \ .' ,-. |</p>
+<p>| ( ' e\ | : / _ \ |</p>
+<p>| \ , ' . .-'-\^ , | \ / \ \ |</p>
+<p>| |; \!_ \|;. ;/._, \ '--' ) |</p>
+<p>| \^\^= \^= '.__,''------' |</p>
+<p>| |</p>
+<ul>
+<li>------------------------------------- +</li>
+</ul>
+<p>Group 17</p>
+<p>Mark Fischer (mlf2156) Language Guru</p>
+<p>Chris Haueter (cmh2122) System Integrator</p>
+<p>Michael Rubin (mnr2114) Project Manager</p>
+<p>Bo Xu (bx2104) Tester</p>
+<p>Etan Zapinsky (eez2107) System Architect</p>
+<h2>Introduction</h2>
+<p>The modern commodity processor is a computational workhorse, capable of
+doing 2.5 billion computations per second <a href="#ftnt1">[1]</a> and effectively
+handling multi-threaded applications. Although these commonplace
+computers are able to run complex simulations, there is still an
+opportunity for a high-level language that abstracts away the
+implementation details of configuring and running such simulations.
+Mongoose is such a language, designed to easily facilitate creating
+independent-agent, discrete-event simulations.</p>
+<p>One use case for Mongoose is Schelling’s Segregation
+Model <a href="#ftnt2">[2]</a>. The premise of Schelling’s Segregation Model is
+that there are different colors representing an individual’s tribe
+affiliation, with individual agents of differing tribes dispersed across
+a 2D Cartesian grid. For social scientists, this tribal affiliation is
+used to represent any difference that they are interested in
+researching, including gender, age, race and hobbies.</p>
+<p>One formulation of this simulation relies on the rule that an individual
+agent will move to a random free space on the board if e.g. more than
+25% of its surrounding neighbors are of a different tribe. This can be
+simulated using Mongoose’s independent-agent approach; in this case,
+large numbers of agents interact with one another via their internal
+preferences and their locations in the environment.</p>
+<p>For example, Mongoose can be used by a researcher to investigate the
+extent to which weak tribal preferences might lead to clustering of
+distinct groups, or to determine whether the formation of tribal groups
+will converge to a steady state, or the agents will be stuck in a
+divergent pattern.</p>
+<p>Furthermore, Mongoose provides syntax that allows for easy use of randomization, to enable the programmer to code simulations more efficiently.</p>
+<p>Additional problems which Mongoose might be used to simulate are
+Conway’s Game of Life <a href="#ftnt3">[3]</a> (discussed below), epidemiological
+models, population growth, crowd simulation, traffic patterns, and
+financial outcome prediction (e.g. retirement planning).</p>
+<h2>Language Properties</h2>
+<h3>Simple and Object-Oriented</h3>
+<p>When creating a simulation, there are many common steps a programmer 
+would have to take to get their program up and running. They have to 
+specify environment invariants, environment agents, agents’ actions, 
+and termination conditions. Our language should easily abstract writing 
+these common lines of code the user would have to write for each simulation.</p>
+<p>Mongoose is object-oriented to make interacting with an environment and 
+agents, each with an internal state and actions, intuitive and manageable. 
+Like Python, the language will provide first-order classes and objects. 
+It will also provide invariants and terminating conditions. All of 
+these objects would interact in specific ways so that the programmer 
+will be able to create a mental model of the simulation
+and truly understand how the different components relate to one another.</p>
+<p>Environments and agents are fundamental classes of objects. Agents will
+be situated in, and interact with their environments. This is an
+important component of many agent-based models because any agent’s
+future actions can depend on the local environment. This will help users
+focus on the relevant abstractions for their model.</p>
+<p>Our programming language uses Java-like syntax with some Python-esque 
+elements and control logic as points of familiarity for users experienced 
+with another high level programming language. In addition, the language 
+provides domain-specific primitives for ease of use. These include 
+keywords like environment, agent, pif and the built-in function print.</p>
+<h3>Temporal</h3>
+<p>Mongoose cares about every time increment because in order to have a
+discrete-event simulation, the language has to schedule events properly.
+Each event occurs at a particular tick of the clock, which signifies a
+change of state in the simulation. Between consecutive events, no change
+in the system is assumed to occur, thus enabling the simulation to
+directly jump from one event to the next. Each event is comprised of
+behaviors acted out by various agents.</p>
+<p>An advantage of this is that each tick of the clock provides a
+convenient mechanism to allow the programmer to determine how much time
+it takes to reach one environment state from another.</p>
+<h3>Analysis</h3>
+<p>Performing the same actions thousands, if not millions of times is only
+half of what makes a discrete-event simulation tool powerful. The other
+important aspect is its ability to perform analysis on the simulation’s
+results. How many organisms were spawned in Conway’s Game of Life? How
+many died? What is an organism’s average life span? If our language
+cannot answer these questions it is as if we have created a computer
+that can run programs but has no way to print the results. Mongoose allows
+the program to act differently based on how the simulation ended. 
+Depending on which invariant was broken, a Mongoose program will execute
+different code, before terminating.</p>
+<h2>Intended users</h2>
+<p>The intended users of the language are researchers and students who
+desire to specify and run agent-based, discrete-event simulations with a
+minimum of language boilerplate. They are assumed to be familiar with
+basic concepts of simulation. They are also assumed to have some Python or
+Java programming experience (at the very least, they should be aware of 
+basic data structures and operators). Writing programs in Mongoose will be
+comfortable for a programmer who has already used an ALGOL-family programming 
+language such as C, Java or Python.</p>
+<h2>Existing Solutions</h2>
+<p>Mongoose focuses on discrete event simulations, i.e. the modeling of a
+simulation as a discrete sequence of events in time. Specifically, our
+language deals with Agent-Based Modeling (ABM), where the simulation
+can be modeled as decentralized agents with behaviors in a common
+environment. While there are many libraries and pieces of software built
+for discrete event simulations, there are not a whole lot of languages.
+Some of the languages that exist for solving these types of problems are
+Simula and SIMSCRIPT. SIMSCRIPT, however, is written in a more
+English-like syntax, which may be less familiar to programmers
+experienced with C or Java, whom our language targets.</p>
+<p>Additionally, Mongoose will be tailored towards agent-based modelling,
+while Simula and SIMSCRIPT are not, and use a concurrent process
+model. <a href="#ftnt4">[4]</a> While software like ExtendSim, Simio, AnyLogic, or
+Flexsim allow for ABM, they are not full languages.</p>
+<hr />
+<p><a href="#ftnt_ref1">[1]</a> When running an intel i7 with 2.5 GHz clock speed
+(http://ark.intel.com/products/65525/Intel-Core-i7-3770T-Processor-8M-Cache-up-to-3_70-GHz)</p>
+<p><a href="#ftnt_ref2">[2]</a>
+http://en.wikipedia.org/wiki/Thomas_Schelling#Models_of_segregation</p>
+<p><a href="#ftnt_ref3">[3]</a>
+http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life</p>
+<p><a href="#ftnt_ref4">[4]</a>
+http://cgibin.erols.com/ziring/cgi-bin/cep/cep.pl?_key=Simscript</p>
+
+
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="./static/js/main.js"></script>
+	
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="./static/favicon.ico"> 
+	<link rel="stylesheet" href="./static/css/style.css">
+
+	
+	<title>Mongoose</title>
+	
+
+</head>
+<body>
+	
+
+<h1>Translator Architecure</h1>
+<h4>Figure 1</h4>
+<p><img src=./static/img/architecture.png /></p>
+<h4>Figure 2</h4>
+<p><img src=./static/img/utility.png /></p>
+<h3>Description</h3>
+<p>Figure 1 describes the architecture of Mongoose. The source text file is sent into the frontend where it is tokenized in the lexer and then those tokens are converted into the intial version of the parse tree. That parse tree is then passed from the frontend to the backend where the compiler makes an intial pass, adding additional semantic meaning to the nodes. After the abstract syntax tree has passed through the compiler it is fed into the Mongoose Utility. This utility runs the program according to the specifications in the reference manual. </p>
+<p>Figure 2 describes the process of a running Mongoose program. The program starts by calling the populate block inside the environment. Then it will call the create() method of all the agents that are being initialized. After those two setup steps it will enter the main program loop. This loop calls the actions of all the agents in the order that they were defined by the programmer. For instance, if the program declares agent A and then agent B, the program will call the action block of agent A and then it will call the action block of agent B, with the state as it was AFTER agent A called its action block. After all the agents call their action blocks, the environment will call its action block. Finally, after all the action blocks are called the program will check the invariantes in the terminate block. If any invariants return true the program will terminate, call the function associated with the invariant condition, and call the analysis block. On the other hand, if none of the invariants return true, the program repeats the main loop by starting to call all the agent action blocks again.</p>
+<h3>Authors</h3>
+<p>Frontend: Michael and Mark</p>
+<p>Backend: Etan and Chris</p>
+
+
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="./static/js/main.js"></script>
+	
+</body>
+</html>

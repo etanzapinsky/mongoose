@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="./static/favicon.ico"> 
+	<link rel="stylesheet" href="./static/css/style.css">
+
+	
+	<title>Mongoose</title>
+	
+
+</head>
+<body>
+	
+
+<h1>Mongoose Reference Manual</h1>
+<h2>Introduction</h2>
+<p>This manual describes in detail the Mongoose Programming Language, a language designed to easily facilitate creating independent-agent, discrete-event simulations. This manual serves as the standard for anyone who would like to program in Mongoose. The interpreter is built with the syntactic conventions described in this document.</p>
+<p>The manual will start by discussing the structure of a Mongoose program and how those components execute in a well-defined order. Then the document will delve into the lexical conventions, the meaning of identifiers, casting, expressions and objects. This will lead into how these components interact, using declarations, initialization, statements, definitions and scope. Finally, it will conclude with a summary of the grammar of the language.</p>
+<h2>The Four Blocks</h2>
+<p>Each Mongoose program consists of four main blocks of code: the environment, the agent(s), the termination conditions, and the analysis block. The environment is mainly responsible for holding global variables, and for populating itself with the agents initially involved in the simulation. It also has an action function it performs every tick of the clock. </p>
+<p>Agents are objects that hold state, have functions that enable them to be created or destroyed, and have an action that is performed at particular time periods, “simultaneously” with the action of every other agent, in other words, the action takes into account only the status quo at the beginning of the time step. This is analogous to transactions: each individual actor's action is executed within a time step, but only once all of the actions have completed (and the various environmental invariants been enforced), is the transaction completed.</p>
+<p>Terminating conditions are checked at the end of time periods, the frequency and order of which can be specified by the programmer. If any of these invariants proves to be false, the simulation ends and an action can be performed, before the final analysis is done. The analysis block is carried out at the end of the simulation, just before it terminates.</p>
+<h2>Order of Execution</h2>
+<p>First, the environment’s instance variables are instantiated with a call to its populate() function. Every time an agent is created, its instance variables are instantiated with a call to its create() function. Then, until the program terminates, the following things are performed in order: first, the agents’ action blocks are all carried out simultaneously (if they are acting on the given turn), that is, they all act based on the same shared state. Next, the environment’s action is invoked, but it may depend on new state as changed by the agents’ actions. Next, the termination conditions are checked in the order they are listed, and if any of them fail, additional actions may be called before the simulation is brought to a halt. Finally however, if none of them fail, the TICKCOUNT increments by 1 and the cycle repeats. After the simulation finally terminates, the additional analysis block of code is executed.</p>
+<h2>Lexical Conventions</h2>
+<h3>Lexical Conventions</h3>
+<p>A program consists of one body of source code, stored in a single file. After being processed by the lexer, this program is represented as a sequence of tokens. Statements are separated by newlines.</p>
+<h3>Comments</h3>
+<p>In Mongoose, comments are denoted by the # symbol. They start at the symbol and end when there is a new line. Comments are not tokens; they are ignored by the lexer.</p>
+<h3>Tokens</h3>
+<p>The language has the following classes of tokens: identifiers, string literals, keywords, operators and other separators (brackets, commas, etc.). White space is considered significant when it separates tokens, but is otherwise ignored.</p>
+<h3>Identifiers</h3>
+<p>An identifier is a sequence of digits, letters and underscores that does not begin with a digit. Identifiers may be of arbitrary length, and all characters in the identifier are significant.</p>
+<h3>Keywords</h3>
+<p>The following identifiers are keywords. They are reserved by the language and may not be used in any other way.</p>
+<pre><code>string
+int
+float
+boolean
+and
+or       
+not
+while
+if
+elif
+else
+pif
+pelif
+pelse
+environment
+populate
+action
+terminate
+analysis
+create
+destroy
+agent
+repeat
+return
+none
+TICKCOUNT
+</code></pre>
+<h3>Strings</h3>
+<p>In Mongoose, strings can be denoted by either ‘single quotes’ or “double quotes.”  A string is a primitive type in Mongoose. Mongoose allows escaped characters \n (newline), \t (tab), \” (double quote), \’ (single quote) and \ (backslash). No string formatting is supported naturally in Mongoose.</p>
+<h2>Meaning of Identifiers</h2>
+<h3>Basic Types</h3>
+<p>The basic types that Mongoose supports are signed ints and floating point numbers, booleans and strings. Note that ints and floats are only signed and not unsigned. The size of these primitive types is platform-specific.</p>
+<h3>Collection Types</h3>
+<p>Mongoose has one primary collection type: <code>list</code>. Mongoose lists are static — in other words, their type (e.g. <code>boolean</code>, <code>int</code>, <code>float</code>, <code>object</code>, etc.) and size are fixed at the time of their declaration (and do not change). Lists are declared with square brackets after the list type. For example, <code>int[2]</code> is a list of two integers, and <code>float[3][2]</code> is a 3x2 multi-dimensional list of floating point numbers.</p>
+<p>Lists can be uni-dimensional (e.g. <code>int[n]</code>) or multi-dimensional (e.g. <code>float[3][5][7]</code>). Both uni-dimensional and multi-dimensional lists may contain values or objects of only one type.</p>
+<h3>Functions</h3>
+<p>Functions in Mongoose are very similar to those in Java or C. They are defined as follows:
+return_type function_name(formal_parameters) {statement(s) return_statement}
+Since Mongoose is a pass-by-reference language, parameters to functions get passed by reference, except for primitives which get passed by value. Mongoose supports anonymous function-like blocks in certain contexts, which are defined as: {expression}.</p>
+<h3>Agent Definitions</h3>
+<p>An agent definition in Mongoose is a blueprint for creating agents, similar to classes acting as blueprints for objects in other object-oriented languages. For the purpose of agent modeling, agent definitions allow us to efficiently create agents and behaviors associated with the simulation.</p>
+<h3>none</h3>
+<p>Similar to Python, Mongoose has a <code>none</code> type, signifying a null value or return type.</p>
+<h3>Built-in Values</h3>
+<p>TICKCOUNT is a built-in int value representing the current time step of the simulation. </p>
+<h3>Casting</h3>
+<p>To have a functioning program, there is a need to be able to easily convert between int and float, from int, float and boolean to string and from int, float and string to boolean. We follow Python's conventions for implicit casting. </p>
+<h2>Expressions</h2>
+<h3>Math</h3>
+<pre><code># arithmetic precedence and associativity is defined using regular
+# mathematical rules
+mathematical-expression :
+mathematical-expression + mathematical-expression
+mathematical-expression - mathematical-expression
+mathematical-expression * mathematical-expression
+mathematical-expression / mathematical-expression
+mathematical-expression % mathematical-expression
+mathematical-expression ^ mathematical-expression
+</code></pre>
+<p>Basic mathematical operations are supported like addition, subtraction, multiplication, modulus, division and exponentiation.</p>
+<h3>Dot Operator</h3>
+<p>To reference an object’s variables and functions the dot operator <code>.</code> is used. For example, object_name.variable_name would access variable_name, and object_name.function_name would access function_name.</p>
+<h3>List Referencing</h3>
+<p>To reference an element of a <code>list</code>, the notation <code>list_name[i]</code> is used, where <code>i</code> is an integer index into the list.</p>
+<h3>Function Calls</h3>
+<p>Functions are called with parentheses, e.g. <code>some_function()</code>, or with parameters (if the function requires parameters), e.g. <code>another_function(a,b)</code>. </p>
+<h3>Unary Operators</h3>
+<p>Mongoose uses unary operators to denote unary minus, and to denote logical negation. Unary operators associate right-to-left. The unary minus symbol is the <code>-</code> operator, and the logical negation symbol is the <code>not</code> operator.</p>
+<h3>Casting</h3>
+<p>To convert between primitive types, explicit casting is allowed, and done in a way similar to how Java or C does so. To convert an expression of type A to one of type B, one would use the expression:
+(B) A</p>
+<p>On top of casting explicitly from one type to the next there is also implicit casting performed as well. For instance, if a float was assigned to an int, the float would be converted to an int and then stored in the int, likewise the same would occur if assigning an int to a float, and similarly for other types that can be implicitly cast in Mongoose. </p>
+<h3>Relational</h3>
+<p>The relational operators in Mongoose are the following infix operators, all of which return a boolean value: &lt; (less than), &gt; (greater than), &lt;= (less than or equal), &gt;= (greater than or equal). If the result is true, then the boolean value true is returned. If not, then false is returned.</p>
+<h3>Equality</h3>
+<p>The language has the == (is equal to) and != (is not equal to) equality infix operators. There is no implicit casting when using these operators; the programmer is responsible for using these operators only with variables of the same type. A runtime error occurs if equality operators are used with variables of different types. Primitives and lists are compared by value, and agent types are compared by reference.</p>
+<h3>Logical Operators</h3>
+<pre><code>boolean-expression :
+    boolean-expression and boolean-expression
+    boolean-expression or boolean-expression
+    not boolean-expression
+    [true|false]
+</code></pre>
+<p>To operate on booleans the operators <code>and</code>, <code>or</code> and <code>not</code> are used. The operators <code>and</code> and <code>or</code> are left associative with <code>and</code> having a higher precedence over <code>or</code>, and <code>not</code> is right associative, similar to the unary minus. Also, these operators can be chained arbitrarily.</p>
+<h3>Conditional Operators</h3>
+<p>The conditional operators are <code>or</code> signifying logical OR, and <code>and</code> signifying logical AND. </p>
+<h3>Assignment Operator</h3>
+<p>The assignment operator in Mongoose is represented by the <code>=</code> symbol. The left-hand-side variable is assigned the value from the right-hand-side, assuming the types are compatible. A <code>TypeError</code> is raised if the types are incompatible. A variable must be declared before a value can be assigned to it.</p>
+<p>Thus, the following code snippet:</p>
+<pre><code># int x
+# the line above was commented out, so x is never declared
+x = 3  # this line will now fail
+</code></pre>
+<p>raises a <code>NameError</code>:</p>
+<pre><code>Traceback (most recent call last):
+...
+NameError: Variable 'x' does not exist
+</code></pre>
+<p>Also note that the assignment operator does not return a reference in Mongoose.</p>
+<h3>Comma Operator</h3>
+<p>Commas are the symbol <code>,</code> used to separate variables. This is used mainly in listing the parameters within a function call.</p>
+<h3>Probabilistic Value</h3>
+<p>A probabilistic value in Mongoose is an expression such as:</p>
+<p><code>(3:true | 7:false)</code>.</p>
+<p>This is a pipe-separated, parenthesized list of colon-separated weight-value pairs w<sub>i</sub>,v<sub>i</sub>, where each w<sub>i</sub> is a positive integer. The w<sub>i</sub> are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (w<sub>i</sub> is the numerator and Σ w<sub>i</sub> (for all i) is the denominator).</p>
+<p>As another example, one may assign the value of a die-roll as such:</p>
+<p><code>int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)</code></p>
+<p>If a chosen v<sub>i</sub> is not of the same type as the left-hand-side variable, a runtime <code>TypeError</code> will be thrown. The programmer is responsible for ensuring that the RHS values of the probabilistic assignment are of the correct type.</p>
+<p>A weight w<sub>i</sub> must be provided for each each value; otherwise a syntax error will be thrown.</p>
+<h3>Terminating Expression</h3>
+<p>Terminating expressions provide a convenient syntax for defining expressions that are run with some certain frequency, and which, if they evaluate to true, first execute some block, then end the simulation. They provide a nice syntax for testing termination conditions of the simulation, while allowing the programmer to limit the frequency of the tests, in order to avoid slowing the simulation through excessive condition testing.</p>
+<p>For example, the terminating expression <code>&lt;pos_int&gt;:(expr) {foo()}</code> is syntactically equivalent to <code>if ((TICKCOUNT % &lt;pos_int&gt; == 0) and (expr))</code> then <code>{foo()}</code>, where <code>&lt;pos_int&gt;</code> is either a non-negative int, or a function returning a non-negative int. If such a function returns a negative int, a runtime error occurs. </p>
+<h2>Objects</h2>
+<h3>Agents</h3>
+<p>Agents are objects that hold state, have functions that enable them to be created or destroyed, and have an action that is performed at particular time periods, simultaneously with the action of every other agent being performed.</p>
+<h3>Agent Actions</h3>
+<p>Actions are blocks, belonging to agents, that are executed only at particular times defined by the programmer. Blocks don't have a return value.</p>
+<h3>Environment</h3>
+<p>Environments encompass a representation of the setting that agents reside in. Examples include 2D “boards” with rows and columns. The environment allows for the querying of relationships between agents and keeps some state for all the agents. </p>
+<h3>Block Contents</h3>
+<p>Blocks can contain variables, or state, as well as functions. Agents and the environment must contain an action block, which is called at specified time periods at the appropriate point in the execution cycle. Agents must contain a create() method and a destroy block, while environments must contain a populate block.</p>
+<h3>Invariants</h3>
+<p>Invariants are expressions that are checked at the end of time periods, at a frequency and in an order determined by the user. When one of the invariants, also known as terminating conditions, evaluates to true, the simulation terminates and performs some final statements.</p>
+<h2>Declarations</h2>
+<h3>Type Specifiers</h3>
+<p>Since Mongoose is a statically typed language, objects and primitives are declared with their type preceding them, as in Java or C. Types can be either user-defined agent types, lists, or one of the primitive types available in Mongoose: <code>int</code>, <code>float</code>, <code>boolean</code>, <code>string</code> or <code>none</code>.</p>
+<h3>Default Values</h3>
+<p>The default values for various types are as follows: none for objects, the empty string for strings, 0 for ints, 0.0 for floats, and false for booleans.</p>
+<h3>Agent Declaration</h3>
+<p>Only agents can have objects of their type instantiated by the programmer. Agents are declared as such:
+<code>agent_type AgentName</code> </p>
+<h3>List Declaration</h3>
+<p>Lists are declared with the type of the list, followed by one or more square brackets. For example, <code>boolean[i][j]</code> declares a two-dimensional array of type boolean of size i x j.</p>
+<h3>Function Definition</h3>
+<p>Functions in Mongoose are declared like so:
+<code>return_type function_name(formal_parameters) {statement(s) return_statement}</code></p>
+<h2>Initialization</h2>
+<p>In Mongoose, objects must be declared and initialized before their values can be accessed. This can occur with separate declaration and initialization expressions (e.g. <code>int a</code> followed by <code>a = 3</code>), or in a combined initialization expression (e.g. <code>int a = 3</code>).</p>
+<h3>Objects and Agent Classes</h3>
+<p>An agent is initialized to an object by calling the agent class name as if you were calling a function, e.g. agent an_agent = AgentClassName(). When the agent is initialized there is an implicit call to the create() function of the applicable agent class to set up the necessary internal state of the instance. Then when an object is killed, there is another implicit call to the destroy() function of the agent class to perform any last operations before being deleted. Objects are also killed by program termination.</p>
+<h3>Kill</h3>
+<p>When one wishes to destroy an agent, one simply calls the built-in kill() function on the agent’s reference, and its destroy() function is invoked.</p>
+<h3>List</h3>
+<p>Mongoose lists are static — they require declaration and may not be resized at runtime. When they are declared, lists are initialized with default values for the given list type. For example, after its declaration as <code>int[5] a</code>, the identifier <code>a</code> is initialized with 5 <code>int</code> members. A multi-dimensional list is initialized the same way: <code>a = int[2][2]</code> initializes <code>a</code> with integer values: <code>[[0,0],[0,0]]</code>. After a list is declared, it is possible to retrieve or set its member elements.</p>
+<p>An <code>IndexError</code> occurs if the program attempts to access a list element that does not exist, as in the following code snippet:</p>
+<pre><code>int x[2]  # the list is of length 2
+x[0] = 3  # list indexing starts at 0
+x[1] = 5
+x[2] = 7  # raises an IndexError
+</code></pre>
+<h2>Statements</h2>
+<h3>Statements</h3>
+<p>There are a few of different types of statements:
+    statement :
+        declaration
+        assignment
+        declaration_assignment
+        selection
+        prob-selection
+        while_loop
+        repeat_loop
+        function_call
+        function_definition
+Individual statements are terminated by the newline (\n) character.</p>
+<h3>Expressions</h3>
+<p>Mongoose provides for boolean, mathematical, logical, cast, randomized, and object-access expressions. Expressions may or may not be parenthesized.</p>
+<h3>Selection: <code>if</code>/<code>elif</code>/<code>else</code></h3>
+<p>The selection statement evaluates an expression and, based on the boolean value of the expression, executes another statement. The statement is executed in <code>if(expr) {statement}</code> only if expr evaluates to true. The optional (one or more) elif (short for else-if) clauses, of the form <code>elif(expr) {statement}</code>, are executed if the preceding if-expression and elif-expressions all evaluated as false. The optional else clause (of the form <code>else {statement}</code>) comes last, and executes if neither the if, nor the elif expressions evaluated as true.</p>
+<h3>Probabilistic Selection: <code>pif</code>/<code>pelif</code>/<code>pelse</code></h3>
+<p>Randomness is a very important aspect of simulations. As such, Mongoose includes an easy syntax for probabilistic selection, which mimics Python’s if()-elif()-else statements of deterministic selection. A probabilistic selection statement contains one pif() block at the beginning, may end with a pelse block, and can contain zero or more pelif() blocks in between. At most one of the blocks will ever execute. 
+Like an if or elif command, each pif and pelif contains an expression in parentheses that determines whether the block executes or not. However, these expressions are positive floating point probabilities, which must sum to 1 in each probabilistic selection statement if no pelse block is involved, and must sum to a number less than or equal to 1 if a pelse block is involved. For example, in the code below, 
+    pif(0.3) {
+    A()
+    }
+    pelif(0.5) {
+        B()
+    }
+    pelse {
+        C()
+    }
+A() will be called with 0.3 probability, B() will be called with 0.5 probability, and C() will be called with 1 - 0.3 - 0.5 = 0.2 probability. Not adhering to these conventions regarding probabilities summing to 1 will result in a runtime error.</p>
+<h3>Iteration: <code>repeat</code> Loops</h3>
+<p>Repeat loops in Mongoose take the form <code>repeat (pos_int) {statement_list}</code>. 
+The statement_list is executed pos_int times.</p>
+<h3>Iteration: <code>while</code> Loops</h3>
+<p>The Mongoose while loop is identical to the Python while loop (i.e. <code>while (expr) {statement_list}</code>). The <code>expr</code> is evaluated at the beginning of each iteration, and the <code>statement_list</code> is executed only if <code>expr</code> evaluates to <code>true</code>.</p>
+<h3>Return</h3>
+<p>Returning from a function in Mongoose is similar to returning from a function in C or Java. The function evaluates to the returned value, and the program continues from where it left off before the function was called. Every function definition must end in a return statement. Functions may be of return type <code>none</code> (equivalent to <code>void</code> in Java).</p>
+<h2>Scope</h2>
+<p>The environment’s and agents’ variables and functions at the uppermost level have global visibility and can be accessed as long as a reference to the agent is available. Variables inside of functions, terminate and analysis blocks, and other statement blocks have scope limited to their block. </p>
+<h3>Scope of Functions</h3>
+<p>Functions can be defined in any of the 4 main blocks of a Mongoose program, or outside of any of the 4 blocks. A function within a terminate or analysis block can only be called from within that block. The functions/blocks in the environment or agents, such as populate, create(), destroy or any user-defined functions there can be called from anywhere, via dot notation on the reference to an agent. Note that action blocks may only be called by the Mongoose interpreter. Functions defined outside any of the 4 types of blocks can be called from any of the 4 blocks as well.</p>
+<p><a href="grammar.html">Appendix A: Complete Grammar</a></p>
+
+
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="./static/js/main.js"></script>
+	
+</body>
+</html>

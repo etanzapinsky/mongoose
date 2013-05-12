@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="./static/favicon.ico"> 
+	<link rel="stylesheet" href="./static/css/style.css">
+
+	
+	<title>Mongoose</title>
+	
+
+</head>
+<body>
+	
+
+<h1>Development and Runtime Environment</h1>
+<h2>Pip, Virtualenv, and VirtualenvWrapper</h2>
+<p>We used <a href="http://www.pip-installer.org/en/latest/">pip</a> to manage the dependencies for our language. One useful strategy was to keep an up-to-date <code>requirements.txt</code> file that contained all the dependencies. To install the latest dependencies, a simple <code>pip install -r requirements.txt</code> was needed.</p>
+<p><a href="http://www.virtualenv.org/en/latest/">Virtualenv</a> provides distinct python "virtual environments" that allow a clean separation between the OS-default python installation/binaries, and the project-specific python installation/binaries. Virtualenv and pip work together to provide a clean development environment that we could then commit to our hosted Git repository (<a href="https://github.com/">Github</a>) for distribution among team members.</p>
+<p><a href="virtualenvwrapper.readthedocs.org">Virtualenvwrapper</a> is a convenient collection of command-line programs and standards (e.g. one canonical .virtualenv folder) that make using Virtualenv more painless.</p>
+<h2>Management Script (manage.sh)</h2>
+<p>When developing our project we separated our code into a logical hierarchy with there being a separate directory for the frontend, backend and tests. This was nice for code structure, but led to a dependency hell. At first we were using relative imports in the directories, but that led to the code working when running it from one directory, but not working when running from another directory. To fix all these issues we created a management script called <code>manage.sh</code>. This script added the proper directories to the python path, leading to a runtime environment that worked everytime. We were then able to run the python shell, the tests, an</p>
+<h2>Git and Github</h2>
+<p>The distributed version control system Git (and Github, our hosted repository) were instrumental in this project. Git allows developers to work independently on one or more branches within a given repository, and makes merging commits and branches as painless as possible.</p>
+<p>We strived to make our commits as granular as possible, and to write meaningful commit messages. This style of committing code facilitates <em>communication</em> about the code among the developers, and clearly communicates the <em>intention</em> of code updates.</p>
+<h2>Automated testing</h2>
+<p>As mentioned in the <a href="test-plan.html">Test Plan</a>, the Nose tests framework was used to facilitate test discovery and run tests. Running tests in verbose mode with nose is as easy as:</p>
+<pre><code>$ ./manage.sh tests -v
+</code></pre>
+<p>For those that desired, sniffer was available to rerun the test suite upon each change in the source code directory on the filesystem. Running sniffer is also easy:</p>
+<pre><code>$ sniffer
+</code></pre>
+
+
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="./static/js/main.js"></script>
+	
+</body>
+</html>

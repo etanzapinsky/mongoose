@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="./static/favicon.ico"> 
+	<link rel="stylesheet" href="./static/css/style.css">
+
+	
+	<title>Mongoose</title>
+	
+
+</head>
+<body>
+	
+
+<h1>Test Plan</h1>
+<p>The testing strategy included covering the functional components of the our language (lexer, parser, semantic analyser, and backend/code generator) with unit tests, along with doing integration tests to verify our specifications from end-to-end.</p>
+<h2>Testing tools</h2>
+<p>We used the <a href="https://nose.readthedocs.org/en/latest/">nose test framework</a>, which provides nice test auto-discovery, to make testing as painless as possible. Another useful tool was <a href="https://github.com/jeffh/sniffer">sniffer</a>, which automatically re-runs the entire test each time a file is changed in the source code directory.</p>
+<p>Nose also makes it easy to test the entire project with one command. Nose also allowed us to make assertions in our testing files, which served the double role of verifying and documenting our implementations.</p>
+<p>We ran nose via manage.sh, the system integration shell script. Error lines are output to the shell.</p>
+<p>Example:</p>
+<pre><code>$ ./manage.sh [files_to_test] [tests_to_run]
+</code></pre>
+<h2>Unit testing</h2>
+<p>Unit testing was useful for "driving out" the development of new features. These are low-level, granular tests used to ensure that a feature (e.g. list access) works correctly. Individual approaches to testing differ, but one effective approach is to write a failing unit test (that reflects the desired functionality) and then implement the feature until the test passes (this is done incrementally, building upon the small improvements tested in the last unit test).</p>
+<p>A future improvement would be to increase our unit test "coverage", i.e. the amount of our source code being tested.</p>
+<h2>Integration testing</h2>
+<p>Integration testing is the <em>end-to-end</em> testing that runs a complete source code program through the entire compiler stack. As we finished the implementation of more language features, we added complete Mongoose source files, reflecting the new features, to a "working" sample code directory. We also added integration tests to ensure that those files continued to work correctly when we made changes to the codebase.</p>
+<p>The combination of unit testing and integration testing gives us the confidence to say that if a Mongoose program is in our working directory, it actually works as intended.</p>
+<p><a href="example-tests.html">A few test examples</a></p>
+
+
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="./static/js/main.js"></script>
+	
+</body>
+</html>

@@ -1,6 +1,37 @@
 {% extends "markdown.html" %}
 {% block markdown %}
 # Project Plan
+                                                                     
+The process used to develop the processor was an iterative one. Every week we would have a meeting at which we would discuss what we wanted to have completed by the next meeting. Then, the front end, back end, and test would all get those components working on their end. Meir and Michael were responsible for writing the the lexer and parser, and for designing the grammar.  Chris and Etan wrote the backend of the language, and integrated it with the front end. Each of these two teams wrote unit tests for their compiler stages. Bo wrote integration tests and formatted the documentation. 
 
+All team members generally stuck to common Python syntax conventions. We used 4 spaces instead of a hard tab to denote scope. We tried to use whitespace between each operator and its operands. We removed all optional parentheses. We used extra commas at the end of the last element in list structures.
+
+##Our main project strategy revolved around the principles found below:
+
+1) Form a schedule for our weekly meeting times in order to have regular meetings as a group, and meetings with Karan, our TA.
+
+2) Github as a repository and version control infrastructure.
+
+3) Generating a set of milestones early on the project and have soft target
+dates 
+
+4) Split up the work in a way to minimize dependencies and maximize paired programming
+
+5 Allow for a flexible approach to work allowing people to work at their own pace, while keeping in open channels of communication on our weekly status
+
+Milestones:
+Setting up of Github and TeamGantt (first few weeks of class)
+
+Language Reference Manual and Reference Manual (completed March 27 worked through remote meetings over Spring Break)
+
+Migration of planning off of TeamGantt and onto Github. Set up the tools and environments (including manage.sh, virtualenv for standardized Python tools, Git tutorials) (first week of April)
+
+Started major work in Frontend Design. Finalized features and specifications for Mongoose. Used PLY tools along with unit testing. Worked on AST implementation (Middle of April to early May)
+
+Major work on Backend. Heavy group testing (Early May to This Weekend)
+
+Test cases for all stages of the compilation process (This weekend)
+
+Final Project / Presentation (This week)
 
 {% endblock %}
