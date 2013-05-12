@@ -37,34 +37,27 @@ program for learning any programming language.
 
 This program prints “hello, world”:
 
-<pre><code>environment^[[a]](#cmnt1)^{
-
-none populate(){
-
-print("hello, world\\n")
-
-}
-
-none action(){
-
-}
-
-}
-
-terminate{}^[[b]](#cmnt2)^
-
-analysis{}</code></pre>
+<pre><code>environment{
+	none populate(){
+		print("hello, world\\n")
+	}
+		none action(){
+		}
+	}
+terminate{}
+analysis{}
+</code></pre>
 
 The code for this program is placed in a file whose name ends with .mon.
 To then run this program you must have the python interpreter 2.7, PLY
 3.4, and the mongoose Python module. If the above program was called
 hello.mon, the command would be:
 
-python mongoose.py hello.mon
+<pre><code>python mongoose.py hello.mon</code></pre>
 
 The output will be:
 
-hello, world
+<pre><code>hello, world</code></pre>
 
 Now, we will discuss the syntax of the above program. Every Mongoose
 program contains functions, variables and blocks. The functions and
@@ -99,27 +92,18 @@ Here is a modified program with comments (not to be included in actual
 program):
 <pre><code>
 environment{ \#start of environment block
+	populate(){ \#start of populate function definition
+		print("hello, world\\n") \#call print on "hello, world\\n"
+		print("how ") \#call print on "how "
+		print("are ") \#call print on "are "
+		print("you?") \#call print on "you?"
+		}
 
-populate(){ \#start of populate function definition
-
-print("hello, world\\n") \#call print on "hello, world\\n"
-
-print("how ") \#call print on "how "
-
-print("are ") \#call print on "are "
-
-print("you?") \#call print on "you?"
-
-}
-
-none action(){
-
-} \#end of populate func definition
+	none action(){
+	} \#end of populate func definition
 
 } \#end of environment block
-
-terminate^[[c]](#cmnt3)^{} \#to be discussed later
-
+terminate
 analysis{}
 </code></pre>
 
@@ -142,49 +126,27 @@ initial configuration. We will be introducing comments, variables,
 declaration, assignment and objects.
 <pre><code>
 \# This program is phase 1 of 3 of building Game of Life simulation
-
 agent Cell{
-
-int i
-
-int j
-
-Cell create(int r, int c) {
-
-self.i = r
-
-self.j = c
-
+	int i
+	int j
+	Cell create(int r, int c) {
+		self.i = r
+		self.j = c
 }
-
 none destroy() {
-
 }
-
 none action() {
-
 }
-
 }
-
 environment {
-
-Cell[1] my\_Cells
-
-none populate() {
-
-env.my\_Cells[0] = Cell(4,4)
-
+	Cell[1] my\_Cells
+	none populate() {
+		env.my\_Cells[0] = Cell(4,4)
+	}
+	none action() {
+	}
 }
-
-none action() {
-
-}
-
-}
-
 terminate{}
-
 analysis{}
 </code></pre>
 The first line of this program that starts with a hash symbol is a comment. Any string of characters that is prepended by an un-escaped hash symbol is ignored by Mongoose’s translator. Its sole purpose is for human readability - not machine interpretation.
@@ -192,7 +154,6 @@ Like C and Java, variables in Mongoose must be declared. A variable is sequence 
 Before we get to objects, let us understand what assignment is. An assignment statement is a special kind of statement that either initializes a variable or modifies a variable to hold a different value. The word self is used when an agent is accessing or mutating its own instance variables. Here the agent is setting its i and j values. self is effectively a reference to oneself. The statements:
 <pre><code>
 self.i = r
-
 self.j = c
 </code></pre>
 are assignment statements. Since the variables i and j have not previously been explicitly set by the programmer, these assignment statements are, more specifically, initialization statements. Note that individual statements are terminated by newlines.
@@ -218,139 +179,75 @@ critical helper functions. These functions will be defined here but not
 called until the final program in the next phase.
 <pre><code>
 \#This program is Phase 2 of 3 of building Game of Life Simulation
-
 int avg(int[] elements) {
-
-int sum = 0
-
-for (int i in elements) {
-
-sum = sum + i
-
+	int sum = 0
+	for (int i in elements) {
+		sum = sum + i
+	}
+	return sum/elements.length
 }
-
-return sum/elements.length
-
-}
-
 int countAlive(){
-
-int num\_alive = 0
-
-for(int i in range(0, env.board.length)){
-
-for(int j in range(0, env.board[0].length)){
-
-if(board[i][j].alive){
-
-num\_alive = num\_alive + 1
-
+	int num\_alive = 0
+	for(int i in range(0, env.board.length)){
+		for(int j in range(0, env.board[0].length)){
+			if(board[i][j].alive){
+			num\_alive = num\_alive + 1
+			}
+		}
+	}
+	return num\_alive
 }
-
-}
-
-}
-
-return num\_alive
-
-}
-
 int neibLiveCnt(int row, int col){
-
-int count = 0
-
-board\_height = env.board.length
-
-board\_width = env.board[0].length
-
-if(row-1\>=0 and env.board[row-1][col].alive){
-
-count = count + 1
-
+	int count = 0
+	board\_height = env.board.length
+	board\_width = env.board[0].length
+	if(row-1\>=0 and env.board[row-1][col].alive){
+		count = count + 1
+	}
+	if(row+1<=board\_height-1 and env.board[row+1][col].alive){
+		count = count + 1
+	}
+	if(col-1\>=0 and env.board[row][col-1].alive){
+	count = count + 1
 }
-
-if(row+1<=board\_height-1 and env.board[row+1][col].alive){
-
-count = count + 1
-
-}
-
-if(col-1\>=0 and env.board[row][col-1].alive){
-
-count = count + 1
-
-}
-
 if(col+1<=board\_width-1 and env.board[row][col+1].alive){
-
-count = count + 1
-
+	count = count + 1
 }
-
 return count;
-
 }
-
 agent Cell{
-
-int i
-
-int j
-
-bool alive
-
-Cell create(int r, int c) {
-
-self.i = r
-
-self.j = c
-
+	int i
+	int j
+	bool alive
+	Cell create(int r, int c) {
+		self.i = r
+		self.j = c
+	}
+	none destroy() {
+	}
+	none action() {
+	}
 }
-
-none destroy() {
-
-}
-
-none action() {
-
-}
-
-}
-
 environment {
-
-Cell[5][5] board
-
-none populate() {
-
-for(int i in range(0, env.board.length)){
-
-for(int j in range(0, env.board[0].length)){
-
-env.board[i][j] = Cell(i,j)
-
+	Cell[5][5] board
+	none populate() {
+		for(int i in range(0, env.board.length)){
+			for(int j in range(0, env.board[0].length)){
+				env.board[i][j] = Cell(i,j)
+			}
+		}
+	}
+		none action() {
+		}
 }
-
-}
-
-}
-
-none action() {
-
-}
-
-}
-
 terminate{}
-
 analysis{}
+</code></pre>
 
 We will start with
-
+<pre><code>
 if(env.board[i][j].alive){
-
-num\_alive = num\_alive + 1
-
+	num\_alive = num\_alive + 1
 }
 </code></pre>
 An if statement is a conditional statement. Only if the expression
@@ -370,7 +267,7 @@ value held in num\_alive. Therefore this assignment statement is in
 effect incrementing num\_alive ’s value by one. The same is true of the
 line
 
-return sum/elements.length
+<pre><code>return sum/elements.length</code></pre>
 
 where the return value is being set to the arithmetic evaluation of the
 right side’s division expression.
@@ -385,9 +282,7 @@ the for statement.
 To discuss the for statement, we start inside the avg() function:
 <pre><code>
 for (int i in elements) {
-
-sum = sum + i
-
+	sum = sum + i
 }
 </code></pre>
 The goal of the avg function is to go find the average of all integer
@@ -403,17 +298,11 @@ value of all integers in this list after the loop.
 The segment:
 <pre><code>
 for(int i in range(0, env.board.length)){
-
-for(int j in range(0, env.board[0].length)){
-
-if(env.board[i][j].alive){
-
-num\_alive = num\_alive + 1
-
-}
-
-}
-
+	for(int j in range(0, env.board[0].length)){
+		if(env.board[i][j].alive){
+			num\_alive = num\_alive + 1
+		}	
+	}
 }
 </code></pre>
 adds two new concepts to our for loop basic understanding. Firstly, we
@@ -457,113 +346,59 @@ neighbors are alive.
 \#This program is Phase 3 of 3 of building Game of Life Simulation
 
 int avg(int[] elements) {
-
 \#include this method’s code from section 3 when executing
-
 }
-
 int countAlive(){
-
 \#include this method’s code from section 3 when executing
-
 }
-
 int neibLiveCnt(int row, int col){
-
 \#include this method’s code from section 3 when executing
-
 }
-
 agent Cell{
-
-int i
-
-int j
-
-bool alive
-
-Cell create(int r, int c) {
-
-self.i = r
-
-self.j = c
-
-self.alive = (1: true | 1: false)
-
+	int i
+	int j
+	bool alive
+	Cell create(int r, int c) {
+		self.i = r
+		self.j = c
+		self.alive = (1: true | 1: false)
+	}
+	none destroy() {
+	}
+	none action() {
+		if(self.alive and neibLiveCnt(i, j)<2){
+			self.alive = false
+		}
+	if(self.alive and (neibLiveCnt(i, j)==2||neibLiveCnt(i, j)==3)){
+	\#nothing happens, just stays alive
+	}
+	if(self.alive and neibLiveCnt(i, j)\>3){
+		self.alive = false
+	}
+	if(self.alive==false and neibLiveCnt(i, j)==3){
+		self.alive = true
+		}
+	}
 }
-
-none destroy() {
-
-}
-
-none action() {
-
-if(self.alive and neibLiveCnt(i, j)<2){
-
-self.alive = false
-
-}
-
-if(self.alive and (neibLiveCnt(i, j)==2||neibLiveCnt(i, j)==3)){
-
-\#nothing happens, just stays alive
-
-}
-
-if(self.alive and neibLiveCnt(i, j)\>3){
-
-self.alive = false
-
-}
-
-if(self.alive==false and neibLiveCnt(i, j)==3){
-
-self.alive = true
-
-}
-
-}
-
-}
-
 environment {
-
-Cell[5][5] board
-
-int[] alive
-
-none populate() {
-
-for(int i in range(0, env.board.length)){
-
-for(int j in range(0, env.board[0].length)){
-
-env.board[i][j] = Cell(i,j)
-
+	Cell[5][5] board
+	int[] alive
+	none populate() {
+		for(int i in range(0, env.board.length)){
+			for(int j in range(0, env.board[0].length)){
+				env.board[i][j] = Cell(i,j)
+			}
+		}
+	}
+	none action() {
+		env.alive.append
+	}
 }
-
-}
-
-}
-
-none action() {
-
-env.alive.append^[[d]](#cmnt4)^( countAlive(env.board) )
-
-}
-
-}
-
 terminate {
-
-1:(TICKCOUNT == 5000) ^[[e]](#cmnt5)^^[[f]](#cmnt6)^
-
+	1:(TICKCOUNT == 5000) 
 }
-
 analysis {
-
-print(avg(env.alive))
-
+	print(avg(env.alive))
 }
 </code></pre>
 There are four blocks in a Mongoose program: agent, environment,
@@ -603,20 +438,17 @@ with which it is called. In our case the number is 1 so it is called at
 the end of every loop. If this number was 5, the expression would be
 evaluated at the end of every fifth loop. If no number is included the
 default used is 1. So our implementation is semantically equivalent to
-
-(TICKCOUNT == 5000)^[[g]](#cmnt7)^
-
+<pre><code>
+(TICKCOUNT == 5000)
+</code></pre>
 Let us now discuss more about lists. Specifically our use of the alive
 list has two interesting aspects.
-
+<pre><code>
 int[] alive
-
 ...
-
 ...
-
-env.alive.append^[[h]](#cmnt8)^( countAlive(board) )
-
+env.alive.append( countAlive(board) )
+</code></pre>
 On the first line above - the declaration line, Mongoose acts
 differently than Java. Lists in Mongoose are dynamic (i.e. they can be
 arbitrarily resized at runtime), so initializing them is optional. On
@@ -626,7 +458,7 @@ the end of the alive list.
 
 Before we complete our discussion, let us turn our attention to the line
 
-env.alive = (1: true | 1: false)^[[i]](#cmnt9)^
+<pre><code>env.alive = (1: true | 1: false)</code></pre>
 
 When the environment is populating the board and establishing the
 initial configuration, this line ensures some randomness of which pieces
@@ -635,7 +467,7 @@ assignment statement except that the right side’s evaluation to true or
 false is of a syntax that is unique from that of other languages. The
 regular expression for this general form is:
 
-( (<weight\>:<value\> | )\* <weight\>:<value\> | <weight\>:<value\> )
+<pre><code>( (<weight\>:<value\> | )\* <weight\>:<value\> | <weight\>:<value\> )</code></pre>
 
 This construct is critical to Mongoose’s focus on baking clear and
 concise probability control flow into simulations. The weights here act
@@ -663,239 +495,122 @@ clustering level. Our environment creates the people and randomly puts
 them in different slots.
 <pre><code>
 bool neighborsOpposite(float prob, Person p){
+	int row = p.row
+	int col = p.col
+	int opp\_gender = 0
+	\#check above
 
-int row = p.row
-
-int col = p.col
-
-int opp\_gender = 0
-
-\#check above
-
-if(row-1\>=0){
-
-if(env.grid[row-1][col].is\_female != p.is\_female){
-
-opp\_gender = opp\_gender + 1
-
+	if(row-1\>=0){
+	if(env.grid[row-1][col].is\_female != p.is\_female){
+		opp\_gender = opp\_gender + 1
+	}
 }
-
-}
-
 \#check below
-
 if(row+1<env.grid.length){
-
-if(env.grid[row+1][col].is\_female != p.is\_female){
-
-opp\_gender = opp\_gender + 1
-
+	if(env.grid[row+1][col].is\_female != p.is\_female){
+	opp\_gender = opp\_gender + 1
 }
-
 }
-
 \#check right
-
 if(col+1<env.grid[0].length){
-
-if(env.grid[row][col+1].is\_female != p.is\_female){
-
-opp\_gender = opp\_gender + 1
-
+	if(env.grid[row][col+1].is\_female != p.is\_female){
+		opp\_gender = opp\_gender + 1
+	}
 }
-
-}
-
 \#check left
-
 if(col-1\>=0){
-
-if(env.grid[row][col-1].is\_female != p.is\_female){
-
-opp\_gender = opp\_gender + 1
-
+	if(env.grid[row][col-1].is\_female != p.is\_female){
+		opp\_gender = opp\_gender + 1
+	}
+	return opp\_gender/4.0 \>= .7
 }
-
-}
-
-return opp\_gender/4.0 \>= .7
-
-}
-
 none moveRandom(Person p){
-
 if(p!=none){
-
-int width = env.grid[0].length
-
-int height = env.grid.length
-
-int new\_row = random(0,height-1)
-
-int new\_col = random(0,width)
-
-while(env.grid[new\_row][new\_col] != none){
-
-new\_row = random(0,height-1)
-
-new\_col = random(0,width)
-
+	int width = env.grid[0].length
+	int height = env.grid.length
+	int new\_row = random(0,height-1)
+	int new\_col = random(0,width)
+	while(env.grid[new\_row][new\_col] != none){
+		new\_row = random(0,height-1)
+		new\_col = random(0,width)
+		}
+	p.row = new\_row
+	p.col = new\_col
+	}
 }
-
-p.row = new\_row
-
-p.col = new\_col
-
-}
-
-}
-
 int getSurroundCount(float percent\_equal\_neighbor){
-
-int surrounded\_by\_equal = 0
-
-for(int i in range(0,grid.length)){
-
-for(int j in range(0,grid[0].length)){
-
-if(grid[i][j] != none){
-
-if(neighborsOpposite(grid[i][j], 1-percent\_equal\_neighbor){
-
-surrounded\_by\_equal = surrounded\_by\_equal + 1
-
+	int surrounded\_by\_equal = 0
+	for(int i in range(0,grid.length)){
+		for(int j in range(0,grid[0].length)){
+		if(grid[i][j] != none){
+			if(neighborsOpposite(grid[i][j], 1-percent\_equal\_neighbor){
+				surrounded\_by\_equal = surrounded\_by\_equal + 1
+				}
+			}
+		}
 }
-
-}
-
-}
-
-}
-
 return surrounded\_by\_equal
-
 }
-
 int getTotalPeople(){
-
 int total = 0
-
 for(int i in range(0,env.grid.length)){
-
-for(int j in range(0,env.grid[0].length)){
-
-if(env.grid[i][j]!=none){
-
-total = total + 1
-
+	for(int j in range(0,env.grid[0].length)){
+		if(env.grid[i][j]!=none){
+			total = total + 1
+		}
+	}
 }
-
-}
-
-}
-
 return total
-
 }
-
 agent Person{
-
-int row
-
-int col
-
-bool is\_female
-
-Person create(int r, int c){
-
-self.row = r
-
-self.col = c
-
-self.is\_female = (3:true | 7:false)
-
+	int row
+	int col
+	bool is\_female
+	Person create(int r, int c){
+		self.row = r
+		self.col = c
+		self.is\_female = (3:true | 7:false)
+	}
+	none action(){
+		\#if \>=70% of neighbors have opp gender then move me to random cell
+		if(neighborsOpposite(.7, this)){
+			moveRandomFree(this)
+		}
+	}
+	none destroy(){
+	}
 }
-
-none action(){
-
-\#if \>=70% of neighbors have opp gender then move me to random cell
-
-if(neighborsOpposite(.7, this)){
-
-moveRandomFree(this)
-
-}
-
-}
-
-none destroy(){
-
-}
-
-}
-
 environment {
-
-Person[10][10] grid
-
-none populate() {
-
-Person[20] list\_a
-
-for(int i in range(0,list\_a.length){
-
-list\_a[i] = Person(1,1)\#loc irrelevant; will be moved
-
-moveRandom(list\_a[i])
-
+	Person[10][10] grid
+	none populate() {
+		Person[20] list\_a
+		for(int i in range(0,list\_a.length){
+			list\_a[i] = Person(1,1)\#loc irrelevant; will be moved
+			moveRandom(list\_a[i])
+			}
+	}
+	none action(){
+		pif(0.3) {
+			moveRandom(grid[3][4])
+		}
+		pelif(0.6) {
+			moveRandom(grid[1][2])
+		}
+		pelse {
+			moveRandom(grid[5][7])
+		}
+	}
 }
-
-}
-
-none action(){
-
-pif(0.3) {
-
-moveRandom(grid[3][4])
-
-}
-
-pelif(0.6) {
-
-moveRandom(grid[1][2])
-
-}
-
-pelse {
-
-moveRandom(grid[5][7])
-
-}
-
-}
-
-}
-
 terminate {
-
-1:(TICKCOUNT == 50000){}
-
-\# if 80% of cells have 70% of their neighbors equal to their gender.
-
-7:(getSurroundCount(.7)/(float)getTotalPeople() \>= .8){
-
-print(“simulation ended because of convergence.”)
-
+	1:(TICKCOUNT == 50000){}
+	\# if 80% of cells have 70% of their neighbors equal to their gender.
+	7:(getSurroundCount(.7)/(float)getTotalPeople() \>= .8){
+	print(“simulation ended because of convergence.”)
+	}
 }
-
-}
-
 analysis{
-
-\#gets number of cells that have 75% of neighbors with equal gender
-
-print(getSurroundCount(.75))
-
+	\#gets number of cells that have 75% of neighbors with equal gender
+	print(getSurroundCount(.75))
 }
 </code></pre>
 In the terminate block we see the use of a function without a declared
@@ -905,8 +620,7 @@ within that function is not useful anywhere else.
 
 In the environment block, we see a construct of the form
 <pre><code>
-pif( probability ) { stmt\* } pelif( probability ) { stmt\* } pelse {
-stmt\* }
+pif( probability ) { stmt\* } pelif( probability ) { stmt\* } pelse {stmt\* }
 </code></pre>
 Due to Mongoose’s focus on coding simulations, its creators included
 this construct to make probability baked into control flow. This
@@ -923,62 +637,5 @@ their combined sum exceeds one, an error will occur. If a pelse is used
 the probability with which it is executed is the sum of its preceding
 zero or more pelif’s and one pif subtracted from one as we saw in our
 Schelling example above.
-
-[[a]](#cmnt_ref1)Michael Rubin:
-
-order: agents, environ block, terminate block, analysis
-
-[[b]](#cmnt_ref2)Michael Rubin:
-
-as is, simulation will never end
-
-* * * * *
-
-meir fischer:
-
-we need to add termination like: "1:(TICKCOUNT == 5000){}"
-
-For the early phases of Game of Life below it is not necessary to add
-this because they are incomplete unlike here where the program is
-supposed to be complete.
-
-[[c]](#cmnt_ref3)meir fischer:
-
-we need to add termination like: "1:(TICKCOUNT == 5000){}"
-
-For the early phases of Game of Life below it is not necessary to add
-this because they are incomplete unlike here where the program is
-supposed to be complete.
-
-[[d]](#cmnt_ref4)Michael Rubin:
-
-only allow appending to dynamic list, not static list
-
-[[e]](#cmnt_ref5)Michael Rubin:
-
-should have blank { } even when no function is called(?)
-
-[[f]](#cmnt_ref6)Michael Rubin:
-
-same as "5000: (true) {}"
-
-* * * * *
-
-meir fischer:
-
-i agree as did etan at the meeting
-
-[[g]](#cmnt_ref7)Michael Rubin:
-
-so the : is no longer necessary(?)
-
-[[h]](#cmnt_ref8)Michael Rubin:
-
-append() fails if list is statically declared
-
-[[i]](#cmnt_ref9)Michael Rubin:
-
-we must decide upon stylistic conventions for the syntax we made up (eg
-this)
 
 {% endblock %}
