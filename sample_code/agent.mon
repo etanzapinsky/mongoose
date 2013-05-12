@@ -30,13 +30,15 @@ environment {
     populate {
         A a = A()
         B b = B(5)
-        A c = A()
+        B c = B(10)
         int y = 1
+        b.n = 3
     }
 
     action {
         print("a.x:", a.x)
         print("b.n:", b.n )
+        print("c.n:", c.n )
     }
 }
 

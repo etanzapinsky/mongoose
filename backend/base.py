@@ -92,19 +92,26 @@ class Backend():
             
             # Assignment
             elif root.vtype == v.ASSIGNMENT:
-                scp = backend.find(root.children[0].symbol)
-                if not scp:
-                    raise NameError, "Variable '{}' does not exist".format(root.symbol)
-                for child in root.children:
-                    backend.walk_ast(child)
-                # this should have been disambiguated in the frontend
-                try:  # list assignment
-                    grandchild = root.children[0].children[0]
-                    assert grandchild.vtype == v.BRACKET_ACCESS
-                    depths = grandchild.syn_value
-                    list_assign(scp, root.children)
-                except IndexError:  # not a list assignment
-                    assign(scp, root.children)  # scopes modified via side effect
+                if root.children[0].vtype == v.IMPLICIT_PARAM:
+                    obj = root.children[0].children[0]
+                    inner = root.children[0].children[1]
+                    scp = backend.find(obj.symbol)
+                    val_scp = scp[obj.symbol].scope
+                    assign(val_scp, (inner, root.children[1]))
+                else:
+                    scp = backend.find(root.children[0].symbol)
+                    if not scp:
+                        raise NameError, "Variable '{}' does not exist".format(root.symbol)
+                    for child in root.children:
+                        backend.walk_ast(child)
+                    # this should have been disambiguated in the frontend
+                    try:  # list assignment
+                        grandchild = root.children[0].children[0]
+                        assert grandchild.vtype == v.BRACKET_ACCESS
+                        depths = grandchild.syn_value
+                        list_assign(scp, root.children)
+                    except IndexError:  # not a list assignment
+                        assign(scp, root.children)  # scopes modified via side effect
 
             elif root.vtype == v.IDENTIFIER:
                 scp = backend.find(root.symbol)
@@ -205,7 +212,6 @@ class Backend():
                 val_scp = scp[obj.symbol].scope
                 val = val_scp[inner.symbol]
                 backend.scopes.append(val_scp)
-                # backend.walk_ast(val)
                 root.syn_value = val.syn_value
                 backend.scopes.pop()
             else:
