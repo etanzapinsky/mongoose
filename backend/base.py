@@ -9,12 +9,12 @@ class Backend():
     def __init__(self):
         symbols = dict()
         symbols.update(builtins)
+        symbols.update({'TICKCOUNT': 1})
         self.scopes = [symbols]
         self.invariants = defaultdict(list)
         self.populate = None
         self.action = None
         self.analysis = None
-        self.tick = 1
         self.agent_list = list()
 
     # this function returns the scope of the symbol requested, practically
@@ -231,14 +231,14 @@ class Backend():
     def run(self):
         backend.walk_ast(backend.populate.children[0])
         while True:
-            backend.walk_ast(backend.action.children[0])
             for agent in self.agent_list:
                 backend.scopes.append(agent.scope)
                 for child in agent.action.children:
                     backend.walk_ast(child)
                 backend.scopes.pop()
+            backend.walk_ast(backend.action.children[0])
             invariants = [i for k,v in backend.invariants.iteritems()
-                          if not self.tick % k for i in v]
+                          if not backend.scopes[0]['TICKCOUNT'] % k for i in v]
             if invariants:
                 stop = False
                 for invariant in invariants:
@@ -251,6 +251,6 @@ class Backend():
                 if stop:
                     backend.walk_ast(backend.analysis.children[0])
                     break
-            self.tick += 1
+            backend.scopes[0]['TICKCOUNT'] += 1
 
 backend = Backend()  # backend is a global singleton variable
