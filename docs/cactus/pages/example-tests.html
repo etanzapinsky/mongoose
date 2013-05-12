@@ -1,0 +1,93 @@
+{% extends "markdown.html" %}
+{% block markdown %}
+
+Tests:
+Example of Lexer unittest for variable definition.
+<pre><code>
+    def test_int_assignment_single_value(self):
+        tokens = self.tokenize("int x = 5")
+        token_parts = [(t.type, t.value) for t in tokens]
+
+        expected_parts = [
+            ('INTEGER', 'int'),
+            ('NAME', 'x'),
+            ('=', '='),
+            ('VINTEGER', '5'),
+        ]
+        assert token_parts == expected_parts
+</code></pre>
+
+
+Example of Parser unittest testing the buildup of Mongoose's AST.     
+<pre><code>
+def test_assignment_decl(self): #coverage for assignment and empty blocks
+         src = '''int x = 5\n
+         environment{\n 
+                 populate{\n
+                 }\n
+                 action{\n
+                 }\n
+         }\n
+         terminate{\n
+         }\n
+         analysis{\n
+         }''' # "int x = 5"
+         expected = Node(vtype=v.PROGRAM, children=[
+                        Node(vtype=v.AGENT_LIST, children=[None]),                           
+                        Node(vtype=v.ENVIRONMENT, children=[
+                            Node(vtype=v.POPULATE, children=[
+                                Node(vtype=v.STATEMENT_LIST, children=[None])
+                            ]),
+                            Node(vtype=v.ACTION, children=[
+                                Node(vtype=v.STATEMENT_LIST, children=[None])
+                            ]),
+                            Node(vtype=v.STATEMENT_LIST, children=[None]),
+                            Node(vtype=v.STATEMENT_LIST, children=[None]),
+                            Node(vtype=v.STATEMENT_LIST, children=[None])
+                        ]),
+                        Node(vtype=v.TERMINATE, children=[None]), 
+                        Node(vtype=v.ANALYSIS, children=[
+                            Node(vtype=v.STATEMENT_LIST, children=[None])
+                        ]),
+                        Node(vtype=v.STATEMENT_LIST, children=[
+                            Node(vtype=v.STATEMENT, children=[
+                                Node(vtype=v.DECLARATION_ASSIGNMENT,children=[
+                                     Node(vtype=v.DECLARATION,children=[
+                                         Node(vtype=v.LIST_TYPE,inh_value='int', children=[
+                                             Node(vtype=v.INT_KEYWORD,syn_value='int')
+                                            ,Node(vtype=v.BRACKET_DECL,inh_value='')
+                                         ])
+                                        ,Node(vtype=v.IDENTIFIER,symbol='x')
+                                     ])
+                                    ,Node(vtype=v.INTEGER_VALUE,syn_value='5')
+                                 ])
+                                ,None
+                             ])
+                            ,None
+                         ]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None])
+                     ])    
+        
+         result = parser.parse(src)
+         assert isinstance(result,Node)
+         assert isinstance(expected,Node) 
+         assert result == expected
+</code></pre>
+
+Example of integration test for print.mon file:
+<pre><code>
+def test_print_mon():
+    expected = '''hello world!
+x: 10
+y: 10
+sum: 20
+x + y: 20
+'''
+    output = run('sample_code/working/print.mon')
+    assert output == expected
+</code></pre>
+
+{% endblock %}
