@@ -26,8 +26,9 @@ def traversePost(root, indent): #preorder
             traversePost(root.next_conditional, indent+1)
         else: #regular Node
             print '     '*indent + root.__str__()#vtype,':',root.syn_value,':',root.symbol,':',root.inh_value,':',root.params
-            for n in root.children:
-                traversePost(n, indent+1)
+            if root.children is not None:
+                for n in root.children:
+                    traversePost(n, indent+1)
 
 if __name__ == "__main__": 
     #while True:

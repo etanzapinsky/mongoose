@@ -20,7 +20,8 @@ precedence = (
     ('left', '+', '-'),
     ('left', '*', '/', '%'),
     ('right', '^'),
-    ('right', 'NOT', 'UMINUS'),           
+    ('right', 'NOT', 'UMINUS'),
+    ('left', '.'),           
 )
 
 start =  'program'
@@ -337,9 +338,13 @@ def p_void_function_def(p):
 
 
 def p_stat_function_call(p):
-    ''' stat : function_call 
+    ''' stat : scope function_call 
+             | function_call 
     '''
-    p[0] = p[1]
+    if len(p) == 3:
+        p[0] = Node(vtype=v.IMPLICIT_PARAM, children=[p[1],p[2]])
+    else:
+        p[0]=p[1]
 
 def p_formal_param_list(p):
     ''' formal_param_list : decl formal_param_comma
@@ -484,6 +489,18 @@ def p_opt_pelse(p):
 ## DECLARATIONS/ASSIGNMENTS ##
 ##############################
 
+def p_stat_assign_scope(p):
+    '''stat : scope NAME non_empty_brack '=' expr    
+    '''
+    kids = []
+    if p[3].vtype == v.BRACKET_ACCESS:
+        kids = [p[3]]
+        if p[3].syn_value == -1:
+            kids = [Node(vtype='?2')]
+    id_node = Node(vtype=v.IDENTIFIER, symbol=p[2], children=kids)
+    expression_node = p[5]
+    p[0] = Node(vtype=v.ASSIGNMENT, children=[Node(vtype=v.IMPLICIT_PARAM, children=[p[1], id_node]), expression_node]) 
+
 def p_stat_assign(p):
     '''stat : NAME non_empty_brack '=' expr    
     '''
@@ -613,9 +630,13 @@ def p_weighted_val_clause(p):
 ################################
 
 def p_pow_function_call(p):
-    ''' pow : function_call
+    ''' pow : scope function_call
+             | function_call
     '''
-    p[0] = p[1]
+    if len(p) == 3:
+        p[0] = Node(vtype=v.IMPLICIT_PARAM, children=[p[1],p[2]])
+    else:
+        p[0] = p[1]
 
 def p_integer(p):
     ''' pow : VINTEGER '''
@@ -639,11 +660,25 @@ def p_none(p):
     p[0] = Node(vtype=v.NONE_VALUE, syn_vtype=v.NONE_VALUE)
 
 def p_id(p):
-    ''' pow : NAME non_empty_brack '''
+    ''' pow : scope NAME non_empty_brack 
+            | NAME non_empty_brack
+    '''
     kids = []
-    if p[2].vtype == v.BRACKET_ACCESS:
-        kids = [p[2]]
-    p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)
+    if len(p) == 4:
+        if p[3].vtype == v.BRACKET_ACCESS:
+            kids = [p[3]]
+        p[0] = Node(vtype=v.IMPLICIT_PARAM,children=[p[1],Node(vtype=v.IDENTIFIER, symbol=p[2], children=kids)])
+    else:
+        if p[2].vtype == v.BRACKET_ACCESS:
+            kids = [p[2]]
+        p[0] = Node(vtype=v.IDENTIFIER, symbol=p[1], children=kids)        
+
+def p_scope(p):
+    ''' scope : NAME '.'
+    '''
+    p[0] = Node(vtype=v.IMPLICIT_PARAM, symbol=p[1])
+    
+
 
 def p_expr_paren(p):
     ''' pow : '(' expr ')'
