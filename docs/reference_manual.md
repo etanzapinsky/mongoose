@@ -146,20 +146,20 @@ The language has the == (is equal to) and != (is not equal to) equality infix op
 ### Logical Operators
     boolean-expression :
         boolean-expression and boolean-expression
-    boolean-expression or boolean-expression
-    not boolean-expression
-    [true|false]
+        boolean-expression or boolean-expression
+        not boolean-expression
+        [true|false]
 
-To operate on booleans the operators `and`, `or` and `not` are used. The operators `and` and `or` are left associative with ``and`` having a higher precedence over or, and not is right associative, similar to the unary minus. Also, these operators can be chained arbitrarily.
+To operate on booleans the operators `and`, `or` and `not` are used. The operators `and` and `or` are left associative with `and` having a higher precedence over `or`, and `not` is right associative, similar to the unary minus. Also, these operators can be chained arbitrarily.
 
 ### Conditional Operators
-The conditional operators are or signifying logical OR, and and signifying logical AND. 
+The conditional operators are `or` signifying logical OR, and `and` signifying logical AND. 
 
 ### Assignment Operator
-The assignment operator in Mongoose is represented by the = symbol. The left-hand-side variable is assigned the value on the right-hand-side, assuming the types are compatible. The assignment operator does not return a reference in Mongoose.
+The assignment operator in Mongoose is represented by the `=` symbol. The left-hand-side variable is assigned the value on the right-hand-side, assuming the types are compatible. The assignment operator does not return a reference in Mongoose.
 
 ### Comma Operator
-Commas are the symbol , used to separate variables. This is used mainly in dealing with functions with parameters.
+Commas are the symbol `,` used to separate variables. This is used mainly in dealing with functions with parameters.
 
 ### Probabilistic Value
 A probabilistic value in Mongoose is an expression such as the following: 
