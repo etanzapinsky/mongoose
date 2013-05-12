@@ -108,4 +108,3 @@ concat: hi there!
 '''
     output = run('sample_code/working/return_statements.mon')
     assert output == expected
->>>>>>> added test for return statements
