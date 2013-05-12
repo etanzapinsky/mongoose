@@ -14,4 +14,117 @@ A future improvement would be to increase our unit test "coverage", i.e. the amo
 Integration testing is the *end-to-end* testing that runs a complete source code program through the entire compiler stack. As we finished the implementation of more language features, we added complete Mongoose source files, reflecting the new features, to a "working" sample code directory. We also added integration tests to ensure that those files continued to work correctly when we made changes to the codebase.
 
 The combination of unit testing and integration testing gives us the confidence to say that if a Mongoose program is in our working directory, it actually works as intended.
+
+8: Testing
+
+Our testing methodology for Mongoose involved using a combination of unit test for covering the functional components of the our language: lexer, parser, semantic analyser, and backend/code generator along with integration tests to verify our specifications from end-to-end yielding in the output results. 
+
+In order to automate our testing, we used Python's Nose framework, which is an extension of Python's unittest library. The benefits included test discovery, which allowed us to test our entire project in one batch. Nose also allowed us to readily call assertions in our testing files, which served the double role of verifying and documenting our implementations.
+
+Nose's features were added into our shellscript manage.sh, used for directory management and testing functionality. Error lines are output to the shell.
+
+Ex: Shell script: ./manage.sh <files to test> <set of tests to run> 
+
+
+
+Files 			Testing Goal
+test_backend.py		Unit tests of backend functionality, covering different AST nodes
+test_builtins.py	Tested coverage of the builtin functions
+test_functions.py	Tested Mongoose supported functions, covering cases of addition, functions, variables and constants
+test_integration.py 	Tested sample .mon (mongoose) source code for the full compiler
+test_lexer.py		Tests the functionality of the lexer based on various expected lines of code such as function definitions, variable initializations, 
+test_lists.py		Tested static list functionality
+test_parser.py		Tested parser AST, tested sample code blocks and coverage of various code blocks
+test_scope.py		Tested scoping rules
+
+
+Tests:
+Example of Lexer unittest for variable definition.
+<pre><code>
+    def test_int_assignment_single_value(self):
+        tokens = self.tokenize("int x = 5")
+        token_parts = [(t.type, t.value) for t in tokens]
+
+        expected_parts = [
+            ('INTEGER', 'int'),
+            ('NAME', 'x'),
+            ('=', '='),
+            ('VINTEGER', '5'),
+        ]
+        assert token_parts == expected_parts
+</code></pre>
+
+
+Example of Parser unittest testing the buildup of Mongoose's AST.     
+<pre><code>
+def test_assignment_decl(self): #coverage for assignment and empty blocks
+         src = '''int x = 5\n
+         environment{\n 
+                 populate{\n
+                 }\n
+                 action{\n
+                 }\n
+         }\n
+         terminate{\n
+         }\n
+         analysis{\n
+         }''' # "int x = 5"
+         expected = Node(vtype=v.PROGRAM, children=[
+                        Node(vtype=v.AGENT_LIST, children=[None]),                           
+                        Node(vtype=v.ENVIRONMENT, children=[
+                            Node(vtype=v.POPULATE, children=[
+                                Node(vtype=v.STATEMENT_LIST, children=[None])
+                            ]),
+                            Node(vtype=v.ACTION, children=[
+                                Node(vtype=v.STATEMENT_LIST, children=[None])
+                            ]),
+                            Node(vtype=v.STATEMENT_LIST, children=[None]),
+                            Node(vtype=v.STATEMENT_LIST, children=[None]),
+                            Node(vtype=v.STATEMENT_LIST, children=[None])
+                        ]),
+                        Node(vtype=v.TERMINATE, children=[None]), 
+                        Node(vtype=v.ANALYSIS, children=[
+                            Node(vtype=v.STATEMENT_LIST, children=[None])
+                        ]),
+                        Node(vtype=v.STATEMENT_LIST, children=[
+                            Node(vtype=v.STATEMENT, children=[
+                                Node(vtype=v.DECLARATION_ASSIGNMENT,children=[
+                                     Node(vtype=v.DECLARATION,children=[
+                                         Node(vtype=v.LIST_TYPE,inh_value='int', children=[
+                                             Node(vtype=v.INT_KEYWORD,syn_value='int')
+                                            ,Node(vtype=v.BRACKET_DECL,inh_value='')
+                                         ])
+                                        ,Node(vtype=v.IDENTIFIER,symbol='x')
+                                     ])
+                                    ,Node(vtype=v.INTEGER_VALUE,syn_value='5')
+                                 ])
+                                ,None
+                             ])
+                            ,None
+                         ]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None]),
+                         Node(vtype=v.STATEMENT_LIST, children=[None])
+                     ])    
+        
+         result = parser.parse(src)
+         assert isinstance(result,Node)
+         assert isinstance(expected,Node) 
+         assert result == expected
+</code></pre>
+
+Example of integration test for print.mon file:
+<pre><code>
+def test_print_mon():
+    expected = '''hello world!
+x: 10
+y: 10
+sum: 20
+x + y: 20
+'''
+    output = run('sample_code/working/print.mon')
+    assert output == expected
+</code></pre>
+
 {% endblock %}
