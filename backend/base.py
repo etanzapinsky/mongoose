@@ -2,6 +2,7 @@ from stdlib import assign, list_assign, boolean_ops, equality_ops, first_order_o
 from stdlib import weighted_value
 import vtypes as v
 from collections import defaultdict
+import copy
 
 class Backend():
 
@@ -62,9 +63,12 @@ class Backend():
                     backend.walk_ast(child)
                 func = scp[root.symbol]
                 if func.vtype == v.AGENT:
-                    backend.scopes.append(func.scope)
-                    func = func.create
-                    root.syn_value = func.execute(*root.children)
+                    agent = copy.deepcopy(func)
+                    backend.scopes.append(agent.scope)
+                    for st in agent.statements:
+                        backend.walk_ast(st)
+                    agent.create.execute(*root.children)
+                    root.syn_value = agent
                     backend.scopes.pop()
                 else:
                     root.syn_value = func.execute(*root.children)
@@ -173,10 +177,6 @@ class Backend():
                     backend.walk_ast(child)
             elif root.vtype == v.AGENT:
                 backend.scopes[-1][root.symbol] = root
-                backend.scopes.append(root.scope)
-                for st in root.statements:
-                    backend.walk_ast(st)
-                backend.scopes.pop()
             elif root.vtype == v.ENVIRONMENT:
                 for child in root.children:
                     backend.walk_ast(child)
@@ -205,6 +205,7 @@ class Backend():
 
     def run(self):
         backend.walk_ast(backend.populate.children[0])
+        import bpdb; bpdb.set_trace()
         while True:
             backend.walk_ast(backend.action.children[0])
             invariants = [i for k,v in backend.invariants.iteritems()

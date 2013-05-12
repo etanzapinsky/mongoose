@@ -30,6 +30,8 @@ environment {
     populate {
         A a = A()
         B b = B(5)
+        A c = A()
+        int x = 1
     }
 
     action {
