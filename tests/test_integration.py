@@ -96,3 +96,8 @@ def test_while_loop():
 '''
     output = run('sample_code/working/repeat_statement.mon')
     assert output == expected
+
+def test_comments():
+    expected = ''''''
+    output = run('sample_code/working/comments.mon')
+    assert output == expected
