@@ -1,31 +1,17 @@
-
-agent Cell {
-      
-      destroy{
-
-      }
-      action{
-
-      }
-
-      create(){
-
-      }
-      
+int[]  foo(string[foo()][] s, boolean x){
+   int y = 5 
+   return x
 }
 
-environment{ 
-	populate{ 
-	}	
+environment{
+	populate{
+
+	}
 	action{
 	}
 }
-
-#terminate{
-#
-#}
-
-analysis{
-
+terminate{
 }
 
+analysis{
+}

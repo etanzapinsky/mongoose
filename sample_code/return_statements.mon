@@ -1,0 +1,21 @@
+
+int foo(){
+    int z    
+    return z
+}
+
+none bar(){
+    return
+}
+
+environment{
+    action{
+    }
+    populate{       
+    }
+}
+
+terminate{
+}
+analysis{
+}

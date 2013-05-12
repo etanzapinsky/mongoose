@@ -1,0 +1,41 @@
+string success = "I should print"
+string failure = "I should not print"
+
+if (true) {
+    print(success)
+} elif (true) {
+    print("1:", failure)
+} elif (true and true) {
+    print("2:", failure)
+} else {
+    print("3:", failure)
+}
+
+if (false) {
+   print ("4:", failure)
+} else {
+   print (success)
+}
+
+if (false) {
+   print("5:", failure)
+} elif (true) {
+   print(success)
+   if (true) {
+       print(success)
+   }
+}
+
+environment{
+	action{
+
+        }
+	populate{
+
+	}
+}
+
+terminate{
+}
+analysis{
+}

@@ -1,0 +1,26 @@
+print("hello world!")
+
+int x = 10
+print("x:", x)
+
+int y = 10
+print("y:", y)
+
+int sum
+sum = x + y
+print("sum:", sum)
+print("x + y:", x + y)
+
+environment{
+	action{
+
+	}
+	populate{
+
+	}
+}
+
+terminate{
+}
+analysis{
+}

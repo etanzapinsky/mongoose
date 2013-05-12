@@ -1,0 +1,14 @@
+
+x = (int) (5 *  ((float) 4+8))
+
+environment{
+    action{
+    }
+    populate{       
+    }
+}
+
+terminate{
+}
+analysis{
+}

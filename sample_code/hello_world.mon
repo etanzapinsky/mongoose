@@ -1,0 +1,14 @@
+environment{
+	string c = "hello world"
+	populate{
+		print(c)
+	}
+	action{
+		print(c)
+	}
+}
+
+terminate{
+}
+analysis{
+}

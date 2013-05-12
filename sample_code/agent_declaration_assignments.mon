@@ -1,0 +1,18 @@
+
+Cell x = Cell()
+
+Cell y
+
+y = Cell()
+
+environment{
+    action{
+    }
+    populate{       
+    }
+}
+
+terminate{
+}
+analysis{
+}

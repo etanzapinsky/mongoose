@@ -50,7 +50,7 @@ class LexerTests(unittest.TestCase):
             ('STRING', 'string'),
             ('NAME', 'x'),
             ('=', '='),
-            ('VSTRING', '\"abc\"'),
+            ('VSTRING', 'abc'),
         ]
         assert token_parts == expected_parts    
 
@@ -62,7 +62,7 @@ class LexerTests(unittest.TestCase):
             ('STRING', 'string'),
             ('NAME', 'x'),
             ('=', '='),
-            ('VSTRING', '\'abc\''),
+            ('VSTRING', 'abc'),
         ]
         assert token_parts == expected_parts     
 
@@ -280,9 +280,9 @@ class LexerTests(unittest.TestCase):
              ('STRING', 'string'),
          ('NAME', 'x'),
              ('=', '='),
-             ('VSTRING', '\"ab\"'),
+             ('VSTRING', 'ab'),
              ('+', '+'),
-             ('VSTRING', '\'cd\''),
+             ('VSTRING', 'cd'),
          ]
          assert token_parts == expected_parts
 
@@ -465,7 +465,7 @@ class LexerTests(unittest.TestCase):
              ('STRING', 'string'),
          ('NAME', 's'),
              ('=', '='),
-         ('VSTRING', '\'abc\''),
+         ('VSTRING', 'abc'),
          ]
          assert token_parts == expected_parts    
 

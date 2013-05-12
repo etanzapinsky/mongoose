@@ -32,6 +32,8 @@ class Lexer:
         'destroy' : 'DESTROY',
         'agent' : 'AGENT',
         'repeat' : 'REPEAT',
+        'return' : 'RETURN',
+        'none' : 'NONE',
     }
 
     #add 'none' later
@@ -64,7 +66,6 @@ class Lexer:
     
     literals = "+-*/%^()=\'\"<>[]{}:|,#"    #type=value for single characters
         
-    t_VSTRING = r'("[^"]*")|(\'[^\']*\')'
     t_VINTEGER = r'[0-9]+'
     t_VFLOAT = r'[0-9]*\.[0-9]+'
     t_EQ = r'\=\='
@@ -72,9 +73,16 @@ class Lexer:
     t_LEQ = r'\<\='
     t_GEQ = r'\>\='
     
+    def t_VSTRING(self, t):
+        r'("[^"]*")|(\'[^\']*\')'
+        # gets rid of the quotes
+        t.value = t.value[1:-1]
+        return t
+
     def t_COMMENT(self, t):
-        r'\#.*'
-        pass
+       r'\#.*'
+       pass
+    #t_ignore_COMMENT = r'\#.*'
 
     def t_VBOOLEAN(self, t):
         r'true|false'

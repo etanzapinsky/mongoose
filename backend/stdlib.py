@@ -2,7 +2,12 @@
 from __future__ import print_function
 import vtypes as v
 
-builtins = {'_print': lambda x: print(x)}
+class PrintFunction():
+    @classmethod
+    def execute(self, *args):
+        print(*[a.syn_value for a in args])
+
+builtins = {'print': PrintFunction}
 
 first_order_ops = {v.ADD: lambda x, y: x + y,
                    v.SUBTRACT: lambda x, y: x - y,
@@ -26,10 +31,27 @@ boolean_ops = {
       v.OR: lambda x, y: bool(x or y),
 }
 
+def _print_scope(scope, when):
+  print('Scope {}:'.format(when))
+  for k,v in scope.items():
+        try:
+            print('\t{}: {}'.format(k, v.__str__()))
+        except AttributeError, e:
+            print('\t{}: {}'.format(k, v))
+
+def list_assign(scope, nodes):
+    sym = nodes[0].symbol
+    val = nodes[1]
+    # _print_scope(scope, "beforelist")
+    indexes = nodes[0].children[0].syn_value
+    scope[sym].store(val,indexes)  # store() does typechecking
+    # _print_scope(scope, "afterlist")
+
 def assign(scope, nodes):
     '''Modifies the scope parameter (side effect!) by inserting the assigned value.
     Example: x = val.'''
-    try:
-        scope[nodes[0].symbol] = nodes[1].syn_value
-    except KeyError:
-        raise 'Varible does not exist'
+    sym = nodes[0].symbol
+    val = nodes[1]
+    # _print_scope(scope, "before")
+    scope[sym] = val
+    # _print_scope(scope, "after")

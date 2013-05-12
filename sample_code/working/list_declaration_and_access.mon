@@ -1,0 +1,22 @@
+int[2][3] x
+x[1][1] = 1
+print(x[1][1])
+int y
+y = x[1][1]
+print(y)
+
+# x[1][1] = 'true'  # this SHOULD raise a TypeError
+# should print 1
+print(x[1][1])
+
+environment{
+	action{
+	}
+	populate{		
+	}
+}
+
+terminate{
+}
+analysis{
+}

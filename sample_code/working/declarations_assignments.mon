@@ -1,6 +1,9 @@
 int x = 7
+print(x)
 x  = 3
-string y
+print(x)
+int y = x
+print(y)
 environment{
 	action{
 

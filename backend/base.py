@@ -1,14 +1,24 @@
-from stdlib import assign, boolean_ops, equality_ops, first_order_ops
+from stdlib import assign, list_assign, boolean_ops, equality_ops, first_order_ops, builtins
 import vtypes as v
 
 class Backend():
 
     def __init__(self):
         symbols = dict()
+        symbols.update(builtins)
         self.scopes = [symbols]
 
     def walk_ast(self, root, siblings=None, parent=None):
 
+        # this function returns the scope of the symbol requested, practically
+        # this means that we cant redefine variables that exist already in the
+        # scope. e.g. if we defined `int x` at the global scope, at no more local
+        # scope can we redefine `int x`
+        def find(symbol):
+            for scp in reversed(backend.scopes):
+                if symbol in scp.keys():
+                    return scp
+            return None
         # not popping b/c we only pop when *destroying* scope
         # (here we are just modifying)
         scope = backend.scopes[-1]
@@ -32,28 +42,91 @@ class Backend():
 
         if root != None:
             if root.vtype == v.FUNCTION_DEFINITION:
-                root.syn_value = evaluate_function(f=root, scope=scope,
-                                                   args=[child.syn_value for child in root.children])
+                scope[root.symbol] = root
+                # root.syn_value = evaluate_function(f=root, scope=scope,
+                #                                    args=[child.syn_value for child in root.children])
+            elif root.vtype == v.FUNCTION_CALL:
+                scp = find(root.symbol)
+                if not scp:
+                    raise NameError, "Function '{}' does not exist".format(root.symbol)
+                # evaluating expressions passed into function before calling function
+                for child in root.children:
+                    backend.walk_ast(child)
+                root.syn_value = scp[root.symbol].execute(*root.children)
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
                 root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
+                root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype in boolean_ops:
                 root.syn_value = boolean_ops[root.vtype](*[child.syn_value for child in root.children])
+                root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype in equality_ops:
                 root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
+                root.syn_vtype = root.children[0].syn_vtype
+            
+            # Assignment
             elif root.vtype == v.ASSIGNMENT:
-                assign(backend.scopes[-1], root.children)  # scopes modified via side effect
+                scp = find(root.children[0].symbol)
+                if not scp:
+                    raise NameError, "Variable '{}' does not exist".format(root.symbol)
+                for child in root.children:
+                    backend.walk_ast(child)
+                # this should have been disambiguated in the frontend
+                try:  # list assignment
+                    grandchild = root.children[0].children[0]
+                    assert grandchild.vtype == v.BRACKET_ACCESS
+                    depths = grandchild.syn_value
+                    list_assign(scp, root.children)
+                except IndexError:  # not a list assignment
+                    assign(scp, root.children)  # scopes modified via side effect
+
             elif root.vtype == v.IDENTIFIER:
-                root.syn_value = root.symbol
+                scp = find(root.symbol)
+                for kid in root.children:
+                    backend.walk_ast(kid)
+
+                # list access
+                try:
+                    root.children[0].vtype == v.BRACKET_ACCESS
+                    root.syn_value = scp[root.symbol].get(indexes=root.children[0].syn_value)
+                    root.syn_vtype = root.children[0].syn_vtype
+                # simple element access
+                except IndexError: # scp[root.symbol]:
+                    root.syn_value = scp[root.symbol].syn_value
+                    root.syn_vtype = scp[root.symbol].syn_vtype
+
+            # Declaration
             elif root.vtype == v.DECLARATION:
-                symbols = backend.scopes[-1]
-                root.inh_value = root.children[0].inh_value
-                root.symbol = root.children[1].symbol
-                symbols[root.symbol] = None # can we do this, or do we have a none type?
+                scp = find(root.symbol)
+                if scp:
+                    raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
+                from parser import Node, List
+                # We store different Node types acc. to the root syn_vtype
+                if root.syn_vtype == v.LIST_TYPE:
+                    depths = root.children[1].depths
+                    syn_vtype = root.children[1].syn_vtype
+                    none_obj = List(symbol=root.symbol, depths=depths, syn_vtype=syn_vtype)
+                elif len(root.children) == 0:  # inside declaration assignment
+                    # sorry, this is necessary b/c of wonkiness in the AST:
+                    none_obj = Node(symbol=root.symbol, vtype=v.IDENTIFIER, syn_vtype=root.syn_vtype, syn_value=None)
+                else:
+                    assert len(root.children) > 0
+                    identifier = root.children[0]
+                    none_obj = Node(symbol=identifier.symbol, vtype=identifier.vtype, syn_vtype=root.syn_vtype, syn_value=None)
+                scope[root.symbol] = none_obj
+
             elif root.vtype == v.DECLARATION_ASSIGNMENT:
-                backend.walk_ast(root.children[0]) # the declaration
-                assign(backend.scopes[-1], root.children)
+                for child in root.children:
+                    backend.walk_ast(child)
+            elif root.vtype == v.IF:
+                root.execute_if()
+            elif root.vtype == v.PIF:
+                root.execute_pif()
+            elif root.vtype == v.WHILE:
+                root.execute_while()
+            elif root.vtype == v.REPEAT:
+                root.execute_repeat()
             elif root.vtype == v.PROGRAM:
                 for kid in root.children:
                     backend.walk_ast(kid)
@@ -67,9 +140,21 @@ class Backend():
                 # print root.children, backend.scopes
             elif root.vtype in v.RETURN_STATEMENT:
                 root.syn_value = backend.walk_ast(root.children)
+            elif root.vtype == v.BRACKET_ACCESS:
+                pass
+            elif root.vtype == v.AGENT_LIST:
+                pass  # @todo
+            elif root.vtype == v.ENVIRONMENT:
+                pass  # @todo
+            elif root.vtype == v.TERMINATE:
+                pass  # @todo
+            elif root.vtype == v.ANALYSIS:
+                pass  # @todo
+            else:
+                pass  # @todo
 
 
-        # return root.syn_value
+        return root.syn_value
         # How does this deal with return values? @todo
 
 backend = Backend()  # backend is a global singleton variable

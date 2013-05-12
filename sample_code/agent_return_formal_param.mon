@@ -1,0 +1,16 @@
+
+Cell foo(Cell c) {
+     return x
+}
+
+environment{
+    action{
+    }
+    populate{       
+    }
+}
+
+terminate{
+}
+analysis{
+}
