@@ -1,10 +1,6 @@
 
 
-q = a.x()
-r.c()
-a.x = 5
-a = r.y
-a.x = b.y
+boolean x 
 
 environment{
 	populate{

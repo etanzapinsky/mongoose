@@ -19,19 +19,18 @@ Each Mongoose program consists of four main blocks of code: the environment, the
 
 Agents are objects that hold state, have functions that enable them to be created or destroyed, and have an action that is performed at particular time periods, “simultaneously” with the action of every other agent, in other words, the action takes into account only the status quo at the beginning of the time step. This is analogous to transactions: each individual actor's action is executed within a time step, but only once all of the actions have completed (and the various environmental invariants been enforced), is the transaction completed.
 
-Terminating conditions are checked at the end of time periods, the frequency and order of which can be specified by the programmer. If any of these invariants proves to be false, the simulation ends and an action can be performed, before the final analysis is done. The analysis block is carried out at the end of the simulation, after it terminates.
-
+Terminating conditions are checked at the end of time periods, the frequency and order of which can be specified by the programmer. If any of these invariants proves to be false, the simulation ends and an action can be performed, before the final analysis is done. The analysis block is carried out at the end of the simulation, just before it terminates.
+    
 ## Order of Execution
 
 When a Mongoose program is run, first the interpreter determines the scope of the functions and variables declared in the file; they are either at the global scope of the file, the scope of a block, or at the scope of a function within a block. This allows the Mongoose interpreter to effectively determine if a block is using variables that it has access to. 
 
-After determining scope, the next thing that occurs is that the environment’s instance variables are instantiated with a call to its populate() function. At the same time, every time an agent is created its instance variables are instantiated with a call to its create() function. Then, until the program terminates, the following things are performed in order: first, the agents’ action() functions are all carried out simultaneously (if they are acting on the given turn), that is they all act based on the same shared state. Next, the environment’s action() is invoked, but it may depend on new state as changed by the agents’ actions. Next, the termination conditions are checked in the order they are listed, and if any of them fail, additional actions may be called before the simulation is brought to a halt. Finally however, if none of them fail, the TICKCOUNT increments by 1 and the cycle repeats. After the simulation finally terminates, the additional analysis block of code is executed.
-
+After determining scope, the next thing that occurs is that the environment’s instance variables are instantiated with a call to its populate() function. Every time an agent is created, its instance variables are instantiated with a call to its create() function. Then, until the program terminates, the following things are performed in order: first, the agents’ action() functions are all carried out simultaneously (if they are acting on the given turn), that is, they all act based on the same shared state. Next, the environment’s action() is invoked, but it may depend on new state as changed by the agents’ actions. Next, the termination conditions are checked in the order they are listed, and if any of them fail, additional actions may be called before the simulation is brought to a halt. Finally however, if none of them fail, the TICKCOUNT increments by 1 and the cycle repeats. After the simulation finally terminates, the additional analysis block of code is executed.
 
 ## Lexical Conventions
 
 ### Lexical Conventions
-A program consists of one body of source code, stored in a single file. After being processed by the lexer, this program is represented as a sequence of tokens.
+A program consists of one body of source code, stored in a single file. After being processed by the lexer, this program is represented as a sequence of tokens. Statements are separated by newlines.
 
 ### Comments
 In Mongoose, comments are denoted by the # symbol. They start at the symbol and end when there is a new line. Comments are not tokens; they are ignored by the lexer.
@@ -45,36 +44,32 @@ An identifier is a sequence of digits, letters and underscores that does not beg
 ### Keywords
 The following identifiers are keywords. They are reserved by the language and may not be used in any other way.
 
-and
-elif
-pelse
-return
-float
-none
-analysis
-or
-else
-then
-in
 string
-agent
-terminate
-not
-pif
-for
-range
-obj
-true
-environment
-if
-pelif
-while
 int
-bool
-false
-self
-pass
-env
+float
+boolean
+and
+or       
+not
+while
+if
+elif
+else
+pif
+pelif
+pelse
+environment
+populate
+action
+terminate
+analysis
+create
+destroy
+agent
+repeat
+return
+none
+TICKCOUNT
 
 ### Strings
 In Mongoose, strings can be denoted by either ‘single quotes’ or “double quotes.”  A string is a primitive type in Mongoose. Mongoose allows escaped characters \n (newline), \t (tab), \” (double quote), \’ (single quote) and \\ (backslash). No string formatting is supported naturally in Mongoose.
@@ -82,34 +77,32 @@ In Mongoose, strings can be denoted by either ‘single quotes’ or “double q
 ## Meaning of Identifiers
 
 ### Basic Types
-The basic types that Mongoose supports are signed ints and floating point numbers, booleans and strings. Note that ints and floats are only signed and not unsigned. The size of these primitive types is platform-specific.#
+The basic types that Mongoose supports are signed ints and floating point numbers, booleans and strings. Note that ints and floats are only signed and not unsigned. The size of these primitive types is platform-specific.
 
 ### Collection Types
 Mongoose has one primary collection type and that is the list. This is synonymous to the Python list, but the types it contains (boolean, int, float, list and object) have to be declared in the list declaration. Lists are identified by placing [] after the type that will be contained in the list. They are defined as follows: int[] or float[].
 
 One important note is that there can be multi-dimensional lists, i.e. a list of lists, etc, but a list can only contain either another list or the base type of the list. For example, int[][] or float[][][].
 
-In Mongoose, lists have a public length field that holds the list’s length.
-
 ### Functions
 
 Functions in Mongoose are very similar to those in Java or C. They are defined as follows:
-return_type function_name() {expression}
-Since Mongoose is a pass-by-reference language, parameters to functions get passed by reference, except for primitives which get passed by value. Mongoose supports anonymous functions in certain contexts, which are defined as: {expression}.
+return_type function_name(formal_parameters) {statement(s) return_statement}
+Since Mongoose is a pass-by-reference language, parameters to functions get passed by reference, except for primitives which get passed by value. Mongoose supports anonymous function-like blocks in certain contexts, which are defined as: {expression}.
 
 ### Agent Definitions
 
-An agent definition in Mongoose is a blueprint for creating agents, similar to classes acting as blueprints for objects in other object oriented languages. For the purpose of agent modeling, agent definitions allow us to efficiently create agents and behaviors associated with the simulation.
-none
-Similar to Python, Mongoose has a none type, signifying a null, non-existent option.
+An agent definition in Mongoose is a blueprint for creating agents, similar to classes acting as blueprints for objects in other object-oriented languages. For the purpose of agent modeling, agent definitions allow us to efficiently create agents and behaviors associated with the simulation.
+
+### none
+Similar to Python, Mongoose has a none type, signifying a null value or return type.
 
 ### Built-in Values
 
 TICKCOUNT is a built-in int value representing the current time step of the simulation. 
-Casting
-To have a functioning program, there is a need to be able to easily convert between int and float, from int, float and boolean to string and from int, float and string to boolean. 
 
-When converting an int to a float no information is lost, however, converting a float to a string will discard the fractional part. Then when using the concatenation operator + between a string and a float or int, the entire integer part of the number will be represented up to 10 digits after the decimal if the number is a float. When converting to a boolean from an int or float, all non-zero values are true and only zero is false, and when converting to a boolean from a string all non-empty strings are true and only the empty string is false. Similarly, only empty lists are cast to boolean false.
+### Casting
+To have a functioning program, there is a need to be able to easily convert between int and float, from int, float and boolean to string and from int, float and string to boolean. We follow Python's conventions for implcit casting. 
 
 ## Expressions
 
@@ -127,16 +120,16 @@ When converting an int to a float no information is lost, however, converting a 
 Basic mathematical operations are supported like addition, subtraction, multiplication, modulus, division and exponentiation.
 
 ### Dot Operator
-To reference an object’s variables and functions the dot operator ‘.’ is used. For example, object_name.variable_name would access variable_name and object_name.function_name would access function_name.
+To reference an object’s variables and functions the dot operator ‘.’ is used. For example, object_name.variable_name would access variable_name, and object_name.function_name would access function_name.
 
 ### List Referencing 
 To reference an element of a list, the notation list_name[i] is used, where i is an integral index of the list.
 
 ### Function Calls
-Function are of the form function()or with parameters function([type] a, [type] b, ...). The dot operator allows for function calls to be of the form an_agent.function(), as scoping is explicit in Mongoose.
+Function are of the form function(), or with parameters, function([type] a, [type] b, ...). 
 
 ### Unary Operators
-Mongoose uses unary operators to denote unary minus, and to denote logical negation. Unary operators associate right-to-left. The unary minus symbol is the - operator, and the logical negation symbol is the not operator.
+Mongoose uses unary operators to denote unary minus, and to denote logical negation. Unary operators associate right-to-left. The unary minus symbol is the - operator, and the logical negation symbol is the 'not' operator.
 
 ### Casting
 To convert between primitive types, explicit casting is allowed, and done in a way similar to how Java or C does so. To convert an expression of type A to one of type B, one would use the expression:
