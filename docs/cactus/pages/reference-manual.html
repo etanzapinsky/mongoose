@@ -151,7 +151,22 @@ To operate on booleans the operators `and`, `or` and `not` are used. The operato
 The conditional operators are `or` signifying logical OR, and `and` signifying logical AND. 
 
 ### Assignment Operator
-The assignment operator in Mongoose is represented by the `=` symbol. The left-hand-side variable is assigned the value on the right-hand-side, assuming the types are compatible. The assignment operator does not return a reference in Mongoose.
+The assignment operator in Mongoose is represented by the `=` symbol. The left-hand-side variable is assigned the value from the right-hand-side, assuming the types are compatible. A `TypeError` is raised if the types are incompatible. A variable must be declared before a value can be assigned to it.
+
+Thus, the following code snippet:
+
+    # int x
+    # the line above was commented out, so x is never declared
+    x = 3  # this line will now fail
+
+raises a `NameError`:
+
+    Traceback (most recent call last):
+    ...
+    NameError: Variable 'x' does not exist
+
+
+Also note that the assignment operator does not return a reference in Mongoose.
 
 ### Comma Operator
 Commas are the symbol `,` used to separate variables. This is used mainly in listing the parameters within a function call.
