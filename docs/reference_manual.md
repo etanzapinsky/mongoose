@@ -150,7 +150,7 @@ The language has the == (is equal to) and != (is not equal to) equality infix op
     not boolean-expression
     [true|false]
 
-To operate on booleans the operators `and`, `or` and `not` are used. The operators `and` and `or` are left associative with ```and``` having a higher precedence over or,and not is right associative, similar to the unary minus. Also, these operators can be chained arbitrarily.
+To operate on booleans the operators `and`, `or` and `not` are used. The operators `and` and `or` are left associative with ``and`` having a higher precedence over or, and not is right associative, similar to the unary minus. Also, these operators can be chained arbitrarily.
 
 ### Conditional Operators
 The conditional operators are or signifying logical OR, and and signifying logical AND. 
