@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width">
+
+	<link rel="shortcut icon" href="./static/favicon.ico"> 
+	<link rel="stylesheet" href="./static/css/style.css">
+
+	
+	<title>Mongoose</title>
+	
+
+</head>
+<body>
+	
+
+<h1>Conclusions</h1>
+<h3>Lessons learned: Bo Xu</h3>
+<p>Taking Professor Aho’s PLT course was ultimately a great learning experience. Being part of a large team-oriented project was rewarding in its own right and learning (and struggling with) the tech stack gave me much greater insight into software development. As a somewhat inexperienced programmer, I found that Python was enjoyable language to learn and has many robust tools for the job. </p>
+<p>Learning the theoretical foundations in class and learning the front-end implementations with the Lex and YACC tools demystified programming languages for me.  (It also helped that the Python Lex and YACC tool was well documented.) Testing the language and finding ways of covering our language's semantic and syntactic cases added to my understanding as well.</p>
+<p>Finally, I really appreciated having such great teammates. Everyone brought a great deal of knowledge and professionalism and were incredibly helpful. It's been a tough experience, but I've learned a lot and hope to utilize what I learned in future projects. </p>
+<h3>Lessons learned: Etan Zapinsky</h3>
+
+
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="./static/js/main.js"></script>
+	
+</body>
+</html>

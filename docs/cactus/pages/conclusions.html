@@ -2,18 +2,25 @@
 {% block markdown %}
 # Conclusions
 
-###Lessons learned: Bo Xu
+### Lessons learned: Bo Xu
 Taking Professor Aho’s PLT course was ultimately a great learning experience. Being part of a large team-oriented project was rewarding in its own right and learning (and struggling with) the tech stack gave me much greater insight into software development. As a somewhat inexperienced programmer, I found that Python was enjoyable language to learn and has many robust tools for the job. 
 
 Learning the theoretical foundations in class and learning the front-end implementations with the Lex and YACC tools demystified programming languages for me.  (It also helped that the Python Lex and YACC tool was well documented.) Testing the language and finding ways of covering our language's semantic and syntactic cases added to my understanding as well.
 
 Finally, I really appreciated having such great teammates. Everyone brought a great deal of knowledge and professionalism and were incredibly helpful. It's been a tough experience, but I've learned a lot and hope to utilize what I learned in future projects. 
 
-### Chris's conclusions
-#### Lessons learned
+### Lessons learned: Chris Haueter
 - use small-grained git commits with descriptive commit messages
 - commit early and often
 - lean heavily on the version control system; use rollbacks, etc.
 - test early and often (preferably on every file-save)
 - short meetings are the most effective
+
+### Lessons learned: Etan Zapinsky
+I really enjoyed taking PLT this semester. On top of teaching me the intricacies of modern language design it gave me a new found appreciation of working on a team and proper project design.
+
+With this project I really saw the interdependencies of each team member. In our case the frontend code was done much earlier than the backend. I thought this would be great having a ready made parse tree to work with, but what I didn't realize is that the I would want the AST to look a certain way that made sense to the backend. Then having to go in and change the AST accordingly was work that I didn't budget into my time working on the project. This also led me to a new appreciatiation of *always* overestimating the time necessary to get something done.
+
+As this was probably the largest project I have worked on from start to finish, I saw intimately how design descisions made at the beginning of the project can come back and bite you in the end. For instance, we decided that when compiling the code we would be modifying the AST by side-effect with an implicit understanding that the result of a call would store the result in a instance member of a variable. This seemed really nice at the beginning, but then as the code got more complicated, we had to make sure to call the side-effect inducing function whenever we wanted a result. Many times I was left scratching my head wondering why something was not working, only to realize a few minutes later that I had forgotten to call the side-effect inducing function.
+
 {% endblock %}
