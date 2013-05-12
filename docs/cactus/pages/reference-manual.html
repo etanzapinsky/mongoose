@@ -310,7 +310,7 @@ The environment’s and agents’ variables and functions at the uppermost level
 
 ### Scope of Functions
 
-Functions can be defined in any of the 4 main blocks of a Mongoose program, or outside of any of the 4 blocks. A function within a terminate or analysis block can only be called from within that block. The functions/blocks in the environment or agents, such as populate, create(), destroy or any user-defined functions there can be called from anywhere, via dot notation on the reference to an agent. Note that action blocks may only be called by the Mongoose interpreter. Functions defined outside any of the 4 types of blocks can be called from any of the 4 blocks as well.
+Functions can be defined in any of the 4 main blocks of a Mongoose program, or outside of any of the 4 blocks. A function within a terminate or analysis block can only be called from within that block. The functions in the environment or agents, ie. any user-defined functions there can be called from anywhere, via dot notation on the reference to an agent. Note that builtin blocks/functions such as populate, create(), destroy, and action are called by the Mongoose interpreter and the programmer can never call them explicitly. Functions defined outside any of the 4 types of blocks can be called from any of the 4 blocks as well.
 
 [Appendix A: Complete Grammar](grammar.html)
 
