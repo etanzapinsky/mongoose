@@ -6,16 +6,27 @@ An Agent-Based Modeling Simulation Language
 + ------------------------------------- +
 
 | |
+
 | .--. |
+
 | ( \_ \\ |
+
 | / /: :\\ |
+
 | ,=. \^ / . | |
+
 | ---'.\_.--.\_ \\ : / |
+
 | \\ '.\_\_=-. \\ .' ,-. |
+
 | ( ' e\\ | : / \_ \\ |
+
 | \\ , ' . .-'-\^ , | \\ / \\ \\ |
+
 | |; \\!\_ \\|;. ;/.\_, \\ '--' ) |
+
 | \^\^= \^= '.\_\_,''------' |
+
 | |
 
 + ------------------------------------- +
@@ -65,14 +76,11 @@ distinct groups, or to determine whether the formation of tribal groups
 will converge to a steady state, or the agents will be stuck in a
 divergent pattern.
 
-Furthermore, Mongoose’s provides statistical analysis tools that enable
-developers to aggregate data effectively from large samplings, better
-understanding results from simulations like Schelling’s Segregation
-Model.
+Furthermore, Mongoose provides syntax that allows for easy use of randomization, to enable the programmer to code simulations more efficiently.
 
 Additional problems which Mongoose might be used to simulate are
 Conway’s Game of Life^[[3]](#ftnt3)^ (discussed below), epidemiological
-models, population growth, crowd simulation, traffic patterns and
+models, population growth, crowd simulation, traffic patterns, and
 financial outcome prediction (e.g. retirement planning).
 
 Language Properties
@@ -80,21 +88,19 @@ Language Properties
 
 ### Simple and Object-Oriented
 
-When creating a simulation, there are many common steps a programmer
-would have to take to get their program up and running. They have to
-specify environment invariants, environment agents, agents’ actions,
-action frequency, and termination conditions. Our language should easily
-abstract writing these common lines of code the user would have to write
-for each simulation.
+When creating a simulation, there are many common steps a programmer 
+would have to take to get their program up and running. They have to 
+specify environment invariants, environment agents, agents’ actions, 
+and termination conditions. Our language should easily abstract writing 
+these common lines of code the user would have to write for each simulation.
 
-Mongoose is object-oriented to make interacting with an environment with
-an internal state, and agents with an internal state and actions,
-intuitive and manageable. Like Python, the language will provide
-first-order classes, functions and objects. It will also provide agents
-and environments with invariants and terminating conditions. All of
-these objects would interact in specific ways so that the programmer
-will be able to create a mental model of the simulation and truly
-understand how the different components relate to one another.
+Mongoose is object-oriented to make interacting with an environment and 
+agents, each with an internal state and actions, intuitive and manageable. 
+Like Python, the language will provide first-order classes and objects. 
+It will also provide invariants and terminating conditions. All of 
+these objects would interact in specific ways so that the programmer 
+will be able to create a mental model of the simulation
+and truly understand how the different components relate to one another.
 
 Environments and agents are fundamental classes of objects. Agents will
 be situated in, and interact with their environments. This is an
@@ -102,12 +108,11 @@ important component of many agent-based models because any agent’s
 future actions can depend on the local environment. This will help users
 focus on the relevant abstractions for their model.
 
-Our programming language uses Python-like syntax and control logic as
-points of familiarity for users experienced with another high level
-programming language. In addition, the language provides domain-specific
-primitives and functions for ease of use. These include keywords like
-environment, agent, rule and built-in functions like spawn, kill,
-simulate, map and reduce.
+Our programming language uses Java-like syntax with some Python-esque 
+elements and control logic as points of familiarity for users experienced 
+with another high level programming language. In addition, the language 
+provides domain-specific primitives for ease of use. These include 
+keywords like environment, agent, pif and the built-in function print.
 
 ### Temporal
 
@@ -123,7 +128,7 @@ An advantage of this is that each tick of the clock provides a
 convenient mechanism to allow the programmer to determine how much time
 it takes to reach one environment state from another.
 
-### Event-sampling and Analysis
+### Analysis
 
 Performing the same actions thousands, if not millions of times is only
 half of what makes a discrete-event simulation tool powerful. The other
@@ -131,72 +136,27 @@ important aspect is its ability to perform analysis on the simulation’s
 results. How many organisms were spawned in Conway’s Game of Life? How
 many died? What is an organism’s average life span? If our language
 cannot answer these questions it is as if we have created a computer
-that can run programs but has no way to print the results.
-
-To enable the gathering of metrics, Mongoose is built with
-event-sampling. The program knows when an event occurs, or more
-explicitly, when a specific function is called. Regarding the example of
-Conway’s Game of Life, the program has to know when an organism was
-spawned, when an organism dies, and when a clock tick is complete.
-Mongoose allows the user to decorate functions, defining them as watched
-events, to let the system keep track of which events have occurred.
-
-Once we have marked all the events, the user can then define analysis
-functions. These functions specify on which particular event they should
-be called, and then capture useful information about the system.
-Mongoose provides a standard library of aggregation and statistical
-functions, in addition to enabling ones defined by the user. For
-instance, to analyze the information captured from Conway’s Game of
-Life, the user could create a function to count every time an organism
-is spawned, a function to count every time an organism dies, a function
-that maintains a list of living organisms or a function that measures
-the lifespan of each organism.
-
-### Stateful, Portable and Architecture-Neutral
-
-When running computationally intensive simulations, it can be
-benneficial to save the program state at important checkpoints to allow
-for users to stop and then restart simulations as desired. Mongoose
-provides two built in functions: save and load, to checkpoint and
-restore the state of the program from a file. Since the programmer can
-save and restore the simulation state, they are able to restart the
-simulation on another machine after porting, or copying, the state data
-to the new machine. The simulations can be run on a variety of machine
-architectures (server, desktop, mobile, etc.) because the language runs
-in the architecture-neutral Python runtime environment.
-
-### Multi-threaded
-
-It is beyond Mongoose’s scope to run each simulation in multiple
-threads; however, the language does provide built-in functions
-(including map and reduce) for running multiple independent simulations
-in parallel, one per thread. These functions make make it easy for the
-researcher to run many simulations with a variety of starting
-conditions, with the goal of aggregating statistics about the
-simulations, as opposed to only aggregating statistics within one
-simulation instance.
-
-This multi-threading, combined with the ability to run the simulations
-in a cloud environment, enables the researcher to spread out
-computationally-intensive simulations across e.g. thousands of machines.
+that can run programs but has no way to print the results. Mongoose allows
+the program to act differently based on how the simulation ended. 
+Depending on which invariant was broken, a Mongoose program will execute
+different code, before terminating.
 
 Intended users
 --------------
 
 The intended users of the language are researchers and students who
-desire to specify and run agent-based discrete-event simulations with a
+desire to specify and run agent-based, discrete-event simulations with a
 minimum of language boilerplate. They are assumed to be familiar with
-basic concepts of simulation. They are also assumed to have some Python
-programming experience (at the very least, they should be aware of the
-basic Python data structures and common built-in functions). Writing
-programs in Mongoose will be comfortable for a programmer who has
-already used an ALGOL-family programming language such as C, Java or
-Python.
+basic concepts of simulation. They are also assumed to have some Python or
+Java programming experience (at the very least, they should be aware of 
+basic data structures and operators). Writing programs in Mongoose will be
+comfortable for a programmer who has already used an ALGOL-family programming 
+language such as C, Java or Python.
 
 Existing Solutions
 ------------------
 
-Mongoose focuses on discrete event simulation, i.e. the modeling of a
+Mongoose focuses on discrete event simulations, i.e. the modeling of a
 simulation as a discrete sequence of events in time. Specifically, our
 language deals with Agent-Based Modelling (ABM), where the simulation
 can be modeled as decentralized agents with behaviors in a common
@@ -207,7 +167,7 @@ Simula and SIMSCRIPT. SIMSCRIPT, however, is written in a more
 English-like syntax, which may be less familiar to programmers
 experienced with C or Java, whom our language targets.
 
-Additionally, Mongoose will be tailored towards agent based modelling,
+Additionally, Mongoose will be tailored towards agent-based modelling,
 while Simula and SIMSCRIPT are not, and use a concurrent process
 model.^[[4]](#ftnt4)^ While software like ExtendSim, Simio, AnyLogic, or
 Flexsim allow for ABM, they are not full languages.
