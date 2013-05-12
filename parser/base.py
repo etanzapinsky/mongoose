@@ -304,7 +304,7 @@ def p_function_def(p):
         for decl in p[4].syn_value:
             parameter_pairs.append((decl.syn_vtype, decl.symbol))
     p[0] = Function(symbol=p[2], statements=p[7],
-                              return_type=p[1].syn_vtype,
+                              return_type=p[1].vtype,
                               parameter_pairs=parameter_pairs,
                               return_value=Node(vtype=v.RETURN_STATEMENT, children=[p[9]]))
 
@@ -582,7 +582,10 @@ def p_weighted_values(p):
 def p_weighted_val_stat(p):
     ''' weighted_val_stat : weighted_val_clause weighted_val_clause_pipe
     '''
-    p[0] = Node(vtype=v.WEIGHTED_VALUE_STAT, children=[p[1],p[2]])
+    kids = [p[1]]
+    if p[2]:
+        kids.extend(p[2].children)
+    p[0] = Node(vtype=v.WEIGHTED_VALUE_STAT, children=kids)
 
 def p_clause_pipe(p):
     ''' weighted_val_clause_pipe : '|' weighted_val_stat 

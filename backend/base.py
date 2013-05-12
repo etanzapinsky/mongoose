@@ -53,6 +53,12 @@ class Backend():
                 for child in root.children:
                     backend.walk_ast(child)
                 root.syn_value = scp[root.symbol].execute(*root.children)
+            elif root.vtype == v.RETURN_STATEMENT:
+                if root.children:
+                    backend.walk_ast(root.children[0])
+                    root.syn_value = root.children[0].syn_value
+                else:
+                    root.syn_value = None
             elif root.vtype in first_order_ops:
                 for kid in root.children:
                     backend.walk_ast(kid)
