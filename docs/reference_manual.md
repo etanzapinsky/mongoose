@@ -163,8 +163,8 @@ Commas are the symbol `,` used to separate variables. This is used mainly in dea
 
 ### Probabilistic Value
 A probabilistic value in Mongoose is an expression such as the following: 
-(3:true | 7:false)
-This is a pipe-separated, parenthesized list of colon-separated weight-value pairs wi,vi, where each wi is a positive integer. The wi are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ wi (for all i) is the denominator of the probability).
+    (3:true | 7:false)
+This is a pipe-separated, parenthesized list of colon-separated weight-value pairs w<sub>i</sub>,v<sub>i</sub>, where each wi is a positive integer. The wi are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ wi (for all i) is the denominator of the probability).
 
 As another  example, one may assign the value of a die-roll as such:
 int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)
