@@ -118,11 +118,18 @@ def test_weighted_value():
     expectation = sum(( like * val for like, val in zip(likelihoods, values)))
 
     num_tests = 50
-    actual_total = 0
+    num_total = 0
+    bin_total = 0
     for i in range(num_tests):
-        output = run('sample_code/weighted_value.mon')
-        actual_total += int(output.strip())
-    avg_value = actual_total / num_tests
+        output = run('sample_code/working/weighted_value.mon')
+        output = output.split('\n')
+        num = int(output[0])
+        bin = int(output[1])
+        num_total += num
+        bin_total += bin
+
+    avg_value = num_total / num_tests
     epsilon = abs(expectation - avg_value) / expectation
-    print(epsilon)
+    assert epsilon < 0.1
+    epsilon = abs(bin_total - 50) / bin_total
     assert epsilon < 0.1
