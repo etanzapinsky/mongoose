@@ -44,32 +44,32 @@ An identifier is a sequence of digits, letters and underscores that does not beg
 ### Keywords
 The following identifiers are keywords. They are reserved by the language and may not be used in any other way.
 
-string
-int
-float
-boolean
-and
-or       
-not
-while
-if
-elif
-else
-pif
-pelif
-pelse
-environment
-populate
-action
-terminate
-analysis
-create
-destroy
-agent
-repeat
-return
-none
-TICKCOUNT
+    string
+    int
+    float
+    boolean
+    and
+    or       
+    not
+    while
+    if
+    elif
+    else
+    pif
+    pelif
+    pelse
+    environment
+    populate
+    action
+    terminate
+    analysis
+    create
+    destroy
+    agent
+    repeat
+    return
+    none
+    TICKCOUNT
 
 ### Strings
 In Mongoose, strings can be denoted by either ‘single quotes’ or “double quotes.”  A string is a primitive type in Mongoose. Mongoose allows escaped characters \n (newline), \t (tab), \” (double quote), \’ (single quote) and \\ (backslash). No string formatting is supported naturally in Mongoose.
