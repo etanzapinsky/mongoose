@@ -238,7 +238,14 @@ An agent is initialized to an object by calling the agent class name as if you w
 When one wishes to destroy an agent, one simply calls the built-in kill() function on the agent’s reference, and its destroy() function is invoked.
 
 ### List
-Mongoose lists are dynamic, so they do not require initialization — they may be resized dynamically at runtime. Once declared, however, lists may optionally be initialized in two ways: either with defaults for the list type, or with a list literal. For example, after its declaration as int[] a, the identifier a may be initialized with the default for its type (zero, in the case of the int type): a = int[2][2] initializes a with [[0,0],[0,0]]. Alternatively, it may be initialized with a list literal: a = [[1,2],[3,4]]. Finally, the declaration may be combined into one expression with either initialization expression, such as int[][] a = int[1][1] or int[] a = [1,2,3]. These initializations are optional; in other words it is possible simply to declare a list and then begin appending to it and accessing its elements. A runtime error occurs if the program attempts to access a list element that does not exist (i.e. when the list is empty).
+Mongoose lists are static — they require declaration and may not be resized at runtime. When they are declared, lists are initialized with default values for the given list type. For example, after its declaration as `int[5] a`, the identifier `a` is initialized with 5 `int` members. A multi-dimensional list is initialized the same way: `a = int[2][2]` initializes `a` with integer values: `[[0,0],[0,0]]`. After a list is declared, it is possible to retrieve or set its member elements.
+
+An `IndexError` occurs if the program attempts to access a list element that does not exist, as in the following code snippet:
+
+    int x[2]  # the list is of length 2
+    x[0] = 3  # list indexing starts at 0
+    x[1] = 5
+    x[2] = 7  # raises an IndexError
 
 ## Statements
 
