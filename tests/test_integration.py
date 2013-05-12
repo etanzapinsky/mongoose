@@ -98,6 +98,14 @@ def test_while_loop():
     assert output == expected
 
 def test_comments():
-    expected = ''''''
+    expected = ''
     output = run('sample_code/working/comments.mon')
     assert output == expected
+
+def test_return_statements():
+    expected = '''add_ten: 20
+concat: hi there!
+'''
+    output = run('sample_code/working/return_statements.mon')
+    assert output == expected
+>>>>>>> added test for return statements
