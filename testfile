@@ -1,12 +1,20 @@
 
 agent A {
       ~boolean on = false
-      create(~boolean x){
+      ~int i = 0
+      ~int j = 0 
+      ~int count = 0
+      create(~boolean x, ~int row, ~int col){
           print("On create A")
-	  on = x
+	        on = x
+	        i = row
+	        j = col
       }
-      action {
+      action { 
       	     print(on)
+      	     print(i)
+      	     print(j)
+             print(count)
       }
       destroy {
 
@@ -27,13 +35,17 @@ agent A {
 
 
 environment {
-	    ~A[2][2] board    
+    ~int length = 2
+    ~A[2][2] board    
     populate {
-        ~A a = A(false)
-        ~A b = A(true)
-        ~A c = A(true)
-	~A d  = A(false)
-	board[0][0] = a
+        ~A a = A(false,0,0)
+        ~A b = A(true,0,1)
+        ~A c = A(true,1,0)
+      	~A d  = A(false,1,1)
+      	board[0][0] = a
+      	board[0][1] = b
+      	board[1][0] = c
+      	board[1][1] = d
     }
 
     action { 
