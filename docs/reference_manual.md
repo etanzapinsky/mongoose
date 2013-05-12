@@ -163,20 +163,19 @@ Commas are the symbol `,` used to separate variables. This is used mainly in dea
 
 ### Probabilistic Value
 A probabilistic value in Mongoose is an expression such as the following: 
-    (3:true | 7:false)
-    
-This is a pipe-separated, parenthesized list of colon-separated weight-value pairs w<sub>i</sub>,v<sub>i</sub>, where each wi is a positive integer. The wi are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ wi (for all i) is the denominator of the probability).
+    `(3:true | 7:false)`
+This is a pipe-separated, parenthesized list of colon-separated weight-value pairs w<sub>i</sub>,v<sub>i</sub>, where each w<sub>i</sub> is a positive integer. The w<sub>i</sub> are normalized to calculate the probability related to each value. The result of this expression is probabilistic; for example, with the expression above, the expression will be true with 3/10 likelihood and false with 7/10 likelihood (wi is the numerator and Σ w<sub>i</sub> (for all i) is the denominator of the probability).
 
 As another  example, one may assign the value of a die-roll as such:
-int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)
-If a chosen vi is not of the same type as the left-hand-side variable, it will be implicitly cast, if possible. If not, a runtime error will be thrown.
+`int die = (1: 1 | 1: 2 | 1: 3 | 1: 4 | 1: 5 | 1: 6)`
+If a chosen v<sub>i</sub> is not of the same type as the left-hand-side variable, it will be implicitly cast, if possible. If not, a runtime error will be thrown.
 
-A weight wi must be provided for each each value to use this construct; otherwise a syntax error will be thrown.
+A weight w<sub>i</sub> must be provided for each each value to use this construct; otherwise a syntax error will be thrown.
 
 ### Terminating Expression
 Terminating expressions provide a convenient syntax for defining expressions that are run with some certain frequency, and which, if they evaluate to true, first execute some function, then end the simulation. They provide a nice syntax for testing termination conditions of the simulation, while allowing the programmer to limit the frequency of the tests, in order to avoid slowing the simulation through excessive condition testing.
 
-For example, the terminating expression <pos_int>:(expr) {foo()} is syntactically equivalent to if ((TICKCOUNT % <pos_int> == 0) and (expr)) then {foo()}, where <pos_int> is either a non-negative int, or a function returning a non-negative int. If such a function returns a negative int, a runtime error occurs. 
+For example, the terminating expression `<pos_int>:(expr) {foo()}` is syntactically equivalent to `if ((TICKCOUNT % <pos_int> == 0) and (expr))` then `{foo()}`, where `<pos_int>` is either a non-negative int, or a function returning a non-negative int. If such a function returns a negative int, a runtime error occurs. 
 
 ## Objects
 
