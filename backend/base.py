@@ -126,9 +126,8 @@ class Backend():
                     root.children[0].vtype == v.BRACKET_ACCESS
                     # identifier as index
                     iden = root.children[0].children[0]
-                    if (iden.vtype == v.IDENTIFIER):
-                        backend.walk_ast(iden)
-                        root.children[0].syn_value = [iden.syn_value]
+                    backend.walk_ast(iden)
+                    root.children[0].syn_value = [iden.syn_value]
                     item = scp[root.symbol].get(indexes=root.children[0].syn_value)
                     root.syn_value = item.syn_value
                     root.syn_vtype = item.syn_vtype
@@ -140,8 +139,8 @@ class Backend():
             # Declaration
             elif root.vtype == v.DECLARATION:
                 scp = backend.find(root.symbol)
-                if scp:
-                    raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
+                # if scp:
+                #     raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
                 from parser import Node, List
                 # We store different Node types acc. to the root syn_vtype
                 if root.syn_vtype == v.LIST_TYPE:

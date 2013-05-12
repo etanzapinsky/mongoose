@@ -1,20 +1,17 @@
 
 agent A {
-      ~boolean on = false
-      ~int i = 0
-      ~int j = 0 
+      ~int x = 0
       ~int count = 0
-      create(~boolean x, ~int row, ~int col){
+      create(){
           print("On create A")
-	        on = x
-	        i = row
-	        j = col
       }
-      action { 
-      	     print(on)
-      	     print(i)
-      	     print(j)
-             print(count)
+      action {
+        x = roll()
+        if((x>=1) and (x <=1)){
+            print("lose")
+            count = 0
+        }
+        count = count + x
       }
       destroy {
 
@@ -27,39 +24,74 @@ agent A {
           print(x)
           return
       }
-      int return_six() {
-          return 6
+      int roll() {
+          ~int sdg = ( 2:1 | 4:2 | 6:3 | 10:4 )
+          print("die roll")
+          print(sdg)
+          return sdg
+      }
+    int getCount(){
+    return count 
+  }
+}
+
+agent B {
+      ~int x = 0
+      ~int count = 0
+      create(){
+          print("On create A")
+      }
+      action {
+        repeat(5){
+          x = roll()
+          if(x>=1 and x <=1){
+              print("lose")
+              count = 0
+          }
+          count = count + x
+        }
+      }
+      destroy {
+
+      }
+      none print_hi() {
+          print('hi')
+          return
+      }
+      none print_num(~int x) {
+          print(x)
+          return
+      }
+      int roll() {
+          ~int sdg = ( 2:1 | 4:2 | 3:3 | 2:4 )
+          return sdg
       }
 }
 
 
-
 environment {
-    ~int length = 2
-    ~A[2][2] board    
+    ~int apoints = 0
+    ~int bpoints = 0
+    ~int win = 10
     populate {
-        ~A a = A(false,0,0)
-        ~A b = A(true,0,1)
-        ~A c = A(true,1,0)
-      	~A d  = A(false,1,1)
-      	board[0][0] = a
-      	board[0][1] = b
-      	board[1][0] = c
-      	board[1][1] = d
+        ~A a = A()
+        ~B b = B()
     }
 
-    action { 
-        print("a.on:", a.on)
- 	print("b.on:", b.on)
-        print("c.on:", c.on)
-        print("d.on:", d.on)
-
+    action {
+        print("a.x:", a.count)
+        print("b.n:", b.count )
+        apoints = a.count
+        bpoints = b.count
     }
 }
 
 terminate {
-    (true) {
-        print("done")
+    (apoints-win>=0) {
+        print("done. A reached 10 points")
+    }
+    (bpoints-win>=0) {
+        print("done. B reached 10 points")
     }
 }
 
