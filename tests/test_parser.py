@@ -83,6 +83,7 @@ class ParserTests(unittest.TestCase):
         print expected.__str__()
         assert result == expected
 
+
     def test_if(self): #coverage for if, equals and assignment
         src = '''if(x==6) {\n
 		y=5\n  
@@ -181,7 +182,7 @@ class ParserTests(unittest.TestCase):
                                 ])
                                ,None
                             ])
-			    Node(vtype=v.STATEMENT, children=[ 
+			    ,Node(vtype=v.STATEMENT, children=[ 
 		                Node(vtype=v.DECLARATION,children=[
 					Node(vtype=v.AGENT_VALUE,syn_value='y')
 					])
@@ -191,7 +192,7 @@ class ParserTests(unittest.TestCase):
 					])
 				])
 				,None
-			    Node(vtype=v.STATEMENT, children=[ 
+			    ,Node(vtype=v.STATEMENT, children=[ 
 		                Node(vtype=v.FUNCTION_DEFINITION,children=[
 					Node(vtype=v.RETURN_TYPE,symbol='foo')
 					])
@@ -302,6 +303,7 @@ class ParserTests(unittest.TestCase):
         print expected.__str__()
         assert result == expected
 
+
     def test_explicit_cast(self): #coverage for casting
         src = '''x = (int) (5 *  ((float) 4+8))\n
 	environment{\n
@@ -372,6 +374,8 @@ class ParserTests(unittest.TestCase):
         assert result == expected
 
 
+
+'''
     # TODO: use setup/teardown properly
     @nottest
     def test_equality():
@@ -388,3 +392,4 @@ class ParserTests(unittest.TestCase):
         node_five = Node(vtype=v.STRING_VALUE, children=[deepcopy(node_two)])
         eq_(node_four, node_five)
 
+'''
