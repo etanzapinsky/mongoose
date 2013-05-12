@@ -212,7 +212,7 @@ Invariants are expressions that are checked at the end of time periods, at a fre
 Since Mongoose is a statically typed language, objects and primitives are declared with their type preceding them, as in Java or C. Types can be either user-defined agent types, lists, or one of the primitive types available in Mongoose: `int`, `float`, `boolean`, `string` or `none`.
 
 ### Default Values
-The default values for various types are as follows: none for objects, the empty string for strings, 0 for ints, 0.0 for floats, and false for booleans.
+The default values for various types are as follows: `none` for objects, `''` (the empty string) for strings, `0` for ints, `0.0` for floats, and `false` for booleans.
 
 ### Agent Declaration
 Only agents can have objects of their type instantiated by the programmer. Agents are declared as such:
@@ -224,6 +224,19 @@ Lists are declared with the type of the list, followed by one or more square bra
 ### Function Definition
 Functions in Mongoose are declared like so:
 `return_type function_name(formal_parameters) {statement(s) return_statement}`
+
+Here's an illustrative example:
+
+    # function definition
+    int add(~int x, ~int y) {
+        ~int sum
+        sum = x + y
+        print(sum)
+        return 0
+    }
+
+    # function call
+    add(10, 10)
 
 ## Initialization
 
@@ -271,7 +284,7 @@ The selection statement evaluates an expression and, based on the boolean value 
 Randomness is a very important aspect of simulations. As such, Mongoose includes an easy syntax for probabilistic selection, which mimics Python’s if()-elif()-else statements of deterministic selection. A probabilistic selection statement contains one pif() block at the beginning, may end with a pelse block, and can contain zero or more pelif() blocks in between. At most one of the blocks will ever execute. 
 Like an if or elif command, each pif and pelif contains an expression in parentheses that determines whether the block executes or not. However, these expressions are positive floating point probabilities, which must sum to 1 in each probabilistic selection statement if no pelse block is involved, and must sum to a number less than or equal to 1 if a pelse block is involved. For example, in the code below, 
     pif(0.3) {
-    A()
+        A()
     }
     pelif(0.5) {
         B()
@@ -279,7 +292,7 @@ Like an if or elif command, each pif and pelif contains an expression in parenth
     pelse {
         C()
     }
-A() will be called with 0.3 probability, B() will be called with 0.5 probability, and C() will be called with 1 - 0.3 - 0.5 = 0.2 probability. Not adhering to these conventions regarding probabilities summing to 1 will result in a runtime error.
+`A()` will be called with 0.3 probability, `B()` will be called with 0.5 probability, and `C()` will be called with 1 - 0.3 - 0.5 = 0.2 probability. Not adhering to these conventions regarding probabilities summing to 1 will result in a runtime error.
 
 ### Iteration: `repeat` Loops
 Repeat loops in Mongoose take the form `repeat (pos_int) {statement_list}`. 
