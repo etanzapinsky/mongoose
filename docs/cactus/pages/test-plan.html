@@ -2,8 +2,18 @@
 {% block markdown %}
 # Test Plan
 
+The testing strategy included covering the functional components of the our language (lexer, parser, semantic analyser, and backend/code generator) with unit tests, along with doing integration tests to verify our specifications from end-to-end.
+
 ## Testing tools
 We used the [nose test framework](https://nose.readthedocs.org/en/latest/), which provides nice test auto-discovery, to make testing as painless as possible. Another useful tool was [sniffer](https://github.com/jeffh/sniffer), which automatically re-runs the entire test each time a file is changed in the source code directory.
+
+Nose also makes it easy to test the entire project with one command. Nose also allowed us to make assertions in our testing files, which served the double role of verifying and documenting our implementations.
+
+We ran nose via manage.sh, the system integration shell script. Error lines are output to the shell.
+
+Example:
+
+    $ ./manage.sh [files_to_test] [tests_to_run] 
 
 ## Unit testing
 Unit testing was useful for "driving out" the development of new features. These are low-level, granular tests used to ensure that a feature (e.g. list access) works correctly. Individual approaches to testing differ, but one effective approach is to write a failing unit test (that reflects the desired functionality) and then implement the feature until the test passes (this is done incrementally, building upon the small improvements tested in the last unit test).
@@ -15,35 +25,5 @@ Integration testing is the *end-to-end* testing that runs a complete source code
 
 The combination of unit testing and integration testing gives us the confidence to say that if a Mongoose program is in our working directory, it actually works as intended.
 
-8: Testing
-
-Our testing methodology for Mongoose involved using a combination of unit test for covering the functional components of the our language: lexer, parser, semantic analyser, and backend/code generator along with integration tests to verify our specifications from end-to-end yielding in the output results. 
-
-In order to automate our testing, we used Python's Nose framework, which is an extension of Python's unittest library. The benefits included test discovery, which allowed us to test our entire project in one batch. Nose also allowed us to readily call assertions in our testing files, which served the double role of verifying and documenting our implementations.
-
-Nose's features were added into our shellscript manage.sh, used for directory management and testing functionality. Error lines are output to the shell.
-
-Ex: Shell script: ./manage.sh <files to test> <set of tests to run> 
-
-
-
-Files 			Testing Goal
-test_backend.py:		Unit tests of backend functionality, covering different AST nodes
-
-test_builtins.py:	Tested print functionality
-
-test_functions.py	Tested Mongoose supported functions, covering cases of addition, functions, variables and constants
-
-test_integration.py 	Tested sample .mon (mongoose) source code for the full compiler
-
-test_lexer.py		Tests the functionality of the lexer based on various expected lines of code such as function definitions, variable initializations, 
-
-test_lists.py		Tested static list functionality
-
-test_parser.py		Tested parser AST, tested sample code blocks and coverage of various code blocks
-
-test_scope.py		Tested scoping rules
-
-
-[Tests Examples](/example-tests.html/)
+[A few test examples](example-tests.html)
 {% endblock %}
