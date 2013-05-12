@@ -9,7 +9,6 @@ string concat(string x, string y) {
 }
 
 none bar() {
-    print("bar")
     return
 }
 
@@ -18,7 +17,7 @@ print("add_ten:", add_ten(a))
 
 print("concat:", concat("hi ", "there!"))
 
-bar()
+print("bar:", bar())
 
 environment{
     action{
