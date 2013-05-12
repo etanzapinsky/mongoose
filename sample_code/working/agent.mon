@@ -17,6 +17,9 @@ agent A {
           print(x)
           return
       }
+      int return_six() {
+          return 6
+      }
 }
 
 agent B {
@@ -49,6 +52,7 @@ environment {
         print("c.n:", c.n )
         a.print_hi()
         a.print_num(5)
+        print("six:", a.return_six())
     }
 }
 

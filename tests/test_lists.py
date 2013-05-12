@@ -10,7 +10,7 @@ def test_access_list():
     # test storage and retrieval
     l.store(value, index)
     stored_value = l.get(index)
-    assert value.syn_value == stored_value
+    assert value == stored_value
 
     # test print string
     expected_values = [0 for i in range(8)]

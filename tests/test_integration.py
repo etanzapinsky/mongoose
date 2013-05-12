@@ -154,3 +154,18 @@ def test_list_parameter_call():
     expected = '12\n'
     output = run('sample_code/working/list_parameter_call.mon')
     assert output == expected
+
+def test_all_agent_things():
+    expected = '''On create A
+On create B
+On create B
+a.x: 1
+b.n: 3
+c.n: 10
+hi
+5
+six: 6
+done
+'''
+    output = run('sample_code/working/agent.mon')
+    assert output == expected
