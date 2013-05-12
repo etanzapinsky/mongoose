@@ -105,6 +105,7 @@ def test_comments():
 def test_return_statements():
     expected = '''add_ten: 20
 concat: hi there!
+bar
 '''
     output = run('sample_code/working/return_statements.mon')
     assert output == expected

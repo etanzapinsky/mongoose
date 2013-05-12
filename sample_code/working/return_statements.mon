@@ -8,7 +8,8 @@ string concat(string x, string y) {
     return x + y
 }
 
-none bar(){
+none bar() {
+    print("bar")
     return
 }
 
@@ -16,6 +17,8 @@ int a = 10
 print("add_ten:", add_ten(a))
 
 print("concat:", concat("hi ", "there!"))
+
+bar()
 
 environment{
     action{
