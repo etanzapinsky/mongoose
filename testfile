@@ -1,23 +1,55 @@
 
-int[3] y
-y[1] = 2
-int[] x = y
-print(x[1])
+agent A {
+      ~boolean on = false
+      create(~boolean x){
+          print("On create A")
+	  on = x
+      }
+      action {
+      	     print(on)
+      }
+      destroy {
 
-environment{
-	populate{
-
-	}
-
-	action{
-	}
-
+      }
+      none print_hi() {
+          print('hi')
+          return
+      }
+      none print_num(~int x) {
+          print(x)
+          return
+      }
+      int return_six() {
+          return 6
+      }
 }
 
-terminate{
 
+
+environment {
+	    ~A[2][2] board    
+    populate {
+        ~A a = A(false)
+        ~A b = A(true)
+        ~A c = A(true)
+	~A d  = A(false)
+	board[0][0] = a
+    }
+
+    action { 
+        print("a.on:", a.on)
+ 	print("b.on:", b.on)
+        print("c.on:", c.on)
+        print("d.on:", d.on)
+
+    }
 }
 
-analysis{
+terminate {
+    (true) {
+        print("done")
+    }
+}
 
+analysis {
 }

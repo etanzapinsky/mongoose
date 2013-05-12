@@ -1,5 +1,5 @@
 agent A {
-      int x = 1
+      ~int x = 1
       create(){
           print("On create A")
       }
@@ -13,7 +13,7 @@ agent A {
           print('hi')
           return
       }
-      none print_num(int x) {
+      none print_num(~int x) {
           print(x)
           return
       }
@@ -23,8 +23,8 @@ agent A {
 }
 
 agent B {
-      int n
-      create(int num){
+      ~int n
+      create(~int num){
           n = num
           print("On create B")
       }
@@ -39,10 +39,10 @@ agent B {
 environment {
 
     populate {
-        A a = A()
-        B b = B(5)
-        B c = B(10)
-        int y = 1
+        ~A a = A()
+        ~B b = B(5)
+        ~B c = B(10)
+        ~int y = 1
         b.n = 3
     }
 

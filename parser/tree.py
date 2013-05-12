@@ -176,10 +176,10 @@ class List(Node):
 
     def store(self, value, indexes):
         '''The list stores only the syn_value, but relies upon the syn_vthpe for type checking.'''
-        if value.vtype == self.syn_vtype:
-            self.data[self._calc_index(indexes)] = value.syn_value
-        else:
-            raise TypeError, "Cannot store value of type '{}' in list of type '{}'.".format(value.vtype, self.syn_vtype)
+        #if value.vtype == self.syn_vtype:
+        self.data[self._calc_index(indexes)] = value.syn_value
+        #else:
+        #    raise TypeError, "Cannot store value of type '{}' in list of type '{}'.".format(value.vtype, self.syn_vtype)
         
     def get(self, indexes):
         return Node(vtype=self.syn_vtype, syn_vtype=self.syn_vtype, syn_value=self.data[self._calc_index(indexes)])
