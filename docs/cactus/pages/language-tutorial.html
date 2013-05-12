@@ -122,6 +122,7 @@ terminate^[[c]](#cmnt3)^{} \#to be discussed later
 
 analysis{}
 </code></pre>
+
 2. Declarations, Variables and Statements
 =========================================
 
@@ -187,26 +188,18 @@ terminate{}
 analysis{}
 </code></pre>
 The first line of this program that starts with a hash symbol is a comment. Any string of characters that is prepended by an un-escaped hash symbol is ignored by Mongoose’s translator. Its sole purpose is for human readability - not machine interpretation.
-================================================================================================================================================================================================================================================================
-
 Like C and Java, variables in Mongoose must be declared. A variable is sequence of strings that represents a location in memory. Mongoose enforces that variables be declared to be of a certain type. The programmer must define what type a variable is. In this example, the variables i and j are declared to be of type int. Types of variables also include float, bool and string. Further down, my\_Cells is declared to be of type Cell[1]. In addition to this being a type declaration it is also a list creation. Cell[1] sets aside space for a list, where each element in the list is of type Cell and the length of the list is currently 1.
-============================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================
-
 Before we get to objects, let us understand what assignment is. An assignment statement is a special kind of statement that either initializes a variable or modifies a variable to hold a different value. The word self is used when an agent is accessing or mutating its own instance variables. Here the agent is setting its i and j values. self is effectively a reference to oneself. The statements:
-==============================================================================================================================================================================================================================================================================================================================================================================================================
 <pre><code>
 self.i = r
 
 self.j = c
 </code></pre>
 are assignment statements. Since the variables i and j have not previously been explicitly set by the programmer, these assignment statements are, more specifically, initialization statements. Note that individual statements are terminated by newlines.
-============================================================================================================================================================================================================================================================
-
 The line:
-=========
-
+<pre><code>
 my\_Cells[0] = Cell(4,4)
-
+</code></pre>
 is an assignment statement. my\_Cells is being assigned to an agent
 instance of type Cell. By instantiation we mean that the function call
 Cell() is not a regular function. Like a regular function it can include
@@ -216,13 +209,10 @@ reference. This reference contains the state of the object as well as
 its methods. Thus after this assignment my\_Cells will hold an object
 reference to an agent. This agent’s values are i and j and its methods
 are its constructor and destroy() and action().
-
 You may have noticed that the function definitions for destroy and action are left empty. Although they are empty, they are required by Mongoose and end up being useful for fully functional simulations.
-==========================================================================================================================================================================================================
 
 3. Expressions, For Statement
 =============================
-
 We will now continue to build up our Game of Life simulation by adding
 critical helper functions. These functions will be defined here but not
 called until the final program in the next phase.
