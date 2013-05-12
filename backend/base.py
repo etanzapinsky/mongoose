@@ -205,7 +205,6 @@ class Backend():
 
     def run(self):
         backend.walk_ast(backend.populate.children[0])
-        import bpdb; bpdb.set_trace()
         while True:
             backend.walk_ast(backend.action.children[0])
             invariants = [i for k,v in backend.invariants.iteritems()
