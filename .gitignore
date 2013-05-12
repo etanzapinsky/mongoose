@@ -7,3 +7,5 @@ parsetab.py
 docs/cactus/.build/*
 *.disabled.py
 .gitignore
+
+docs/cactus/config.json

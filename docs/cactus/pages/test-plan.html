@@ -1,0 +1,29 @@
+{% extends "markdown.html" %}
+{% block markdown %}
+# Test Plan
+
+The testing strategy included covering the functional components of the our language (lexer, parser, semantic analyser, and backend/code generator) with unit tests, along with doing integration tests to verify our specifications from end-to-end.
+
+## Testing tools
+We used the [nose test framework](https://nose.readthedocs.org/en/latest/), which provides nice test auto-discovery, to make testing as painless as possible. Another useful tool was [sniffer](https://github.com/jeffh/sniffer), which automatically re-runs the entire test each time a file is changed in the source code directory.
+
+Nose also makes it easy to test the entire project with one command. Nose also allowed us to make assertions in our testing files, which served the double role of verifying and documenting our implementations.
+
+We ran nose via manage.sh, the system integration shell script. Error lines are output to the shell.
+
+Example:
+
+    $ ./manage.sh [files_to_test] [tests_to_run] 
+
+## Unit testing
+Unit testing was useful for "driving out" the development of new features. These are low-level, granular tests used to ensure that a feature (e.g. list access) works correctly. Individual approaches to testing differ, but one effective approach is to write a failing unit test (that reflects the desired functionality) and then implement the feature until the test passes (this is done incrementally, building upon the small improvements tested in the last unit test).
+
+A future improvement would be to increase our unit test "coverage", i.e. the amount of our source code being tested.
+
+## Integration testing
+Integration testing is the *end-to-end* testing that runs a complete source code program through the entire compiler stack. As we finished the implementation of more language features, we added complete Mongoose source files, reflecting the new features, to a "working" sample code directory. We also added integration tests to ensure that those files continued to work correctly when we made changes to the codebase.
+
+The combination of unit testing and integration testing gives us the confidence to say that if a Mongoose program is in our working directory, it actually works as intended.
+
+[A few test examples](example-tests.html)
+{% endblock %}

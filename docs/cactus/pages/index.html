@@ -4,10 +4,33 @@ date: 12-05-2013
 
 {% extends "markdown.html" %}
 {% block markdown %}
-Mongoose is ...
+# Mongoose
 
+- [Introduction (White Paper)](white-paper.html)
 - [Language Tutorial](language-tutorial.html)
 - [Reference Manual](reference-manual.html)
-- [White Paper](white-paper.html)
+- [Project Plan](project-plan.html)
+- [Language Evolution](language-evolution.html)
+- [Translator Architecture](translator-architecture.html)
+- [Development and Runtime Environment](development-runtime.html)
+- [Test Plan](test-plan.html)
+- [Conclusions](conclusions.html)
 - [Appendix A: Complete Grammar](grammar.html)
+- [Source code on GitHub](https://github.com/etanzapinsky/mongoose)
+
+### Authors
+#### Frontend (Lexer and Parser)
+- Mark Fischer (mlf2156@columbia.edu) - *Language Guru*
+- Michael Rubin (mnr2114@columbia.edu) - *Project Manager*
+#### Backend (Compiler and Mongoose Utility)
+- Chris Haueter (cmh2122@columbia.edu) - *System Integrator*
+- Etan Zapinsky (eez2107@columbia.edu) - *System Architect*
+#### Test Suite
+- Bo Xu (bx2104@columbia.edu) - *Tester*
+
+### Release Notes:
+#### May 12, 2013:
+0. We ran into last-minute errors disambiguating list access from variable declarations. As a short-term hack, we've modified variable declarations (the variable declaration must be preceded by a tilde, e.g. `~int x` is currently a valid declaration in Mongoose). This will be corrected in the next release.
+1. We have not yet completely implemented the functionality of agents (specifically, agents with a destroy block) — the destroy block currently does nothing. This will be implemented in future version of Mongoose.
+2. We implemented *implicit* casting, but not *explicit* casting, for this release. The notes in the reference manual regarding explicit casting thus reflect the *future* state of Mongoose, not its current state.
 {% endblock %}
