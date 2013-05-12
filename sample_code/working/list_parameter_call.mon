@@ -1,0 +1,31 @@
+int add(int[] l, int[] m) {
+    int sum = 0
+    int i = 0
+    repeat(3) {
+        sum = sum + l[i] + m[i]
+        i = i + 1
+    }
+    return sum
+}
+
+int[3] list
+list[0] = 1
+list[1] = 2
+list[2] = 3
+
+int s = add(list, list)
+
+environment{
+	action{
+	}
+	populate{		
+	}
+}
+
+terminate{
+    (true) {
+        print(s)
+    }
+}
+analysis{
+}

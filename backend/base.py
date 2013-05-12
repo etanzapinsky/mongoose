@@ -15,17 +15,18 @@ class Backend():
         self.analysis = None
         self.turn = 1
 
+    # this function returns the scope of the symbol requested, practically
+    # this means that we cant redefine variables that exist already in the
+    # scope. e.g. if we defined `int x` at the global scope, at no more local
+    # scope can we redefine `int x`
+    def find(self, symbol):
+        for scp in reversed(backend.scopes):
+            if symbol in scp.keys():
+                return scp
+        return None
+
     def walk_ast(self, root, siblings=None, parent=None):
 
-        # this function returns the scope of the symbol requested, practically
-        # this means that we cant redefine variables that exist already in the
-        # scope. e.g. if we defined `int x` at the global scope, at no more local
-        # scope can we redefine `int x`
-        def find(symbol):
-            for scp in reversed(backend.scopes):
-                if symbol in scp.keys():
-                    return scp
-            return None
         # not popping b/c we only pop when *destroying* scope
         # (here we are just modifying)
         scope = backend.scopes[-1]
@@ -53,7 +54,7 @@ class Backend():
                 # root.syn_value = evaluate_function(f=root, scope=scope,
                 #                                    args=[child.syn_value for child in root.children])
             elif root.vtype == v.FUNCTION_CALL:
-                scp = find(root.symbol)
+                scp = backend.find(root.symbol)
                 if not scp:
                     raise NameError, "Function '{}' does not exist".format(root.symbol)
                 # evaluating expressions passed into function before calling function
@@ -80,7 +81,7 @@ class Backend():
             
             # Assignment
             elif root.vtype == v.ASSIGNMENT:
-                scp = find(root.children[0].symbol)
+                scp = backend.find(root.children[0].symbol)
                 if not scp:
                     raise NameError, "Variable '{}' does not exist".format(root.symbol)
                 for child in root.children:
@@ -95,13 +96,18 @@ class Backend():
                     assign(scp, root.children)  # scopes modified via side effect
 
             elif root.vtype == v.IDENTIFIER:
-                scp = find(root.symbol)
+                scp = backend.find(root.symbol)
                 for kid in root.children:
                     backend.walk_ast(kid)
 
                 # list access
                 try:
                     root.children[0].vtype == v.BRACKET_ACCESS
+                    # identifier as index
+                    iden = root.children[0].children[0]
+                    if (iden.vtype == v.IDENTIFIER):
+                        backend.walk_ast(iden)
+                        root.children[0].syn_value = [iden.syn_value]
                     root.syn_value = scp[root.symbol].get(indexes=root.children[0].syn_value)
                     root.syn_vtype = root.children[0].syn_vtype
                 # simple element access
@@ -111,7 +117,7 @@ class Backend():
 
             # Declaration
             elif root.vtype == v.DECLARATION:
-                scp = find(root.symbol)
+                scp = backend.find(root.symbol)
                 if scp:
                     raise Exception, "Symbol '{}' cannot be re-declared".format(root.symbol)
                 from parser import Node, List

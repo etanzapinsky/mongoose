@@ -149,3 +149,8 @@ def test_analysis():
     expected = 'I am being analyzed!\n'
     output = run('sample_code/working/analysis.mon')
     assert output == expected
+
+def test_list_parameter_call():
+    expected = '12\n'
+    output = run('sample_code/working/list_parameter_call.mon')
+    assert output == expected
