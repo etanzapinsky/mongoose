@@ -229,7 +229,7 @@ Functions in Mongoose are declared like so:
 
 ## Initialization
 
-In Mongoose, objects and lists must be declared and initialized before their values can be accessed. This can occur with separate declaration and initialization expressions (e.g. `int a` followed by `a = 3`), or in a combined initialization expression (e.g. `int a = 3`).
+In Mongoose, objects must be declared and initialized before their values can be accessed. This can occur with separate declaration and initialization expressions (e.g. `int a` followed by `a = 3`), or in a combined initialization expression (e.g. `int a = 3`).
 
 ### Objects and Agent Classes
 An agent is initialized to an object by calling the agent class name as if you were calling a function, e.g. agent an_agent = AgentClassName(). When the agent is initialized there is an implicit call to the create() function of the applicable agent class to set up the necessary internal state of the instance. Then when an object is killed, there is another implicit call to the destroy() function of the agent class to perform any last operations before being deleted. Objects are also killed by program termination.
