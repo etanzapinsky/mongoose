@@ -112,6 +112,16 @@ def p_agent_acd_right_brace_error(p):
     '''
     print syntax_error_in_input+"missing right brace in agent definition at line "+str(p.lineno(11))
 
+def p_create_error(p):
+    ''' create : CREATE error
+    '''
+    print syntax_error_in_input+"CREATE function error at lineno "+str(p.lineno(2))+". create format: CREATE '(' formal_param_list ')' '{' statement_list '}'"
+
+def p_destroy_error(p):
+    ''' destroy : DESTROY error
+    '''
+    print syntax_error_in_input+"DESTROY block contains an error at line "+str(p.lineno(2))+". Proper format: DESTROY '{' statement_list '}'"
+
 def p_while_error(p):
     ''' stat : WHILE error
     '''
@@ -147,7 +157,10 @@ def p_function_call_error(p):
     '''
     print syntax_error_in_input+"function call error at line "+str(p.lineno(3))+". function call format: NAME '{' actual_param_list '}'. See "+p[1] 
 
-
+def p_weighted_val_stat_error(p):
+    ''' weighted_val_stat : error
+    '''
+    print syntax_error_in_input+"weighted value error at line "+str(p.lineno(1))+". weighted value format: '(' (integer:value '|')* integer:value ')'" 
 
 
 

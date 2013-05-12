@@ -752,8 +752,6 @@ def p_empty_bracket(p):
     '''
     p[0] = Node(vtype=v.BRACKET_DECL, syn_value=0)
 
-
-
 #VINTEGER is non-negative
 def p_non_empty_bracket(p):
     ''' non_empty_brack :  '[' expr ']' non_empty_brack
