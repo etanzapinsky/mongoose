@@ -47,7 +47,7 @@ for the “hello, world” program in Mongoose. This is a standard first
 program for learning any programming language.
 
 This program prints “hello, world”:
-<code class="codeblock">
+<pre><code>
 environment^[[a]](#cmnt1)^{
 
 none populate(){
@@ -65,7 +65,7 @@ none action(){
 terminate{}^[[b]](#cmnt2)^
 
 analysis{}
-</code>
+</code></pre>
 The code for this program is placed in a file whose name ends with .mon.
 To then run this program you must have the python interpreter 2.7, PLY
 3.4, and the mongoose Python module. If the above program was called
