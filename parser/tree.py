@@ -93,7 +93,8 @@ class Function(Node):
 
     def execute(self, *args):
         backend.scopes.append(self._bind_params(*args))
-        r = backend.walk_ast(self.statements)
+        backend.walk_ast(self.statements)
+        r = backend.walk_ast(self.return_value)
         backend.scopes.pop()
         return r
 

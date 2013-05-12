@@ -1,12 +1,21 @@
-
-int foo(){
-    int z    
+int add_ten(int x){
+    int z
+    z = 10 + x    
     return z
+}
+
+string concat(string x, string y) {
+    return x + y
 }
 
 none bar(){
     return
 }
+
+int a = 10
+print("add_ten:", add_ten(a))
+
+print("concat:", concat("hi ", "there!"))
 
 environment{
     action{

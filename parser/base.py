@@ -304,7 +304,7 @@ def p_function_def(p):
         for decl in p[4].syn_value:
             parameter_pairs.append((decl.syn_vtype, decl.symbol))
     p[0] = Function(symbol=p[2], statements=p[7],
-                              return_type=p[1].syn_vtype,
+                              return_type=p[1].vtype,
                               parameter_pairs=parameter_pairs,
                               return_value=Node(vtype=v.RETURN_STATEMENT, children=[p[9]]))
 
