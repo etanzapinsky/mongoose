@@ -34,7 +34,7 @@ class Node:
             # We're currently just raising a python error #FIXME @todo
             raise TypeError, "'{}' is not comparable with '{}'".format(self.vtype, other.vtype)
 
-            # @todo #FIXME expanding IDENTIFIER (so we can say x == 32)
+# @todo #FIXME expanding IDENTIFIER (so we can say x == 32)
 
         if self.children == None:
             return bool(self.inh_value == other.inh_value
@@ -50,7 +50,7 @@ class Node:
                              #and self.params == other.params
                              )
             return self_comp and all([self_c == other_c for self_c, other_c in
-                                  zip(self.children, other.children)])
+                                      zip(self.children, other.children)])
 
     # Useful for debugging
     def __str__(self):
@@ -103,11 +103,14 @@ class Function(Node):
         if len(args) != len(self.parameter_pairs):
             raise Exception, "InvalidParameters (incorrect number of parameters)"
 
-        # typechecking
+        # typechecking - gone!
         for arg, (syn_vtype, symbol) in zip(args, self.parameter_pairs):
-            if arg.syn_vtype != syn_vtype:
-                raise TypeError, "Invalid parameter of type '{}'".format(arg.syn_vtype)
-            bindings[symbol] = arg
+            # if arg.syn_vtype != syn_vtype:
+            #     raise TypeError, "Invalid parameter of type '{}'".format(arg.syn_vtype)
+            if arg.vtype == v.IDENTIFIER:
+                bindings[symbol] = backend.find(arg.symbol)[arg.symbol]
+            else:
+                bindings[symbol] = arg
         return bindings
 
     def __eq__(self, other):
