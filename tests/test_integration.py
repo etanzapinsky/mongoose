@@ -172,10 +172,10 @@ done
 
 def test_one_agent_turn():
     expected = '''On create A
-a.x: 0
 a.x: 1
 a.x: 2
 a.x: 3
+a.x: 4
 done
 '''
     output = run('sample_code/working/agent_turn.mon')
@@ -184,12 +184,12 @@ done
 def test_multiple_agents():
     expected = '''On create A
 On create B
-one.x: 0
-two.x: 0
 one.x: 1
 two.x: 2
 one.x: 2
 two.x: 3
+one.x: 3
+two.x: 4
 done
 '''
     output = run('sample_code/working/multiple_agents.mon')
