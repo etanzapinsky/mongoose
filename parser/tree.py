@@ -182,7 +182,6 @@ class List(Node):
         #    raise TypeError, "Cannot store value of type '{}' in list of type '{}'.".format(value.vtype, self.syn_vtype)
         
     def get(self, indexes):
-        import pdb; pdb.set_trace()
         return Node(vtype=self.syn_vtype, syn_vtype=self.syn_vtype, syn_value=self.data[self._calc_index(indexes)])
 
     def __str__(self):
