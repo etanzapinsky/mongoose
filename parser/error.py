@@ -20,7 +20,32 @@ def p_no_analysis_error(p):
 def p_program_error(p):
 	''' program : error 
 	'''
-	print syntax_error_in_input+"program order must be: [agents] environment terminate analysis" 
+	print syntax_error_in_input+"Program contains an error. Block order must be: [agents] environment terminate analysis" 
+
+def p_environment_error(p):
+    ''' environment : ENVIRONMENT error 
+    '''
+    print syntax_error_in_input+"ENVIRONMENT block contains an error at line "+str(p.lineno(2))+". Proper format: ENVIRONMENT '{' statement_list populate/action statement_list action/populate statement_list  '}'"
+
+def p_populate_error(p):
+    ''' populate : POPULATE error
+    '''
+    print syntax_error_in_input+"POPULATE block contains an error at line "+str(p.lineno(2))+". Proper format: POPULATE '{' statement_list '}'"
+
+def p_action_error(p):
+    ''' action : ACTION error
+    '''
+    print syntax_error_in_input+"ACTION block contains an error at line "+str(p.lineno(2))+". Proper format: ACTION '{' statement_list '}'"
+
+def p_terminate_error(p):
+    ''' terminate_block : TERMINATE error
+    '''
+    print syntax_error_in_input+"TERMINATE block contains an error at line "+str(p.lineno(2))+". Proper format: TERMINATE '{' invariant_list '}'"
+
+def p_analysis_error(p):
+    ''' analysis : ANALYSIS error
+    '''
+    print syntax_error_in_input+"ANALYSIS block contains an error at line "+str(p.lineno(2))+". Proper format: ANALYSIS '{' statement_list '}'"
 
 def p_agent_error(p):
 	''' agent : AGENT NAME '{' error '}'
@@ -86,4 +111,55 @@ def p_agent_acd_right_brace_error(p):
     ''' agent : AGENT NAME '{' stat_list_wrapper action stat_list_wrapper create stat_list_wrapper destroy stat_list_wrapper error
     '''
     print syntax_error_in_input+"missing right brace in agent definition at line "+str(p.lineno(11))
+
+def p_while_error(p):
+    ''' stat : WHILE error
+    '''
+    print syntax_error_in_input+"while loop error at line "+str(p.lineno(2))+". while format: WHILE '(' expr ')' '{' statement_list '}'"
+
+def p_if_error(p):
+    ''' stat : IF error   
+    '''
+    print syntax_error_in_input+"if statement error at line "+str(p.lineno(2))+". if format: IF '(' expr ')' '{' statement_list '}' [elifs] [else]"
+
+def p_pif_error(p):
+    ''' stat : PIF error
+    '''
+    print syntax_error_in_input+"pif statement error at line "+str(p.lineno(2))+". pif format: PIF '(' float ')' '{' statement_list '}' [pelifs] [pelse]"
+
+def p_repeat_error(p):
+    ''' stat : REPEAT error 
+    '''
+    print syntax_error_in_input+"repeat statement error at line "+str(p.lineno(2))+". repeat format: REPEAT '(' int ')' '{' statement_list '}'"
+
+def p_possible_function_def_error(p):
+    ''' stat : list_type NAME error 
+    '''
+    print syntax_error_in_input+"error at line "+str(p.lineno(3))+". See "+p[2] 
+
+def p_possible_none_function_def_error(p):
+    ''' stat : NONE NAME error 
+    '''
+    print syntax_error_in_input+"error at line "+str(p.lineno(3))+". See "+p[2] 
+
+def p_function_call_error(p):
+    ''' function_call : NAME '(' error ')'
+    '''
+    print syntax_error_in_input+"function call error at line "+str(p.lineno(3))+". function call format: NAME '{' actual_param_list '}'. See "+p[1] 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
