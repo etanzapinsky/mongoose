@@ -23,8 +23,8 @@ first_order_ops = {v.ADD: lambda x, y: x + y,
                    v.GREATER_THAN_EQUAL: lambda x, y: x >= y,
                    }
 
-equality_ops = {  v.EQUAL: lambda x, y: x.__eq__(y),
-                  v.NOT_EQUAL: lambda x, y: not x.__eq__(y),
+equality_ops = {  v.EQUAL: lambda x, y: x == y,
+                  v.NOT_EQUAL: lambda x, y: x != y,
                   }
 
 boolean_ops = {

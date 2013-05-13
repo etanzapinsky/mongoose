@@ -86,10 +86,14 @@ class Backend():
                 root.syn_value = first_order_ops[root.vtype](*[child.syn_value for child in root.children])
                 root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype in boolean_ops:
+                for kid in root.children:
+                    backend.walk_ast(kid)
                 root.syn_value = boolean_ops[root.vtype](*[child.syn_value for child in root.children])
                 root.syn_vtype = root.children[0].syn_vtype
             elif root.vtype in equality_ops:
-                root.syn_value = equality_ops[root.vtype](*root.children)  # does this break for len(root.children) > 2?
+                for kid in root.children:
+                    backend.walk_ast(kid)
+                root.syn_value = equality_ops[root.vtype](*[child.syn_value for child in root.children])  # does this break for len(root.children) > 2?
                 root.syn_vtype = root.children[0].syn_vtype
             
             # Assignment
