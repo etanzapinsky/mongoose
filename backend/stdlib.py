@@ -1,7 +1,7 @@
 #need this to have the print function work properly in the lambda function
 from __future__ import print_function
 import vtypes as v
-from random import random
+from random import choice
 
 class PrintFunction():
     vtype = 'PRINT'
@@ -61,14 +61,19 @@ def assign(scope, nodes):
     # _print_scope(scope, "after")
 
 def weighted_value(weights, values):
-    total = sum(weights)
-    likelihoods = [ float(weight) / total for weight in weights ]
-    x = random()
-    val = None
-    for like in likelihoods:
-        if x <= like:
-            i = likelihoods.index(like)
-            val = values[i].syn_value
-            break
-        x -= like
-    return val
+    # total = sum(weights)
+    # likelihoods = [ float(weight) / total for weight in weights ]
+    # x = random()
+    # val = None
+    # for like in likelihoods:
+    #     if x <= like:
+    #         i = likelihoods.index(like)
+    #         val = values[i].syn_value
+    #         break
+    #     x -= like
+    # return val
+    l = []
+    for w, v in zip(weights, values):
+        if w:
+            l.extend([v.syn_value]*w)
+    return choice(l)
