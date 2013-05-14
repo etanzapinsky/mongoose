@@ -1,0 +1,16 @@
+print(( 1:( 1:'a' | 1:'b' ) | 1:'c' ))
+
+environment{
+	action{
+
+	}
+	populate{
+
+	}
+}
+
+terminate{
+    (true) {}
+}
+analysis{
+}
