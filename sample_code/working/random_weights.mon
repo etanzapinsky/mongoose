@@ -1,0 +1,19 @@
+string rand(~string x, ~string y) {
+    return ( 1:x | 1:y )
+}
+print(rand('hi', 'bye'))
+
+environment{
+	action{
+
+	}
+	populate{
+
+	}
+}
+
+terminate{
+    (true) {}
+}
+analysis{
+}

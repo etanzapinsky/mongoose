@@ -215,8 +215,10 @@ class Backend():
             elif root.vtype == v.ANALYSIS:
                 self.analysis = root
             elif root.vtype == v.WEIGHTED_VALUE_STAT:
+                for kid in root.children:
+                    backend.walk_ast(kid.children[1])
                 root.syn_value = weighted_value([k.children[0].syn_value for k in root.children ],
-                                                [k.children[1] for k in root.children])
+                                                [k.children[1] for k in root.children]).syn_value
             elif root.vtype == v.IMPLICIT_PARAM:
                 obj = root.children[0]
                 inner = root.children[1]

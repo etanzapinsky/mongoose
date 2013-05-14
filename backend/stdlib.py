@@ -75,5 +75,5 @@ def weighted_value(weights, values):
     l = []
     for w, v in zip(weights, values):
         if w:
-            l.extend([v.syn_value]*w)
+            l.extend([v]*w)
     return choice(l)
