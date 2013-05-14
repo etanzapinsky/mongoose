@@ -114,6 +114,8 @@ class Backend():
                     # this should have been disambiguated in the frontend
                     try:  # list assignment
                         grandchild = root.children[0].children[0]
+                        for child in grandchild.children:
+                            backend.walk_ast(child)
                         assert grandchild.vtype == v.BRACKET_ACCESS
                         depths = grandchild.syn_value
                         list_assign(scp, root.children)

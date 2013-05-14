@@ -11,7 +11,13 @@ class PrintFunction():
 
 builtins = {'print': PrintFunction}
 
-first_order_ops = {v.ADD: lambda x, y: x + y,
+def add(x, y):
+    if isinstance(x, str) or isinstance(y, str):
+        return str(x) + str(y)
+    else:
+        return x + y
+
+first_order_ops = {v.ADD: add,
                    v.SUBTRACT: lambda x, y: x - y,
                    v.MULTIPLY: lambda x, y: x * y,
                    v.DIVIDE: lambda x, y: x / y,
