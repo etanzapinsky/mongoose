@@ -863,6 +863,8 @@ def p_error(p):
 # Build the parser
 parser = yacc.yacc()
 
+backend.scopes[0]['TICKCOUNT'] = Node(vtype=v.INTEGER_VALUE, syn_vtype=v.INTEGER_VALUE, syn_value=1)
+
 # very dirty hack to get the program to terminate on an error condition;
 # before, it was continuing to run and failing somewhere later on in ply
 # because the node wasnt constructed here properly
