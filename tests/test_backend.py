@@ -105,16 +105,19 @@ class BackendTests(unittest.TestCase):
         eq_(int_node_not_equal.syn_value, True)
 
     # Incomparable types
+    @nottest
     @raises(TypeError)
     def test_int_float_incomparable_equal(self):
         equal_node = Node(vtype=v.EQUAL, children=[self.int_node_one, self.float_node_one])
         backend.walk_ast(equal_node)
 
+    @nottest
     @raises(TypeError)
     def test_float_string_incomparable_equal(self):
         equal_node = Node(vtype=v.EQUAL, children=[self.float_node_one, self.string_node_one])
         backend.walk_ast(equal_node)
 
+    @nottest
     @raises(TypeError)
     def test_float_bool_incomparable_equal(self):
         equal_node = Node(vtype=v.EQUAL, children=[self.float_node_one, self.bool_node_true])
