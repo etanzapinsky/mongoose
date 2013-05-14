@@ -5,6 +5,7 @@ def test_access_list():
     index = (1,0,1)
     value = Node(vtype=v.INTEGER_VALUE, syn_value=42)
     l = List(symbol='x', depths=[2,2,2], syn_vtype=v.INTEGER_VALUE)
+    print l.data
     assert l.data == [0 for i in range(8)]
 
     # test storage and retrieval

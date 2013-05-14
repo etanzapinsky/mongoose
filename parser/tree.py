@@ -165,18 +165,11 @@ class List(Node):
         # Generate the internal list of the correct size
         length = reduce(mul, depths, 1)
         default_value = default_values[syn_vtype]
-        t = type(default_value)
-        self.data = []
-        for i in range(length):
-            # df = t(default_value.__str__())
-            if (default_value==0):
-                self.data.append(list())
-        # self.data = [copy.deepcopy(default_value) for i in range(length)]
+        self.data = [default_value for i in range(length)]
 
     def _calc_index(self, indexes):
         r = len(self.data)
         i = 0
-        # print set([id(x) for x in self.data])
         for (d, n) in zip(indexes, self.depths):
             r = r / n
             i += r * d
